@@ -11,7 +11,7 @@ db: db.sqlite
 
 SELECT * FROM user;
 
--- ftd.text: How to add more person in record
+-- ftd.text: How to add more person in record?
 size: 30
 color: #0C3C26
 style: bold
