@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package: arpita-blog
+-- fpm.package: blog
 
 -- fpm.dependency: fifthtry/blog-theme
 repo: github

@@ -1,0 +1,19 @@
+-- record person:
+integer id:
+string name:
+string department:
+
+-- person list people:
+
+-- people:
+$processor$: package-query
+db: db.sqlite
+
+SELECT * FROM user;
+
+-- show-person:
+p: $p
+$loop$: $people as $p
+
+-- ftd.text show-person: $p.name
+person p:
