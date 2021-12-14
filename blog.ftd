@@ -83,3 +83,5 @@ logo: https://res.cloudinary.com/dphj6havg/image/upload/v1638860433/Group_552_ua
 fpm is “ftd package manager”, defines a package format for packaging ftd files.
 fpm packages can depend on other fpm packages, and fpm can install all the
 dependencies of a package.
+
+-- ftd.text hello: Blog says hello
