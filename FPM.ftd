@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package: blog
+-- fpm.package: arpita-jaiswal.github.io/blog
+zip: github.com/arpita-jaiswal/blog/archive/refs/heads/main.zip
 
--- fpm.dependency: fifthtry/blog-theme
-repo: github
+-- fpm.dependency: fifthtry.github.io/Rocky-theme as fifthtry/blog-theme

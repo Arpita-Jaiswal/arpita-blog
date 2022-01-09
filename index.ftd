@@ -1,85 +1,160 @@
 -- import: fifthtry/blog-theme as lib
+-- import: fifthtry/blog-theme/docs as docs
 
--- lib.toc list toc:
+-- import: fpm-ui
 
--- toc: Home
-link: /
 
--- toc: Support
-link: /
-
--- toc: Contact Us
-link: /
-
--- toc: Github
-link: /
-
--- ftd.column:
-width: fill
+-- lib.main-wrapper:
 id: main
 
--- lib.banner:
-
--- container: main
+-- docs.dark-mode-switcher:
 
 
--- ftd.column:
-width: fill
+-- lib.header-container:
+id:header
 
--- lib.header:
-logo: https://res.cloudinary.com/dphj6havg/image/upload/v1638644344/Group_551_gqhmnl.svg
-toc: $toc
+-- lib.header-left:
 
--- container: main
-
--- lib.welcome-section: Hello! Welcome to  FPM blog
-
-A ftd package manager”, defines a package format  for packaging ftd files. fpm packages can
-depend on other fpm packages, and fpm can install all the dependencies  of a package.
-
--- container: main
-
--- ftd.row:
-width: fill
-spacing: 50
-id: content
-padding-vertical: 40
-padding-horizontal: 100
-
--- ftd.row:
-width: fill
-spacing: 20
-wrap: true
-
-
--- lib.blog-card: What is FPM?
-image: https://res.cloudinary.com/dphj6havg/image/upload/v1638648047/Rectangle_663_raj9bt.png
-date: 04 Oct 2021
+--- lib.nav-logo:
+src: ./static/logo.png
 link: /
-author: Sourabh
 
-fpm is “ftd package manager”, defines a package format for packaging
-ftd files. fpm packages can depend on other fpm packages, and fpm ...
+--- lib.site-title: Arpita Blog
+url: /
 
--- lib.blog-card: How to create a blog through FPM?
-image: https://res.cloudinary.com/dphj6havg/image/upload/v1638648047/Rectangle_664_q04opt.png
-date: 04 Oct 2021
-link: /
-author: Sourabh
+-- container: header
 
+-- lib.header-right:
 
-fpm is “ftd package manager”, defines a package format for packaging
-ftd files. fpm packages can depend on other fpm packages, and fpm ...
+--- lib.nav-link: Follow us on
 
+--- lib.nav-icon:
+src: ./static/twitter.png
+link: https://www.twitter.com/fifthtry
+width: 31
+height: 27
+
+--- lib.nav-icon:
+src: ./static/facebook.png
+link: https://www.facebook.com/fifthtry
+width: 15
+height: 32
+
+--- lib.nav-icon:
+src: ./static/linkedin.png
+link: https://www.linkedin.com/fifthtry
+width: 31
+height: 30
+
+--- lib.nav-icon:
+src: ./static/instagram.png
+link: https://www.instagram.com/fifthtry
+width: 31
+height: 30
+
+--- lib.nav-icon:
+src: ./static/redit.png
+link: https://www.redit.com/fifthtry
+width: 37
+height: 30
 
 
 -- container: main
 
--- lib.footer: FPM BLOG - LATEST FPM NEWS & UPDATES
-copyright: © 2021 FPM Blog - Latest FPM News & Updates
-links: $toc
-logo: https://res.cloudinary.com/dphj6havg/image/upload/v1638860433/Group_552_uanei2.svg
+/author section starts here:
 
-fpm is “ftd package manager”, defines a package format for packaging ftd files.
-fpm packages can depend on other fpm packages, and fpm can install all the
-dependencies of a package.
+-- lib.author-section:
+id: author
+
+-- lib.author-section-left:
+
+--- lib.author-title: Hi, I am Arpita Jaiswal
+
+--- lib.author-bio: I'm a web/software developer who loves to build projects and share valuable ps for new programmers on this blog.
+
+-- container: author
+
+-- lib.author-section-right:
+
+--- lib.author-photo:
+src: ./static/arpita.jpeg
+width: 180
+height: 180
+
+--- lib.author-email: arpita@fifthtry.com
+
+/author section ends here:
+
+
+-- container: main
+
+/post starts here::
+
+-- lib.post:
+id: post
+
+-- lib.post-image:
+
+--- lib.post-thumbnail:
+link: http://www.post.com
+src: ./static/default-post.png
+width: 330
+height: 170
+
+--- lib.timestamp-caption: Published on
+
+--- lib.timestamp: 15th Dec 2021
+
+-- container: post
+
+-- lib.post-details:
+
+--- lib.post-title: The fundamentals of understanding color theory
+
+--- lib.post-intro: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+
+-- container: main
+
+-- lib.seperator:
+
+-- lib.seperator-image:
+src: ./static/post-seperator.png
+width: fill
+
+-- container: main
+/post ends here::
+
+/post starts here::
+
+-- lib.post:
+id: post
+
+-- lib.post-image:
+
+--- lib.post-thumbnail:
+link: http://www.post.com
+src: ./static/default-post.png
+width: 330
+height: 170
+
+--- lib.timestamp-caption: Published on
+
+--- lib.timestamp: 15th Dec 2021
+
+-- container: post
+
+-- lib.post-details:
+
+--- lib.post-title: The fundamentals of understanding color theory
+
+--- lib.post-intro: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+
+-- container: main
+
+/post ends here::
+
+-- lib.footer:
+
+--- lib.footer-link: © 2022 FPM Blog - Latest FPM News & Updates

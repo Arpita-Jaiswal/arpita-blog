@@ -1,5 +1,3 @@
--- import: blog
-
 -- record person:
 integer id:
 string name:
@@ -54,5 +52,3 @@ $loop$: $people as $p
 
 -- ftd.text show-person: $p.name
 person p:
-
--- blog.hello:
