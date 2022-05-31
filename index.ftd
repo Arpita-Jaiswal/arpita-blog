@@ -1,9 +1,45 @@
+-- import: arjaupashak.com/assets
+-- import: fpm
+
 -- ds.page: Great the whole page just about me
 
--- ds.h1: Hi, I am Arpita Jaiswal
+-- blog-heading: Hi, I am Arpita Jaiswal
+image: $assets.files.static.arpita.jpeg
+
 
 I’m a web/software developer who loves to build projects and share valuable ps
 for programmers on this blog.
 
 Currently, building a new language FTD and its package manager FPM day and night.
+
+
+
+
+
+
+
+-- ftd.row blog-heading:
+caption title:
+body description:
+ftd.image-src image:
+width: fill
+spacing: 30
+background-color: $fpm.color.main.background.step-1
+padding: 20
+
+--- ftd.row:
+width: percent 30
+
+--- ds.image:
+src: $image
+width: fill
+align: center
+
+--- container: ftd.main
+
+--- ftd.column:
+width: auto
+
+--- ds.h1: $title
+body: $description
 
