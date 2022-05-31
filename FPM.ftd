@@ -1,6 +1,25 @@
 -- import: fpm
 
--- fpm.package: arpita-jaiswal.github.io/blog
+-- fpm.package: arjaupashak.com
 zip: github.com/arpita-jaiswal/blog/archive/refs/heads/main.zip
 
--- fpm.dependency: fifthtry.github.io/Rocky-theme as fifthtry/blog-theme
+-- fpm.dependency: fifthtry.github.io/doc-site as ds
+-- fpm.dependency: ftd.dev
+-- fpm.dependency: fpm.dev
+
+-- fpm.auto-import: arjaupashak.com/FPM/config
+-- fpm.auto-import: ds
+-- fpm.auto-import: ds as ft
+
+-- fpm.sitemap:
+
+# FTD Course: /c1/
+
+- Chapter 1: FPM Intro
+  url: /c1/intro/
+  - Installation Instruction: -/fpm.dev/how-to/install/
+- Chapter 2: P1 Grammar
+  url: /c1/p1/
+  - P1 Grammar Docs: -/ftd.dev/p1-grammar/
+- Chapter 3: Adding dependencies
+  url: /c1/deps/
