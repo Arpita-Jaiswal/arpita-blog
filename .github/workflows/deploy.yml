@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: build
-      - run: /bin/rm -rf *
+      - run: /bin/find . ! -path ./CNAME -delete
       - uses: actions/download-artifact@master
         with:
           name: SSR_BUILD
