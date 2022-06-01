@@ -23,9 +23,68 @@ caption title:
 body description:
 ftd.image-src image:
 width: fill
-spacing: 30
 background-color: $fpm.color.main.background.step-1
 padding: 20
+
+
+--- blog-desktop:
+title: $title
+description: $description
+image: $image
+if: not $config.is-mobile
+
+
+--- blog-mobile:
+title: $title
+description: $description
+image: $image
+if: $config.is-mobile
+
+
+
+
+
+
+
+
+
+-- ftd.column blog-mobile:
+caption title:
+body description:
+ftd.image-src image:
+width: fill
+spacing: 30
+
+--- ds.image:
+src: $image
+width: fill
+align: center
+
+--- container: ftd.main
+
+--- ftd.column:
+width: auto
+
+--- ds.h1: $title
+body: $description
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.row blog-desktop:
+caption title:
+body description:
+ftd.image-src image:
+width: fill
+spacing: 30
 
 --- ftd.row:
 width: percent 30
