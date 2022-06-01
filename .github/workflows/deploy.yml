@@ -7,7 +7,6 @@ on:
       - '**.ftd'
       - '**.md'
   workflow_dispatch:
-  workflow_call:
 env:
   CARGO_TERM_COLOR: always
 
@@ -17,7 +16,6 @@ jobs:
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v2
-      - uses: FranzDiebold/github-env-vars-action@v2
       - name: Install fpm
         id: install_fpm
         continue-on-error: false
