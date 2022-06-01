@@ -1,0 +1,11 @@
+-- ds.page: Funny github workflow behaviour
+
+Today, I encounter the weird behaviour on github workflow. We are using
+[peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages)
+github action to deploy our static files to GitHub Pages.
+
+But everytime, this workflow action runs, the
+[`Custom domain`](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)
+for github page site gets removed or unset and that results in site throws 404.
+
+Then we have written our own workflow to achieve and BINGO! ✌️ it worked.

@@ -23,3 +23,9 @@ zip: github.com/arpita-jaiswal/blog/archive/refs/heads/main.zip
   - P1 Grammar Docs: -/ftd.dev/p1-grammar/
 - Chapter 3: Adding dependencies
   url: /c1/deps/
+
+
+# Day to day discovery: /ddd/
+nav-title: My Day to Day Learnings and Discoveries
+
+- Funny github workflow behaviour: /ddd/funny-github-workflow/
