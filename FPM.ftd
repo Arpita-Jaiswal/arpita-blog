@@ -2,6 +2,7 @@
 
 -- fpm.package: arjaupashak.com
 zip: github.com/arpita-jaiswal/blog/archive/refs/heads/main.zip
+base: https://raw.githubusercontent.com/Arpita-Jaiswal/blog/main
 
 -- fpm.dependency: fifthtry.github.io/doc-site as ds
 -- fpm.dependency: ftd.dev
