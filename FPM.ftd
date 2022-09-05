@@ -29,4 +29,8 @@ download-base-url: https://raw.githubusercontent.com/arpita-jaiswal/blog/main
 # Day to day discovery: /ddd/
 nav-title: My Day to Day Learnings and Discoveries
 
-- Funny github workflow behaviour: /ddd/funny-github-workflow/
+- Discoveries:
+  - Funny github workflow behaviour: /ddd/funny-github-workflow/
+  - Struggle with CORS issue: /ddd/preflight-cors-issue/
+- Learning:
+  - Preflight Request: learn/preflight-request/
