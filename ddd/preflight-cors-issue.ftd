@@ -21,7 +21,7 @@ the preflight request sent in a logged-in state?
 -- ds.h3: Observations
 
 - The method of the request was `GET`.
-- Logged in sets the browser COOKIE.
+- Logged-in state sets the browser COOKIE.
 
 -- ds.h3: Conclusion
 
