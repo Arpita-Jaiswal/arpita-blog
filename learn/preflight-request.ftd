@@ -1,0 +1,81 @@
+-- ds.page: Preflight Request
+
+A CORS preflight request is a CORS request that checks to see if the CORS
+protocol is understood and a server is aware using specific methods and headers.
+
+It is an OPTIONS request, using three HTTP request headers:
+
+- Access-Control-Request-Method
+- Access-Control-Request-Headers
+- Origin header
+
+A preflight request is automatically issued by a browser and in normal cases,
+It appears when request is qualified as "to be preflighted" and omitted for
+simple requests.
+
+-- ds.h2: Qualifications
+
+-- ds.h3: Simple requests
+
+Qualification for Simple requests include the following
+
+- methods: GET, HEAD, POST.
+- headers: Accept, Accept-Language, Content-Language, Content-Type, Range
+
+and etcs..
+
+-- ds.h3: Preflight requests
+
+Out of all the "to be preflighted" qualifications, the interesting are
+
+- methods: DELETE, PUT
+- all custom headers
+
+
+
+-- ds.h2: How this works
+
+Before sending the actual request to the server, the client would ask server if
+it allows the request or not. This is achieved by sending preflight request.
+
+-- ds.code:
+lang: sh
+
+OPTIONS /resource/foo
+Access-Control-Request-Method: DELETE
+Access-Control-Request-Headers: origin, x-requested-with
+Origin: https://foo.bar.org
+
+-- ds.markdown:
+
+If the server allows it, then it will respond to the preflight request with an
+`Access-Control-Allow-Methods` response header, which lists DELETE:
+
+-- ds.code:
+lang: sh
+
+HTTP/1.1 204 No Content
+Connection: keep-alive
+Access-Control-Allow-Origin: https://foo.bar.org
+Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE
+Access-Control-Max-Age: 86400
+
+-- ds.markdown:
+
+The preflight response can be optionally cached for the requests created in the
+same URL using `Access-Control-Max-Age` header like in the above example.
+
+
+For more details:
+
+- [Preflight request](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request)
+- [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+
+[This discovery](/ddd/preflight-cors-issue) results in learning
+
+
+
+
+
+

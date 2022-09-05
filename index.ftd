@@ -1,7 +1,17 @@
 -- import: arjaupashak.com/assets
 -- import: fpm
 
--- ds.page: Great the whole page just about me
+-- ds.page:
+widthfill: true
+
+-- ftd.column:
+width: fill
+padding-horizontal: 34
+max-width: 1104
+align: center
+
+-- ds.h1:  Great the whole page just about me
+
 
 -- blog-heading: Hi, I am Arpita Jaiswal
 image: $assets.files.static.arpita.jpeg
