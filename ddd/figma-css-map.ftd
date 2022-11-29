@@ -47,17 +47,13 @@
   - Bottom right >>> justify-content: end; align-items: end;
 
 
-
-
-
-
-## Things not in auto-layout
+-- ds.h2: Things not in auto-layout
 
 - flex-direction: column-reverse, row-reverse
 - justify-content: flex-start, flex-end
 - align-items: flex-start, flex-end
 
-## Things supported by ftd besides auto-layout (Auto Layout ++)
+-- ds.h2: Things supported by ftd besides auto-layout (Auto Layout ++)
 
 - [x] Support: direction: rtl in common
 - [x] Cross axis alignment (align-self), cross-alignment ??
