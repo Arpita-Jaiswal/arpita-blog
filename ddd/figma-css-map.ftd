@@ -46,6 +46,8 @@
   - Bottom center >>> justify-content: end; align-items: center;
   - Bottom right >>> justify-content: end; align-items: end;
 
+- Clip Content: overflow: hidden
+
 
 -- ds.h2: Things not in auto-layout
 
@@ -60,5 +62,7 @@
 - [x] Spacing: extra values from [mdn justify-content](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content)
 - [x] Fills is an array and Fill is an or-type (ftd.fill) (Solid, linear, etc). These are common properties
 - [x] Color (ftd.fill.solid) is only available to text common.
+- [x] line-clamp
+- [x] overflow: scroll
 
 
