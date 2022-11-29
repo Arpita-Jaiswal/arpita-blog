@@ -27540,15 +27540,15 @@ document.addEventListener("keydown", function(event) {
 
 
 
-if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"increment","target":"arjaupashak.com/ddd/#current-app@0,1,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,1,1.len"}]}}]', this);
+if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/ddd/#current-app@0,1,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,1,1.len"}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
 }
 
-if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/ddd/#current-app@0,1,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,1,1.len"}]}}]', this);
+if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"increment","target":"arjaupashak.com/ddd/#current-app@0,1,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,1,1.len"}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
@@ -27568,15 +27568,15 @@ if (global_keys["Escape"] && buffer.join(',').includes("Escape")) {
     return;
 }
 
-if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/ddd/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,2,1.len"}]}}]', this);
+if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"increment","target":"arjaupashak.com/ddd/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,2,1.len"}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
 }
 
-if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"increment","target":"arjaupashak.com/ddd/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,2,1.len"}]}}]', this);
+if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/ddd/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/ddd/#apps@0,2,1.len"}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
