@@ -64,5 +64,6 @@
 - [x] Color (ftd.fill.solid) is only available to text common.
 - [x] line-clamp
 - [x] overflow: scroll
+- [x] Wrap: true
 
 
