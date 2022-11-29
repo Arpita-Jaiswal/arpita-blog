@@ -26328,13 +26328,6 @@ if (global_keys["Escape"] && buffer.join(',').includes("Escape")) {
     return;
 }
 
-if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/fifthtry/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/fifthtry/#apps@0,2,1.len"}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
 if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
     window.ftd.handle_event(event, 'main', '[{"action":"increment","target":"arjaupashak.com/fifthtry/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/fifthtry/#apps@0,2,1.len"}]}}]', this);
     buffer = [];
@@ -26342,8 +26335,8 @@ if (global_keys["ArrowRight"] && buffer.join(',').includes("ArrowRight")) {
     return;
 }
 
-if (global_keys["Shift"] && global_keys["Shift"] && buffer.join(',').includes("Shift,Shift")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/fifthtry/#is-open@0,2,1","parameters":{"value":[{"value":true,"reference":null},{"value":"boolean","reference":null}]}}]', this);
+if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"decrement","target":"arjaupashak.com/fifthtry/#current-app@0,2,1","parameters":{"clamp":[{"value":0,"reference":null},{"value":0,"reference":"arjaupashak.com/fifthtry/#apps@0,2,1.len"}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
@@ -26351,6 +26344,13 @@ if (global_keys["Shift"] && global_keys["Shift"] && buffer.join(',').includes("S
 
 if (global_keys["Escape"] && buffer.join(',').includes("Escape")) {
     window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/fifthtry/#is-open@0,2,1","parameters":{"value":[{"value":false,"reference":null},{"value":"boolean","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
+    return;
+}
+
+if (global_keys["Shift"] && global_keys["Shift"] && buffer.join(',').includes("Shift,Shift")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/fifthtry/#is-open@0,2,1","parameters":{"value":[{"value":true,"reference":null},{"value":"boolean","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
