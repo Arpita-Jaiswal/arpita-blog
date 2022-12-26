@@ -46,3 +46,4 @@ nav-title: My Day to Day Learnings and Discoveries
 ## Rust: /rust/
 
 - The Stack And Heap: /rust/memory/
+- Cell and RefCell: /rust/mutable-container/

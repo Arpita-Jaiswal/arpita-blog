@@ -63,3 +63,6 @@ been, but what about x? Well, x is a Box<i32>, and boxes allocate memory on the
 heap. The actual value of the box is a structure which has a pointer to
 ‘the heap’. When we start executing the function, and Box::new() is called,
 it allocates some memory for the heap, and puts 5 there.
+
+
+** Note: The `Box` and `Vector` stores data in heap.
