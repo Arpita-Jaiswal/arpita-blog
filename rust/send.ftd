@@ -18,5 +18,5 @@ An example of a non-Send type is the reference-counting pointer
 [`rc::Rc`](/rust/rc/). If two threads attempt to clone Rcs that point to the
 same reference-counted value, they might try to update the reference count at
 the same time, which is undefined behavior because Rc doesn’t use atomic
-operations. Its cousin `sync::Arc` does use atomic operations (incurring some
-overhead) and thus is `Send`.
+operations. Its cousin [`sync::Arc`](/rust/arc/) does use atomic operations
+(incurring some overhead) and thus is `Send`.

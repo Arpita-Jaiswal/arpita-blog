@@ -50,4 +50,5 @@ nav-title: My Day to Day Learnings and Discoveries
 - Trait `send`: /rust/send/
 - Arc: /rust/arc/
 - Cell and RefCell: /rust/cell-refcell/
+- Trait `sync`: /rust/sync/
 - Mutability inside immutable: /rust/rcrefcell/
