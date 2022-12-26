@@ -51,4 +51,5 @@ nav-title: My Day to Day Learnings and Discoveries
 - Arc: /rust/arc/
 - Cell and RefCell: /rust/cell-refcell/
 - Trait `sync`: /rust/sync/
+- Mutex and RwLock: /rust/mutex-rwlock/
 - Mutability inside immutable: /rust/rcrefcell/
