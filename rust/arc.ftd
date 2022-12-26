@@ -1,0 +1,60 @@
+-- ds.page: Arc
+
+Refer: [link 1](https://doc.rust-lang.org/std/sync/struct.Arc.html)
+
+A thread-safe reference-counting pointer. 'Arc' stands for 'Atomically
+Reference Counted'.
+
+The type `Arc<T>`` provides shared ownership of a value of type `T`, allocated
+in the heap. Invoking clone on Arc produces a new Arc instance, which points to
+the same allocation on the heap as the source Arc, while increasing a
+reference count. When the last Arc pointer to a given allocation is destroyed,
+the value stored in that allocation (often referred to as “inner value”) is
+also dropped.
+
+Shared references in Rust disallow mutation by default, and `Arc` is no
+exception: you cannot generally obtain a mutable reference to something inside
+an Arc. If you need to mutate through an Arc, use `Mutex`, `RwLock`, or one of
+the Atomic types.
+
+** Note: For single-threaded reference-counting pointer, use [`Rc`](/rust/rc/) **
+
+-- ds.code:
+lang: rs
+
+use std::sync::Arc;
+
+let arc = Arc::new(());
+// Method-call syntax
+let arc2 = arc.clone();
+// Fully qualified syntax
+let arc3 = Arc::clone(&arc);
+
+
+-- ds.code:
+lang: rs
+
+use std::sync::Arc;
+
+let foo = Arc::new(vec![1.0, 2.0, 3.0]);
+
+// The two syntaxes below are equivalent.
+let a = foo.clone();
+let b = Arc::clone(&foo);
+
+// a, b, and foo are all Arcs that point to the same memory location
+
+
+-- ds.h2: Weak Pointers
+
+To understand Weak Pointers better, checkout this
+[link](/rust/rc/#weak-pointers).
+
+
+-- ds.code:
+lang: rs
+
+use std::sync::Arc;
+
+let my_arc = Arc::new(());
+let my_weak = Arc::downgrade(&my_arc);

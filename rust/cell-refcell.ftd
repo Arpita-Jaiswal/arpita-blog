@@ -1,7 +1,7 @@
 -- ds.page: Shareable Mutable Container (Cell and RefCell)
 
 Refer: [link 1](https://doc.rust-lang.org/std/cell/struct.RefCell.html), [link
-2](https://doc.rust-lang.org/std/cell/struct.Cell.html) [link 3](https://blog.iany.me/2019/02/rust-cell-and-refcell/#:~:text=The%20difference%20is%20how%20they,mutable%20and%20immutable%20reference%20borrowing.)
+2](https://doc.rust-lang.org/std/cell/struct.Cell.html), [link 3](https://blog.iany.me/2019/02/rust-cell-and-refcell/#:~:text=The%20difference%20is%20how%20they,mutable%20and%20immutable%20reference%20borrowing.)
 
 Rust memory safety is based on this rule: Given an object T, it is only possible
 to have one of the following:

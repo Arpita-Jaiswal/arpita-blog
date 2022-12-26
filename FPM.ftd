@@ -46,6 +46,8 @@ nav-title: My Day to Day Learnings and Discoveries
 ## Rust: /rust/
 
 - The Stack And Heap: /rust/memory/
-- Rc: /rust/rc
-- Cell and RefCell: /rust/mutable-container/
+- Rc: /rust/rc/
+- Trait `send`: /rust/send/
+- Arc: /rust/arc/
+- Cell and RefCell: /rust/cell-refcell/
 - Mutability inside immutable: /rust/rcrefcell/
