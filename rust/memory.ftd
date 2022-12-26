@@ -65,4 +65,4 @@ heap. The actual value of the box is a structure which has a pointer to
 it allocates some memory for the heap, and puts 5 there.
 
 
-** Note: The `Box` and `Vector` stores data in heap.
+** Note: The `Box` and `Vector` stores data in heap. **

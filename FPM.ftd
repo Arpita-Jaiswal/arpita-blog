@@ -46,4 +46,6 @@ nav-title: My Day to Day Learnings and Discoveries
 ## Rust: /rust/
 
 - The Stack And Heap: /rust/memory/
+- Rc: /rust/rc
 - Cell and RefCell: /rust/mutable-container/
+- Mutability inside immutable: /rust/rcrefcell/

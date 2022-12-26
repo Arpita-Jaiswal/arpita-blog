@@ -1,0 +1,64 @@
+-- ds.page: Introducing mutability ‘inside’ of something immutable
+
+Many shared smart pointer types, including `Rc<T>` and `Arc<T>`, provide
+containers that can be cloned and shared between multiple parties. Because the
+contained values may be multiply-aliased, they can only be borrowed with `&`, not
+`&mut`. Without cells it would be impossible to mutate data inside of these
+smart pointers at all.
+
+It’s very common then to put a `RefCell<T>` inside shared pointer types to
+reintroduce mutability:
+
+-- ds.code: single-threaded
+lang: rs
+
+use std::cell::{RefCell, RefMut};
+use std::collections::HashMap;
+use std::rc::Rc;
+
+fn main() {
+    let shared_map: Rc<RefCell<_>> = Rc::new(RefCell::new(HashMap::new()));
+    let c_ref_cell = Rc::clone(&shared_map);
+    // Create a new block to limit the scope of the dynamic borrow
+    {
+        let mut map: RefMut<_> = c_ref_cell.borrow_mut();
+        map.insert("africa", 92388);
+        map.insert("kyoto", 11837);
+        map.insert("piccadilly", 11826);
+        map.insert("marbles", 38);
+    }
+
+    // Note that if we had not let the previous borrow of the cache fall out
+    // of scope then the subsequent borrow would cause a dynamic thread panic.
+    // This is the major hazard of using `RefCell`.
+    let total: i32 = shared_map.borrow().values().sum();
+    println!("{total}");
+}
+
+-- ds.code: Multi-threaded
+lang: rs
+
+use std::sync::{Arc, Mutex, MutexGuard};
+use std::collections::HashMap;
+use std::thread;
+
+fn main() {
+    let shared_map: Arc<Mutex<_>> = Arc::new(Mutex::new(HashMap::new()));
+    let c_mutex = Arc::clone(&shared_map);
+        // Create a new block to limit the scope of the dynamic borrow
+        thread::spawn(move || {
+        let mut map: MutexGuard<_> = c_mutex.lock().unwrap();
+        map.insert("africa", 92388);
+        map.insert("kyoto", 11837);
+        map.insert("piccadilly", 11826);
+        map.insert("marbles", 38);
+        drop(map);
+    }).join().expect("thread::spawn failed");
+
+    // Note that if we had not let the previous borrow of the cache fall out
+    // of scope then the subsequent borrow would cause a dynamic thread panic.
+    // This is the major hazard of using `RefCell`.
+    let total: i32 = shared_map.lock().unwrap().values().sum();
+    println!("{total}");
+
+}
