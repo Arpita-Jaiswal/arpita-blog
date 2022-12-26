@@ -1,0 +1,8 @@
+-- ds.page: Understanding Rust
+
+Rust is the most commonly used data these days and we are mainly using this to
+develop a new language `FTD` and it's package manager ++ `FPM`.
+
+This need to understand rust in deep detail.
+
+I am listing the discoveries and interesting facts that I find in rust.
