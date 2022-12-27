@@ -449,8 +449,10 @@
   },
   "arjaupashak.com/c1/p1/#current-page@0,1,0,2": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -504,8 +506,10 @@
   },
   "arjaupashak.com/c1/p1/#current-page@0,1,0,3": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -559,8 +563,10 @@
   },
   "arjaupashak.com/c1/p1/#current-page@0,2,0,2": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -614,8 +620,10 @@
   },
   "arjaupashak.com/c1/p1/#current-page@0,2,0,3": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -669,6 +677,7 @@
   },
   "arjaupashak.com/c1/p1/#current-section@0,1,0,2": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -726,6 +735,7 @@
   },
   "arjaupashak.com/c1/p1/#current-section@0,1,0,3": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -766,6 +776,7 @@
   },
   "arjaupashak.com/c1/p1/#current-section@0,2,0,2": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -823,6 +834,7 @@
   },
   "arjaupashak.com/c1/p1/#current-section@0,2,0,3": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -2957,6 +2969,7 @@
   },
   "arjaupashak.com/c1/p1/#obj@0,2,0,3,2,2,0,0,3,0": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -3062,6 +3075,7 @@
   },
   "arjaupashak.com/c1/p1/#obj@0,2,0,3,2,2,0,1,3,0": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -5355,8 +5369,10 @@
   },
   "arjaupashak.com/c1/p1/#toc@0,1,2,0,0": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -5514,6 +5530,7 @@
   },
   "arjaupashak.com/c1/p1/#toc@0,1,2,0,0,2": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -5646,8 +5663,10 @@
   },
   "arjaupashak.com/c1/p1/#toc@0,1,2,0,1": {
     "value": {
+      "bury": false,
       "children": [
         {
+          "bury": false,
           "children": [],
           "document": null,
           "font-icon": null,
@@ -5805,6 +5824,7 @@
   },
   "arjaupashak.com/c1/p1/#toc@0,1,2,0,1,2": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -5937,6 +5957,7 @@
   },
   "arjaupashak.com/c1/p1/#toc@0,1,2,0,2": {
     "value": {
+      "bury": false,
       "children": [],
       "document": null,
       "font-icon": null,
@@ -6593,6 +6614,7 @@
   "fifthtry.github.io/header#footer-list": {
     "value": [
       {
+        "bury": false,
         "children": [],
         "document": null,
         "font-icon": null,
@@ -6607,6 +6629,7 @@
         "url": "/legal/"
       },
       {
+        "bury": false,
         "children": [],
         "document": null,
         "font-icon": null,
@@ -6621,6 +6644,7 @@
         "url": "/support/"
       },
       {
+        "bury": false,
         "children": [],
         "document": null,
         "font-icon": null,
@@ -24721,6 +24745,26 @@ function filter_keys(data, filter_fn) {
 }
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
+
+    if (method == "GET") {
+        let query_parameters = new URLSearchParams();
+        for (let [header, value] of Object.entries(request_data)) {
+            if (header != "url" && header != "function" && header != "method")
+            {
+                query_parameters.set(header, value);
+            }
+       }
+       let query_string = query_parameters.toString();
+       if (query_string) {
+           let get_url = request_data.url + "?" + query_parameters.toString();
+           window.location.href = get_url;
+       }
+       else{
+           window.location.href = request_data.url;
+       }
+       return;
+    }
+
     let xhr = new XMLHttpRequest();
     xhr.open(method, request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
@@ -25245,15 +25289,15 @@ if (global_keys["ArrowLeft"] && buffer.join(',').includes("ArrowLeft")) {
     return;
 }
 
-if (global_keys["Escape"] && buffer.join(',').includes("Escape")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/c1/p1/#is-open@0,1,1","parameters":{"value":[{"value":false,"reference":null},{"value":"boolean","reference":null}]}}]', this);
+if (global_keys["Shift"] && global_keys["Shift"] && buffer.join(',').includes("Shift,Shift")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/c1/p1/#is-open@0,1,1","parameters":{"value":[{"value":true,"reference":null},{"value":"boolean","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
 }
 
-if (global_keys["Shift"] && global_keys["Shift"] && buffer.join(',').includes("Shift,Shift")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/c1/p1/#is-open@0,1,1","parameters":{"value":[{"value":true,"reference":null},{"value":"boolean","reference":null}]}}]', this);
+if (global_keys["Escape"] && buffer.join(',').includes("Escape")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"arjaupashak.com/c1/p1/#is-open@0,1,1","parameters":{"value":[{"value":false,"reference":null},{"value":"boolean","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
