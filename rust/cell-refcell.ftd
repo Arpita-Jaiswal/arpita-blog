@@ -89,7 +89,7 @@ assert_eq!(*my_struct.special_field.borrow(), new_value);
 In Rust document, Cell is "A mutable memory location", and RefCell is "A
 mutable memory location with dynamically checked borrow rules".
 
-They both provide "interior mutability", where you can modify the value stored 
+They both provide "interior mutability", where you can modify the value stored
 in cell via immutable reference of the cell.
 
 They both have an API get_mut to return a mutable reference to the underlying
@@ -116,10 +116,10 @@ The first set is the Copy API. It requires a Copy wrapper, and contains methods
 -- ds.code:
 lang: rs
 
-// impl<T: Copy> Cell<T>
+;; // impl<T: Copy> Cell<T>
 pub fn get(&self) -> T
 
-// impl<T> Cell<T>
+;; // impl<T> Cell<T>
 pub fn set(&self, val: T)
 
 -- ds.markdown:
@@ -132,10 +132,10 @@ cell.
 -- ds.code:
 lang: rs
 
-// impl<T: Default> Cell<T>
+;; // impl<T: Default> Cell<T>
 pub fn take(&self) -> T
 
-// impl<T> Cell<T>
+;; // impl<T> Cell<T>
 pub fn set(&self, val: T)
 
 -- ds.markdown:
@@ -146,7 +146,7 @@ Default or the new value is known in advance when taking the value.
 -- ds.code:
 lang: rs
 
-// impl<T> Cell<T>
+;; // impl<T> Cell<T>
 pub fn replace(&self, val: T) -> T
 
 -- ds.markdown:
@@ -178,3 +178,6 @@ is currently borrowed, either mutably or immutably.
 
 The runtime tracking certainly has overheads, and `RefCell` also can lead to
 runtime panics.
+
+
+-- end: ds.page

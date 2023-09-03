@@ -62,3 +62,5 @@ fn main() {
     println!("{total}");
 
 }
+
+-- end: ds.page

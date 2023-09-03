@@ -73,11 +73,4 @@ expiration, the `X-XSRF-TOKEN` cookie was deleted, hence the successful request.
 request
 - Or the backend can fix the handling of requests for `OPTION` method.
 
-
-
-
-
-
-
-
-
+-- end: ds.page

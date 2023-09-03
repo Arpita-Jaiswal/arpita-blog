@@ -38,3 +38,5 @@ Cell cannot be Sync.
 Another example of a non-Sync type is the reference-counting pointer `Rc`. Given
 any reference `&Rc<T>`, you can clone a new `Rc<T>`, modifying the reference
 counts in a non-atomic way.
+
+-- end: ds.page

@@ -42,3 +42,6 @@ Had a chat with AmitU of how to implement `processor` in FTD 0.3.
 The discussion that follows it [discussion#447](https://github.com/ftd-lang/ftd/discussions/447).
 I need to break this discussion into two discussion. One comprising the processor
 syntax and other over the discussion on generic type.
+
+
+-- end: ds.page

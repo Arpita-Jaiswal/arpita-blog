@@ -204,3 +204,6 @@ fn main() {
     // gadgets, so they are destroyed. This zeroes the reference count on
     // Gadget Man, so he gets destroyed as well.
 }
+
+
+-- end: ds.page

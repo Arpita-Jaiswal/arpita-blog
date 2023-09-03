@@ -1,27 +1,29 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: arjaupashak.com
-zip: github.com/arpita-jaiswal/blog/archive/refs/heads/main.zip
-download-base-url: https://raw.githubusercontent.com/arpita-jaiswal/blog/main
+-- fastn.package: arjaupashak.com
+favicon: /-/arjaupashak.com/static/favicon.png
 
--- fpm.dependency: fifthtry.github.io/doc-site as ds
--- fpm.dependency: ftd.dev
--- fpm.dependency: fpm.dev
+-- fastn.dependency: fastn-community.github.io/doc-site
+-- fastn.dependency: fastn.com
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+-- fastn.dependency: fifthtry.github.io/fastn-io-typography
 
--- fpm.auto-import: arjaupashak.com/FPM/config
--- fpm.auto-import: ds
--- fpm.auto-import: ds as ft
+-- fastn.auto-import: arjaupashak.com/FASTN/config
+-- fastn.auto-import: arjaupashak.com/FASTN/ds
+-- fastn.auto-import: arjaupashak.com/assets
 
--- fpm.sitemap:
+-- fastn.sitemap:
 
-# FTD Course: /c1/
+# fastn Course: /c1/
 
-- Chapter 1: FPM Intro
+## fastn 0.3: /c1/intro/
+
+- Chapter 1: fastn Intro
   url: /c1/intro/
-  - Installation Instruction: -/fpm.dev/how-to/install/
+  ;; - Installation Instruction: -/fastn.com/how-to/install/
 - Chapter 2: P1 Grammar
   url: /c1/p1/
-  - P1 Grammar Docs: -/ftd.dev/p1-grammar/
+  ;; - P1 Grammar Docs: -/fastn.com/p1-grammar/
 - Chapter 3: Adding dependencies
   url: /c1/deps/
 
@@ -53,3 +55,6 @@ nav-title: My Day to Day Learnings and Discoveries
 - Trait `sync`: /rust/sync/
 - Mutex and RwLock: /rust/mutex-rwlock/
 - Mutability inside immutable: /rust/rcrefcell/
+
+
+# 🔎: /search/

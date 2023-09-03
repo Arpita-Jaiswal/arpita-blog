@@ -1,8 +1,0 @@
--- import: ds
-
--- ds.site-name: ArpitaSays
-
--- boolean is-mobile: false
-
--- is-mobile: true
-if: $ftd.device == mobile
