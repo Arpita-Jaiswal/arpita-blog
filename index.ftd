@@ -8,7 +8,7 @@ sidebar: false
 
 -- blog-heading:
 image: $assets.files.static.arpita-1.png
-title: [Hi! I am Arpita, Jaiswal !!!!]
+title: Hi! I am Arpita Jaiswal !!!!
 
 I’m a **web/software developer** who loves to build projects and share
 valuable ps for programmers on this blog.
@@ -75,7 +75,7 @@ padding-horizontal.px: 34
 
 
 -- component blog-heading:
-string list title:
+caption title:
 body description:
 ftd.image-src image:
 
@@ -94,7 +94,7 @@ image: $blog-heading.image
 
 
 -- component blog-desktop:
-string list title:
+caption title:
 body description:
 ftd.image-src image:
 
@@ -111,36 +111,26 @@ align-self: center
 width: fill-container
 spacing.fixed.px: 70
 
--- ftd.column:
-width: fill-container
+-- ftd.container:
 role: $heading-hero
-color: $inherited.colors.text-strong
+margin-left.percent: -8
 margin-bottom.rem: 0.5
 padding-top.em: 0.5
-margin-left.percent: -8
-spacing.fixed.px: 25
 
--- ftd.text: $obj
-for: obj in $blog-desktop.title
+-- ftd.text: $blog-desktop.title
 background.solid: #b58fdc
-padding.px: 5
 color: white
+display: inline
+padding-right.px: 12
 
--- end: ftd.column
-
+-- end: ftd.container
 
 -- ftd.text: $blog-desktop.description
 role: $copy-regular
 padding-right.px: 50
-
-
+color: black
 
 -- end: ftd.column
-
-
-/-- ds.h1: $blog-desktop.title
-
-$blog-desktop.description
 
 -- end: ftd.row
 
@@ -159,7 +149,7 @@ $blog-desktop.description
 
 
 -- ftd.type heading-hero:
-line-height.em: 1.25
+line-height.em: 1.5
 size.em: 6
 letter-spacing.px: 0
 weight: 700
