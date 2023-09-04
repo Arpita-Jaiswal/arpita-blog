@@ -1,16 +1,28 @@
 -- import: arjaupashak.com/assets
+-- import: fastn-community.github.io/lobster-font/assets as lobster-assets
+-- import: fifthtry.github.io/inter-font/assets as inter-assets
 
--- ds.page: Great the whole page just about me
+-- ds.page:
 full-width: true
 sidebar: false
 
--- blog-heading: Hi, I am Arpita Jaiswal
-image: $assets.files.static.arpita.jpeg
+-- blog-heading:
+image: $assets.files.static.arpita-1.png
+title: [Hi! I am Arpita, Jaiswal !!!!]
 
-I’m a web/software developer who loves to build projects and share valuable ps
-for programmers on this blog.
+I’m a **web/software developer** who loves to build projects and share
+valuable ps for programmers on this blog.
 
-Currently, building `fastn`, a programming language for everyone, day and night.
+Currently, building **fastn**, a programming language for everyone, day and
+night.
+
+-- small-message: *Let’s dive in…*
+
+-- banner-with-cta:
+cta-text: Learn More
+
+Get yourself introduced with fastn. Discover the new possibilities and explore
+the new found power that fastn gives you while building your website.
 
 -- end: ds.page
 
@@ -18,35 +30,59 @@ Currently, building `fastn`, a programming language for everyone, day and night.
 
 
 
--- component blog-heading:
-caption title:
-body description:
-ftd.image-src image:
+-- component small-message:
+caption or body message:
+
+-- ftd.text: $small-message.message
+role: $copy-regular
+color: #fc9cd5
+align-self: center
+
+-- end: small-message
+
+
+
+
+
+
+-- component banner-with-cta:
+caption or body message:
+string cta-text:
 
 -- ftd.row:
 width: fill-container
-background.solid: $inherited.colors.background.step-1
-padding.px: 20
+background.solid: #fc9cd5
+padding-vertical.px: 75
+padding-horizontal.px: 60
 
--- ftd.desktop:
+-- ftd.text: $banner-with-cta.message
+role: $copy-regular
+align-self: center
+color: white
+
+-- ftd.text: $banner-with-cta.cta-text
+background.solid: #b58fdc
+color: white
+padding-vertical.px: 21
+padding-horizontal.px: 34
+
+-- end: ftd.row
+
+-- end: banner-with-cta
+
+
+
+
+
+-- component blog-heading:
+string list title:
+body description:
+ftd.image-src image:
 
 -- blog-desktop:
 title: $blog-heading.title
 description: $blog-heading.description
 image: $blog-heading.image
-
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- blog-mobile:
-title: $blog-heading.title
-description: $blog-heading.description
-image: $blog-heading.image
-
--- end: ftd.mobile
-
--- end: ftd.row
 
 -- end: blog-heading
 
@@ -57,41 +93,8 @@ image: $blog-heading.image
 
 
 
--- component blog-mobile:
-caption title:
-body description:
-ftd.image-src image:
-
-
--- ftd.column:
-width: fill-container
-spacing.fixed.px: 30
-
--- ftd.image:
-src: $blog-mobile.image
-width: fill-container
-align-self: center
-
--- ds.h1: $blog-mobile.title
-
-$blog-mobile.description
-
--- end: ftd.column
--- end: blog-mobile
-
-
-
-
-
-
-
-
-
-
-
-
 -- component blog-desktop:
-caption title:
+string list title:
 body description:
 ftd.image-src image:
 
@@ -100,14 +103,72 @@ width: fill-container
 spacing.fixed.px: 30
 
 -- ftd.image:
-width.fixed.percent: 30
+width.fixed.percent: 45
 src: $blog-desktop.image
 align-self: center
 
--- ds.h1: $blog-desktop.title
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 70
+
+-- ftd.column:
+width: fill-container
+role: $heading-hero
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+padding-top.em: 0.5
+margin-left.percent: -8
+spacing.fixed.px: 25
+
+-- ftd.text: $obj
+for: obj in $blog-desktop.title
+background.solid: #b58fdc
+padding.px: 5
+color: white
+
+-- end: ftd.column
+
+
+-- ftd.text: $blog-desktop.description
+role: $copy-regular
+padding-right.px: 50
+
+
+
+-- end: ftd.column
+
+
+/-- ds.h1: $blog-desktop.title
 
 $blog-desktop.description
 
 -- end: ftd.row
 
 -- end: blog-desktop
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.type heading-hero:
+line-height.em: 1.25
+size.em: 6
+letter-spacing.px: 0
+weight: 700
+font-family: $lobster-assets.fonts.Lobster
+
+
+-- ftd.type copy-regular:
+line-height.em: 1.5
+size.px: 22
+letter-spacing.px: 0
+font-family: $inter-assets.fonts.Inter
+weight: 400
