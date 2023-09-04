@@ -1,0 +1,76 @@
+-- ds.page: Struggle with CORS issue
+
+The story goes like this. We were calling cross-origin API. When logged in, the
+preflight request is sent during API call; weirdly, when logged out, the
+preflight request is not sent. Also, the preflight request was failing, and so
+during the logged-in state, the request failed.
+
+And the more weird thing is people were adopting some weird solution of expiring
+the session and then making requests. This results in not sending the Preflight
+request. Hence (huh..) hack for them.
+
+For all those who don’t know about `preflight request`, Visit
+[this](learn/preflight-request).
+
+
+-- ds.h2: Problem #1
+
+Why is the preflight request not sent in a logged-out state? Or probably why is
+the preflight request sent in a logged-in state?
+
+-- ds.h3: Observations
+
+- The method of the request was `GET`.
+- Logged-in state sets the browser COOKIE.
+
+-- ds.h3: Conclusion
+
+There must be some custom header set in the API request during the logged-in
+state that causes a preflight request. (Who is doing this??)
+
+
+-- ds.h2: Problem #2
+
+Why is the preflight request failing (in the logged-in state)?
+
+-- ds.h3: Observations
+
+The preflight request has the `OPTION` method and this is handled differently.
+Well, this part is of no interest, about like Why?, but the interesting thing is
+the response doesn’t contain headers like `Access-Control-Allow-Origin`,
+`Access-Control-Allow-Headers`, `Access-Control-Allow-Methods` etc.
+
+-- ds.h3: Conclusion
+
+We need to add the headers in the response which allows our API request which
+probably contains some custom header (set by still don't know who)
+
+
+-- ds.h2: Problem #3
+
+If the API request header has some custom header then who is setting it?
+
+-- ds.h3: Observation
+
+- Well obviously the caller of the API is setting it and the caller is React-JS
+(front-end). But nowhere in the code contains this logic to send some custom
+header during the logged-in state.
+- The API was called using `axios`
+- After logged in, one of the interesting browser cookies was X-XSRF-TOKEN
+
+-- ds.h3: Conclusion
+
+The `axios` sets some headers from the cookie itself and `X-XSRF-TOKEN` is one of
+them. So `X-XSRF-TOKEN` header was sent during the logged-in state by `axios`,
+this results in a preflight request and hence the failure. After manual session
+expiration, the `X-XSRF-TOKEN` cookie was deleted, hence the successful request.
+
+
+
+-- ds.h2: Possible solutions
+
+- Either frontend stop axios from sending the `X-XSRF-TOKEN` header in the API
+request
+- Or the backend can fix the handling of requests for `OPTION` method.
+
+-- end: ds.page

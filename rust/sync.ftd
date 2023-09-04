@@ -1,0 +1,42 @@
+-- ds.page: Trait `Sync`
+
+Refer: [link](https://doc.rust-lang.org/std/marker/trait.Sync.html)
+
+Types for which it is safe to share references between threads.
+
+-- ds.code:
+lang: rs
+
+pub unsafe auto trait Sync { }
+
+-- ds.markdown:
+
+The precise definition is: a type `T` is `Sync` if and only if `&T` is
+[Send](/rust/send/). In other words, if there is no possibility of undefined
+behavior (including data races) when passing `&T` references between threads.
+
+As one would expect, primitive types like `u8` and `f64` are all Sync, and so
+are simple aggregate types containing them, like tuples, structs and enums. More
+examples of basic Sync types include "immutable" types like `&T`, and those with
+simple inherited mutability, such as `Box<T>`, `Vec<T>` and most other
+collection types. (Generic parameters need to be Sync for their container to be
+Sync.)
+
+A somewhat surprising consequence of the definition is that `&mut T` is Sync
+(if `T` is Sync) even though it seems like that might provide unsynchronized
+mutation. The trick is that a mutable reference behind a shared reference (that
+is, `& &mut T`) becomes read-only, as if it were a `& &T`. Hence there is no
+risk of a data race.
+
+Types that are not Sync are those that have "interior mutability" in a
+non-thread-safe form, such as [`Cell` and `RefCell`](/rust/cell-refcell/). These
+types allow for mutation of their contents even through an immutable, shared
+reference. For example the set method on `Cell<T>` takes &self, so it requires
+only a shared reference `&Cell<T>`. The method performs no synchronization, thus
+Cell cannot be Sync.
+
+Another example of a non-Sync type is the reference-counting pointer `Rc`. Given
+any reference `&Rc<T>`, you can clone a new `Rc<T>`, modifying the reference
+counts in a non-atomic way.
+
+-- end: ds.page

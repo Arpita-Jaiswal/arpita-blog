@@ -1,0 +1,254 @@
+-- ds.page: Mutex and RwLock
+
+Refer: [link 1](https://doc.rust-lang.org/std/sync/struct.Mutex.html),
+[link 2](https://doc.rust-lang.org/std/sync/struct.RwLock.html), [link 3](https://stackoverflow.com/questions/50704279/when-or-why-should-i-use-a-mutex-over-an-rwlock)
+
+Multi-Threaded (thread-safe) Shareable Mutable Container
+
+
+**Note: For Single-Threaded Shareable Mutable Container, use [`Cell` or
+`RefCell`](/rust/cell-refcell/).**
+
+-- ds.h2: Mutex
+
+A mutual exclusion primitive useful for protecting shared data
+
+This mutex will block threads waiting for the lock to become available. The
+mutex can be created via a new constructor. Each mutex has a type parameter
+which represents the data that it is protecting. The data can only be accessed
+through the RAII guards returned from `lock` and `try_lock`, which guarantees
+that the data is only ever accessed when the mutex is locked.
+
+-- ds.code:
+lang: rs
+
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::sync::mpsc::channel;
+
+const N: usize = 10;
+
+// Spawn a few threads to increment a shared variable (non-atomically), and
+// let the main thread know once all increments are done.
+//
+// Here we're using an Arc to share memory among threads, and the data inside
+// the Arc is protected with a mutex.
+let data = Arc::new(Mutex::new(0));
+
+let (tx, rx) = channel();
+for _ in 0..N {
+    let (data, tx) = (Arc::clone(&data), tx.clone());
+    thread::spawn(move || {
+        // The shared state can only be accessed once the lock is held.
+        // Our non-atomic increment is safe because we're the only thread
+        // which can access the shared state when the lock is held.
+        //
+        // We unwrap() the return value to assert that we are not expecting
+        // threads to ever fail while holding the lock.
+        let mut data = data.lock().unwrap();
+        *data += 1;
+        if *data == N {
+            tx.send(()).unwrap();
+        }
+        // the lock is unlocked here when `data` goes out of scope.
+    });
+}
+
+rx.recv().unwrap();
+
+
+-- ds.h3:  Poisoning
+
+The mutexes in this module implement a strategy called “poisoning” where a mutex
+is considered poisoned whenever a thread panics while holding the mutex. Once a
+mutex is poisoned, all other threads are unable to access the data by default
+as it is likely tainted (some invariant is not being upheld).
+
+For a mutex, this means that the lock and try_lock methods return a Result which
+indicates whether a mutex has been poisoned or not. Most usage of a mutex will
+simply `unwrap()` these results, propagating panics among threads to ensure that
+a possibly invalid invariant is not witnessed.
+
+A poisoned mutex, however, does not prevent all access to the underlying data.
+The `PoisonError` type has an `into_inner` method which will return the guard
+that would have otherwise been returned on a successful lock. This allows access
+to the data, despite the lock being poisoned.
+
+To recover from a poisoned mutex:
+
+-- ds.code:
+lang: rs
+
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+let lock = Arc::new(Mutex::new(0_u32));
+let lock2 = Arc::clone(&lock);
+
+let _ = thread::spawn(move || -> () {
+    // This thread will acquire the mutex first, unwrapping the result of
+    // `lock` because the lock has not been poisoned.
+    let _guard = lock2.lock().unwrap();
+
+    // This panic while holding the lock (`_guard` is in scope) will poison
+    // the mutex.
+    panic!();
+}).join();
+
+// The lock is poisoned by this point, but the returned result can be
+// pattern matched on to return the underlying guard on both branches.
+let mut guard = match lock.lock() {
+    Ok(guard) => guard,
+    Err(poisoned) => poisoned.into_inner(),
+};
+
+*guard += 1;
+
+-- ds.markdown:
+
+It is sometimes necessary to manually drop the mutex guard to unlock it sooner
+than the end of the enclosing scope.
+
+-- ds.code:
+lang: rs
+
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+const N: usize = 3;
+
+let data_mutex = Arc::new(Mutex::new(vec![1, 2, 3, 4]));
+let res_mutex = Arc::new(Mutex::new(0));
+
+let mut threads = Vec::with_capacity(N);
+(0..N).for_each(|_| {
+    let data_mutex_clone = Arc::clone(&data_mutex);
+    let res_mutex_clone = Arc::clone(&res_mutex);
+
+    threads.push(thread::spawn(move || {
+        let mut data = data_mutex_clone.lock().unwrap();
+        // This is the result of some important and long-ish work.
+        let result = data.iter().fold(0, |acc, x| acc + x * 2);
+        data.push(result);
+        drop(data);
+        *res_mutex_clone.lock().unwrap() += result;
+    }));
+});
+
+let mut data = data_mutex.lock().unwrap();
+// This is the result of some important and long-ish work.
+let result = data.iter().fold(0, |acc, x| acc + x * 2);
+data.push(result);
+// We drop the `data` explicitly because it's not necessary anymore and the
+// thread still has work to do. This allow other threads to start working on
+// the data immediately, without waiting for the rest of the unrelated work
+// to be done here.
+//
+// It's even more important here than in the threads because we `.join` the
+// threads after that. If we had not dropped the mutex guard, a thread could
+// be waiting forever for it, causing a deadlock.
+drop(data);
+// Here the mutex guard is not assigned to a variable and so, even if the
+// scope does not end after this line, the mutex is still released: there is
+// no deadlock.
+*res_mutex.lock().unwrap() += result;
+
+threads.into_iter().for_each(|thread| {
+    thread
+        .join()
+        .expect("The thread creating or execution failed !")
+});
+
+assert_eq!(*res_mutex.lock().unwrap(), 800);
+
+
+-- ds.h2: RwLock
+
+A reader-writer lock
+
+This type of lock allows a number of readers or at most one writer at any point
+in time. The write portion of this lock typically allows modification of the
+underlying data (exclusive access) and the read portion of this lock typically
+allows for read-only access (shared access).
+
+In comparison, a Mutex does not distinguish between readers or writers that
+acquire the lock, therefore blocking any threads waiting for the lock to become
+available. An RwLock will allow any number of readers to acquire the lock as
+long as a writer is not holding the lock.
+
+The type parameter `T` represents the data that this lock protects. It is
+required that `T` satisfies Send to be shared across threads and Sync to allow
+concurrent access through readers. The RAII guards returned from the locking
+methods implement `Deref` (and `DerefMut` for the write methods) to allow access
+to the content of the lock.
+
+-- ds.code:
+lang: rs
+
+use std::sync::RwLock;
+
+let lock = RwLock::new(5);
+
+// many reader locks can be held at once
+{
+    let r1 = lock.read().unwrap();
+    let r2 = lock.read().unwrap();
+    assert_eq!(*r1, 5);
+    assert_eq!(*r2, 5);
+} // read locks are dropped at this point
+
+// only one write lock may be held, however
+{
+    let mut w = lock.write().unwrap();
+    *w += 1;
+    assert_eq!(*w, 6);
+} // write lock is dropped here
+
+
+-- ds.h3: Poisoning
+
+An `RwLock`, like `Mutex`, will become poisoned on a panic. Note, however, that
+an RwLock may only be poisoned if a panic occurs while it is locked exclusively
+(write mode). If a panic occurs in any reader, then the lock will not be
+poisoned.
+
+
+-- ds.h2: When or why should I use a Mutex over an RwLock?
+
+Reading the definition above, the difference we get, is the following:
+
+- Mutex can have only one reader or writer at a time,
+- RwLock can have one writer or multiple readers at a time.
+
+When put it in this way, `RwLock` seems always better (less limited) than
+`Mutex`, why and when to use it, then?
+
+-- ds.h3: Answer
+
+Sometimes it is better to use a Mutex over an RwLock in Rust:
+
+#### RwLock<T> needs more bounds for T to be thread-safe:
+
+- Mutex requires T: Send to be Sync,
+- RwLock requires T to be Send and Sync to be itself Sync.
+
+In other words, Mutex is the only wrapper that can make a T syncable.
+
+Because of those bounds, RwLock requires its contents to be Sync, i.e. it's
+safe for two threads to have a &ptr to that type at the same time.
+Mutex only requires the data to be Send, because conceptually you can
+think of it like when you lock the Mutex it sends the data to your thread, and
+when you unlock it the data gets sent to another thread.
+
+Use Mutex when your T is only Send and not Sync.
+
+####  Preventing writer starvation
+
+RwLock does not have a specified implementation because it uses the
+implementation of the system. Some read-write locks can be subject to writer
+starvation while Mutex cannot have this kind of issue.
+
+Mutex should be used when you have possibly too many readers to let the writers
+have the lock.
+
+-- end: ds.page

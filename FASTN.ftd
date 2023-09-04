@@ -1,0 +1,60 @@
+-- import: fastn
+
+-- fastn.package: arjaupashak.com
+favicon: /-/arjaupashak.com/static/favicon.png
+
+-- fastn.dependency: fastn-community.github.io/doc-site
+-- fastn.dependency: fastn.com
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+-- fastn.dependency: fifthtry.github.io/fastn-io-typography
+
+-- fastn.auto-import: arjaupashak.com/FASTN/config
+-- fastn.auto-import: arjaupashak.com/FASTN/ds
+-- fastn.auto-import: arjaupashak.com/assets
+
+-- fastn.sitemap:
+
+# fastn Course: /c1/
+
+## fastn 0.3: /c1/intro/
+
+- Chapter 1: fastn Intro
+  url: /c1/intro/
+  ;; - Installation Instruction: -/fastn.com/how-to/install/
+- Chapter 2: P1 Grammar
+  url: /c1/p1/
+  ;; - P1 Grammar Docs: -/fastn.com/p1-grammar/
+- Chapter 3: Adding dependencies
+  url: /c1/deps/
+
+
+# Day to day discovery: /ddd/
+nav-title: My Day to Day Learnings and Discoveries
+
+
+## Personal: /ddd/funny-github-workflow/
+
+- Discoveries:
+  - Funny github workflow behaviour: /ddd/funny-github-workflow/
+  - Struggle with CORS issue: /ddd/preflight-cors-issue/
+- Learning:
+  - Preflight Request: learn/preflight-request/
+
+## FifthTry: /fifthtry/
+
+- November 2022: /fifthtry/nov2022/
+- Layout Research: /ddd/figma-css-map/
+
+## Rust: /rust/
+
+- The Stack And Heap: /rust/memory/
+- Rc: /rust/rc/
+- Trait `send`: /rust/send/
+- Arc: /rust/arc/
+- Cell and RefCell: /rust/cell-refcell/
+- Trait `sync`: /rust/sync/
+- Mutex and RwLock: /rust/mutex-rwlock/
+- Mutability inside immutable: /rust/rcrefcell/
+
+
+# 🔎: /search/

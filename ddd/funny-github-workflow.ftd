@@ -1,0 +1,18 @@
+-- ds.page: Funny github workflow behaviour
+
+Today, I encounter the weird behaviour on github workflow. We are using
+[peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages)
+github action to deploy our static files to GitHub Pages.
+
+But everytime, this workflow action runs, the
+[`Custom domain`](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)
+for github page site gets removed or unset and that results in site throwing 404.
+
+After lots of debugs, I have found that adding a Custom domain in Github
+pages pushes a new commit in the branch. This commit adds a `CNAME` file and
+that file contains the custom domain name.
+
+The `peaceiris/actions-gh-pages` delete all files (including `CNAME` file) inside the
+branch and dump the static files in `gh-pages` and hence lost the custom domain.
+
+Then we have added CNAME file in our repo and BINGO! ✌️ it worked.

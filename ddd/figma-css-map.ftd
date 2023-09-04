@@ -1,0 +1,69 @@
+-- ds.page: Layout Research
+
+-- ds.h1: Frame
+
+-- ds.h2: Horizontal Resizing
+
+
+- Fixed(value) >>> width: (value - (horizontal-padding-value * 2))px
+- Hug content >>> width: fit-content
+- Fill container >>> width: 100%
+
+
+-- ds.h2: Vertical Resizing
+
+- Fixed(value) >>> height: (value - (vertical-padding-value * 2))px
+- Hug content >>> height: fit-content
+- Fill container >>> height: 100%
+
+
+-- ds.h1: Auto Layout
+
+- Auto Layout >>> display: flex
+- Direction
+  - Vertical >>> flex-direction: column
+  - Horizontal >>> flex-direction: row
+
+- Positioning for Horizontal direction
+  - Top left >>> justify-content: left; align-items: start;
+  - Top center >>> justify-content: center; align-items: start;
+  - Top right >>> justify-content: right; align-items: start;
+  - Center left >>> justify-content: left; align-items: center;
+  - Center center >>> justify-content: center; align-items: center;
+  - Center right >>> justify-content: right; align-items: center;
+  - Bottom left >>> justify-content: left; align-items: end;
+  - Bottom center >>> justify-content: center; align-items: end;
+  - Bottom right >>> justify-content: right; align-items: end;
+
+- Positioning for Vertical direction
+  - Top left >>> justify-content: start; align-items: start;
+  - Top center >>> justify-content: start; align-items: center;
+  - Top right >>> justify-content: start; align-items: end;
+  - Center left >>> justify-content: center; align-items: start;
+  - Center center >>> justify-content: center; align-items: center;
+  - Center right >>> justify-content: center; align-items: end;
+  - Bottom left >>> justify-content: end; align-items: start;
+  - Bottom center >>> justify-content: end; align-items: center;
+  - Bottom right >>> justify-content: end; align-items: end;
+
+- Clip Content: overflow: hidden
+
+
+-- ds.h2: Things not in auto-layout
+
+- flex-direction: column-reverse, row-reverse
+- justify-content: flex-start, flex-end
+- align-items: flex-start, flex-end
+
+-- ds.h2: Things supported by ftd besides auto-layout (Auto Layout ++)
+
+- [x] Support: direction: rtl in common
+- [x] Cross axis alignment (align-self), cross-alignment ??
+- [x] Spacing: extra values from [mdn justify-content](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content)
+- [x] Fills is an array and Fill is an or-type (ftd.fill) (Solid, linear, etc). These are common properties
+- [x] Color (ftd.fill.solid) is only available to text common.
+- [x] line-clamp
+- [x] overflow: scroll
+- [x] Wrap: true
+
+-- end: ds.page

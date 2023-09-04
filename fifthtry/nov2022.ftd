@@ -1,0 +1,47 @@
+-- ds.page: November
+
+
+-- ds.h2: 27th
+
+
+- [] or-type
+- [] styles
+- [] rona (for clear vision as suggested by AmitU)
+- [] doc-site (till Friday) (PS: This includes all dependencies and you are alone in this.)
+- [] [any](https://github.com/ftd-lang/ftd/discussions/451)
+- [] mobile, desktop, xl
+
+-- ds.h2: 25th
+
+I have added the StuckOnProcessor in FTD 2022
+
+-- ds.h2: 24th
+
+-- ds.h3: One on one with AmitU
+
+He showed me case study on stripe website. The different pages have complete
+different look and feel.
+
+Consider the pages.
+- [home page](https://stripe.com/en-in)
+- [Documentation page](https://stripe.com/docs/payments/checkout)
+
+
+This is because of different integration for different service like for
+documentation, wordpress and for analytics, leadsquared etc.
+
+There are also react [template/
+themes](https://themeforest.net/search/react%20stripe?gclid=CjwKCAiAyfybBhBKEiwAgtB7flhArn4LH28U93q2HiE9xcLyYVhMctyyHaP5TN3eIFK-_wjjzpPGEBoClVIQAvD_BwE)
+available for stripe integration. We can get into this and create 50+ themes in
+ftd with integration with different SAAS api.
+
+
+-- ds.h3: Discussion with AmitU
+
+Had a chat with AmitU of how to implement `processor` in FTD 0.3.
+The discussion that follows it [discussion#447](https://github.com/ftd-lang/ftd/discussions/447).
+I need to break this discussion into two discussion. One comprising the processor
+syntax and other over the discussion on generic type.
+
+
+-- end: ds.page

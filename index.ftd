@@ -1,0 +1,113 @@
+-- import: arjaupashak.com/assets
+
+-- ds.page: Great the whole page just about me
+full-width: true
+sidebar: false
+
+-- blog-heading: Hi, I am Arpita Jaiswal
+image: $assets.files.static.arpita.jpeg
+
+I’m a web/software developer who loves to build projects and share valuable ps
+for programmers on this blog.
+
+Currently, building `fastn`, a programming language for everyone, day and night.
+
+-- end: ds.page
+
+
+
+
+
+-- component blog-heading:
+caption title:
+body description:
+ftd.image-src image:
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding.px: 20
+
+-- ftd.desktop:
+
+-- blog-desktop:
+title: $blog-heading.title
+description: $blog-heading.description
+image: $blog-heading.image
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- blog-mobile:
+title: $blog-heading.title
+description: $blog-heading.description
+image: $blog-heading.image
+
+-- end: ftd.mobile
+
+-- end: ftd.row
+
+-- end: blog-heading
+
+
+
+
+
+
+
+
+-- component blog-mobile:
+caption title:
+body description:
+ftd.image-src image:
+
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 30
+
+-- ftd.image:
+src: $blog-mobile.image
+width: fill-container
+align-self: center
+
+-- ds.h1: $blog-mobile.title
+
+$blog-mobile.description
+
+-- end: ftd.column
+-- end: blog-mobile
+
+
+
+
+
+
+
+
+
+
+
+
+-- component blog-desktop:
+caption title:
+body description:
+ftd.image-src image:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 30
+
+-- ftd.image:
+width.fixed.percent: 30
+src: $blog-desktop.image
+align-self: center
+
+-- ds.h1: $blog-desktop.title
+
+$blog-desktop.description
+
+-- end: ftd.row
+
+-- end: blog-desktop
