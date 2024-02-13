@@ -2,11 +2,11 @@
 
 -- fastn.package: arjaupashak.com
 favicon: /-/arjaupashak.com/static/favicon.png
+zip: https://codeload.github.com/Arpita-Jaiswal/blog/zip/refs/heads/main
 
 -- fastn.dependency: fastn-community.github.io/doc-site
--- fastn.dependency: fastn.com
 -- fastn.dependency: fastn-community.github.io/dark-flame-cs
--- fastn.dependency: fifthtry.github.io/fastn-io-typography
+-- fastn.dependency: fifthtry.github.io/fastn-typography
 -- fastn.dependency: fastn-community.github.io/lobster-font
 -- fastn.dependency: fastn-community.github.io/arya-font
 -- fastn.dependency: fastn-community.github.io/blaka-font
