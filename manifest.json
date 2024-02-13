@@ -1,0 +1,176 @@
+{
+  "files": {
+    "CNAME": {
+      "name": "CNAME",
+      "checksum": "C37D0A6F9BB9C834085675F6E618A67E9317D2BB851F681F65229EC95BDE484B",
+      "size": 15
+    },
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "9186CE3062F8DA6622AFECC43571B10EC20570ACF4075FB49EACF3A9B7C6CA57",
+      "size": 1804
+    },
+    "FASTN/ds.ftd": {
+      "name": "FASTN/ds.ftd",
+      "checksum": "B23AC59790DC499946940A6C9B8A1D3087583D3EFF6B89B77B2794042F3AC2FA",
+      "size": 1881
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "EE1A37A0B38189C3E3D8ED913CD5E0BC1170DAAD6CB89C0AC46DFCB9FEB20A09",
+      "size": 1522
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "40574FCF8CB90D4A67D90BC4ACD4E1C81663640450FC3FF0D32E011DDFCC3DE0",
+      "size": 98
+    },
+    "c1/deps.ftd": {
+      "name": "c1/deps.ftd",
+      "checksum": "366294C5A1AF2B601F02DE57E4D50F0DE5FF092752FB8B09D4FA88FCFD3F949B",
+      "size": 375
+    },
+    "c1/index.ftd": {
+      "name": "c1/index.ftd",
+      "checksum": "A1F0B9D215990B53F39EE4DB32CC460183730D2DFC422816F0C2A6ACD56F75AC",
+      "size": 64
+    },
+    "c1/intro.ftd": {
+      "name": "c1/intro.ftd",
+      "checksum": "814F2C24830BB505F944A1E30944A1D6792B8D1CC3C07EAC8CBD3BDC512CB1B4",
+      "size": 321
+    },
+    "c1/p1.ftd": {
+      "name": "c1/p1.ftd",
+      "checksum": "3E484B6B745695F0019BFDF22CA6608B8AC288AD9D4A7608EBE43CB6C4777EA4",
+      "size": 300
+    },
+    "ddd/figma-css-map.ftd": {
+      "name": "ddd/figma-css-map.ftd",
+      "checksum": "3F46E7D0BCC98B8387C7A3FEB88DB6BF13FE49730B5D7EA328AB54AC0BF2FC01",
+      "size": 2491
+    },
+    "ddd/funny-github-workflow.ftd": {
+      "name": "ddd/funny-github-workflow.ftd",
+      "checksum": "E2FA0C8181FFF79A1349C6EC77A69FFB4CABF8812BA22B08D03C6DB2FD0F536D",
+      "size": 920
+    },
+    "ddd/index.ftd": {
+      "name": "ddd/index.ftd",
+      "checksum": "91B1FFD6982A319AC0C228918CEC3520B0D18AA473C32B10CE39D1DDB43F6105",
+      "size": 253
+    },
+    "ddd/preflight-cors-issue.ftd": {
+      "name": "ddd/preflight-cors-issue.ftd",
+      "checksum": "188B9DD63833ACDA793A264075BA923A3B382EF8A171EE56D571B9611A6805D1",
+      "size": 2596
+    },
+    "fifthtry/index.ftd": {
+      "name": "fifthtry/index.ftd",
+      "checksum": "D75DF4F11C5E0E86FFF4E6AC5B9E9C63DFCBF7CDCBE61E7C9C1E25417D182833",
+      "size": 153
+    },
+    "fifthtry/nov2022.ftd": {
+      "name": "fifthtry/nov2022.ftd",
+      "checksum": "9E0B4EF7C2DD03E0552BF7437861DE612D70F16854804450BCB0D360E7AC23BF",
+      "size": 1435
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "DA24117836A151BDCE291676ED8352AD47E88A49A40F4DBC51E58F090679057A",
+      "size": 2590
+    },
+    "learn/preflight-request.ftd": {
+      "name": "learn/preflight-request.ftd",
+      "checksum": "9C2FCE3A04EE6DED5C53A859DFA5F2E942406E8AACBE2476C79E95F13B10A814",
+      "size": 2063
+    },
+    "rust/arc.ftd": {
+      "name": "rust/arc.ftd",
+      "checksum": "CD6F3C76A4D504A9142B4E3F675843A1A25CA97148D9313965E4EABDEBCBC7A0",
+      "size": 1565
+    },
+    "rust/cell-refcell.ftd": {
+      "name": "rust/cell-refcell.ftd",
+      "checksum": "0670E8A6A9C4427CA1026936F97F1535E540F14DCD152A7DD24F32774B046CFE",
+      "size": 5220
+    },
+    "rust/index.ftd": {
+      "name": "rust/index.ftd",
+      "checksum": "FBBFB81050717A1BF9A7C8B49701A1FFE9841969D7B6A84862C5BAA7508C5E6A",
+      "size": 294
+    },
+    "rust/memory.ftd": {
+      "name": "rust/memory.ftd",
+      "checksum": "D28426FC1F010547F56245FA0DBE3970325EF983030ED2596FF163E09D49C96A",
+      "size": 2598
+    },
+    "rust/mutex-rwlock.ftd": {
+      "name": "rust/mutex-rwlock.ftd",
+      "checksum": "A12806EF10D0F2814367A4B0D24C4C613C299F915B2F504E0567BB26E39FDA63",
+      "size": 8600
+    },
+    "rust/rc.ftd": {
+      "name": "rust/rc.ftd",
+      "checksum": "114195104E339E6683D1EB164EFBF8AF8987200AE356B4C8D752B50DABD444E2",
+      "size": 6297
+    },
+    "rust/rcrefcell.ftd": {
+      "name": "rust/rcrefcell.ftd",
+      "checksum": "38841353D65B7845DFB2A9A00DB2FAE410C945B31A2E6D90D964DB9CAC9983E8",
+      "size": 2295
+    },
+    "rust/send.ftd": {
+      "name": "rust/send.ftd",
+      "checksum": "3E7DAA77117CC5970B8650C557FBA44F6D2C29ECFAFDBCD2049A49FC2A3D044D",
+      "size": 738
+    },
+    "rust/sync.ftd": {
+      "name": "rust/sync.ftd",
+      "checksum": "9C176D8F1EEB7F93E80222EDCE323B2AB5F6021D799667E1B44AB74D2C101E16",
+      "size": 1804
+    },
+    "search.ftd": {
+      "name": "search.ftd",
+      "checksum": "13F6B9CE1483D9D89E5275482EA78B645CEFEDF5372E4C803DC895543DF78759",
+      "size": 3304
+    },
+    "search.js": {
+      "name": "search.js",
+      "checksum": "75A3B1E12AAC7867CF7D293D7E22B83CAEEAE9882263B5C002018C90ED34CF14",
+      "size": 2769
+    },
+    "static/arpita-1.png": {
+      "name": "static/arpita-1.png",
+      "checksum": "826D2531CE9BD99C729EFCC163AF17999B76549220EC99E31F1B149E59A2147C",
+      "size": 755815
+    },
+    "static/arpita.jpeg": {
+      "name": "static/arpita.jpeg",
+      "checksum": "D94052273E87C0424856A6EBD8D104EAD34F2080C8301917BDB9AF50774C41A5",
+      "size": 87359
+    },
+    "static/favicon.png": {
+      "name": "static/favicon.png",
+      "checksum": "23CBFF9EA2D30DF01BE9848A9D80B3D5C65F5EC0370213A2CF96F13FC163C44D",
+      "size": 21165
+    },
+    "static/full-arpita-1.png": {
+      "name": "static/full-arpita-1.png",
+      "checksum": "92C2944D1F469B30FC33B3D7EDA472982DC2BFF8811F96741FE879BAD3F04FB9",
+      "size": 1078010
+    },
+    "static/logo-1.svg": {
+      "name": "static/logo-1.svg",
+      "checksum": "6EBE288BDAE48BE87B1DB8294E2A8196FED564804BF2286FB1282C6D33AD24CB",
+      "size": 10109
+    },
+    "static/logo.svg": {
+      "name": "static/logo.svg",
+      "checksum": "74F0C948795ED4E212520F47CFF49927B9B9F82008750315F4AC5268899798DD",
+      "size": 11352
+    }
+  },
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/01fd504a79616fe0f927f523ae46ee4f81e2d57a.zip",
+  "checksum": "3DF9BD64CFDD1F221E04690612DE3D922A6FB8F43ED0436296CADC6B694F3EB0"
+}
