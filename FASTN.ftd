@@ -45,6 +45,9 @@ nav-title: My Day to Day Learnings and Discoveries
   - Struggle with CORS issue: /ddd/preflight-cors-issue/
 - Learning:
   - Preflight Request: learn/preflight-request/
+- Designing data intensive application: /ddd/data-intensive-application/
+  - Reliable Scalable and Maintainable Application: /ddd/dia-1/
+    document: ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd
 
 ## FifthTry: /fifthtry/
 
