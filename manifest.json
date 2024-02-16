@@ -7,8 +7,8 @@
     },
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "9186CE3062F8DA6622AFECC43571B10EC20570ACF4075FB49EACF3A9B7C6CA57",
-      "size": 1804
+      "checksum": "39710B58CB6A7E4F3512FA327FD5D22E2B70DD8A1CB7B3649C282B70AD8EFAEB",
+      "size": 2023
     },
     "FASTN/ds.ftd": {
       "name": "FASTN/ds.ftd",
@@ -44,6 +44,16 @@
       "name": "c1/p1.ftd",
       "checksum": "3E484B6B745695F0019BFDF22CA6608B8AC288AD9D4A7608EBE43CB6C4777EA4",
       "size": 300
+    },
+    "ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd": {
+      "name": "ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd",
+      "checksum": "60BC180CC4767B979333F80A544E707700D499A2599E5F5F9D3AEDE2F5E0D9C8",
+      "size": 10300
+    },
+    "ddd/data-intensive-application/index.ftd": {
+      "name": "ddd/data-intensive-application/index.ftd",
+      "checksum": "536948486B92058D581FDE46AAFD713079E8F04C62F7D2B87B946EC20199337E",
+      "size": 396
     },
     "ddd/figma-css-map.ftd": {
       "name": "ddd/figma-css-map.ftd",
@@ -171,6 +181,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/e97fa3da6f25333352d06e6296528c87e81c6ed0.zip",
-  "checksum": "3DF9BD64CFDD1F221E04690612DE3D922A6FB8F43ED0436296CADC6B694F3EB0"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/4d7bdfcc405e1892ee51125bd6dc7125e8b41ae2.zip",
+  "checksum": "EDCCBDFA78CA4D7823221CE975D3D5C6905A40C65E6D476EDBFCD30C89760DB9"
 }
