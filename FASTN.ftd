@@ -48,6 +48,8 @@ nav-title: My Day to Day Learnings and Discoveries
 - Designing data intensive application: /ddd/data-intensive-application/
   - Reliable Scalable and Maintainable Application: /ddd/dia-1/
     document: ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd
+  - Data Models and Query Languages: /ddd/dia-2/
+    document: ddd/data-intensive-application/2-data-models-query-languages.ftd
 
 ## FifthTry: /fifthtry/
 
