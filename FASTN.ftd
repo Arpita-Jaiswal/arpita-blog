@@ -50,6 +50,8 @@ nav-title: My Day to Day Learnings and Discoveries
     document: ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd
   - Data Models and Query Languages: /ddd/dia-2/
     document: ddd/data-intensive-application/2-data-models-query-languages.ftd
+  - Storage and Retrieval: /ddd/dia-3/
+    document: ddd/data-intensive-application/3-storage-retrieval.ftd
 
 ## FifthTry: /fifthtry/
 
