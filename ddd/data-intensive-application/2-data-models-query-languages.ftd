@@ -356,20 +356,20 @@ lang: html
 
 <ul>
  <li class="selected">
- <p>Sharks</p>
- <ul>
- <li>Great White Shark</li>
- <li>Tiger Shark</li>
- <li>Hammerhead Shark</li>
- </ul>
+     <p>Sharks</p>
+     <ul>
+         <li>Great White Shark</li>
+         <li>Tiger Shark</li>
+         <li>Hammerhead Shark</li>
+     </ul>
  </li>
  <li>
- <p>Whales</p>
- <ul>
- <li>Blue Whale</li>
- <li>Humpback Whale</li>
- <li>Fin Whale</li>
- </ul>
+     <p>Whales</p>
+     <ul>
+         <li>Blue Whale</li>
+         <li>Humpback Whale</li>
+         <li>Fin Whale</li>
+     </ul>
  </li>
 </ul>
 
@@ -507,6 +507,60 @@ have any side effects. These restrictions allow the database to run the function
 anywhere, in any order, and rerun them on failure. However, they are nevertheless
 powerful: they can parse strings, call library functions, perform calculations,
 and more.
+
+A usability problem with MapReduce is that you have to write two carefully
+coordinated JavaScript functions, which is often harder than writing a single
+query. Moreover, a declarative query language offers more opportunities for a
+query optimizer to improve the performance of a query. For these reasons,
+MongoDB 2.2 added support for a declarative query language called the aggregation
+pipeline. In this language, the same shark-counting query looks like this:
+
+-- ds.code:
+lang: js
+
+db.observations.aggregate([
+     { $match: { family: "Sharks" } },
+     { $group: {
+         _id: {
+             year: { $year: "$observationTimestamp" },
+             month: { $month: "$observationTimestamp" }
+         },
+         totalAnimals: { $sum: "$numAnimals" }
+     } }
+]);
+
+-- ds.markdown:
+
+The aggregation pipeline language is similar in expressiveness to a subset of SQL, but
+it uses a JSON-based syntax rather than SQL’s English-sentence-style syntax; the
+difference is perhaps a matter of taste. The moral of the story is that a NoSQL
+system may find itself accidentally reinventing SQL, albeit in disguise.
+
+
+-- ds.h2: Graph-Like Data Models
+
+If your application has mostly one-to-many relationships (tree-structured data)
+or no relationships between records, the document model is appropriate.
+
+But what if many-to-many relationships are very common in your data? The
+relational model can handle simple cases of many-to-many relationships, but as
+the connections within your data become more complex, it becomes more natural to
+start modeling your data as a graph.
+
+A graph consists of two kinds of objects: vertices (also known as nodes or entities) and
+edges (also known as relationships or arcs).
+
+Graphs are not limited to such homogeneous data: an equally powerful use of graphs
+is to provide a consistent way of storing completely different types of objects
+in a single datastore.
+
+For example, Facebook maintains a single graph with many different types of vertices
+and edges: vertices represent people, locations, events, checkins, and comments
+made by users; edges indicate which people are friends with each other, which
+checkin happened in which location, who commented on which post, who attended which event,
+and so on.
+
+More about this can be found in the book.
 
 
 -- end: ds.page

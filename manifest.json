@@ -52,8 +52,8 @@
     },
     "ddd/data-intensive-application/2-data-models-query-languages.ftd": {
       "name": "ddd/data-intensive-application/2-data-models-query-languages.ftd",
-      "checksum": "207DD57984A882B6472636B71795EEEF4423FC62DCB8CBE9191D73070E5707A7",
-      "size": 21065
+      "checksum": "0CE6A8F3D2E5E5E5805D128C95DF1E31D36C311996037BA71E5236ABE9879BDC",
+      "size": 23417
     },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
@@ -186,6 +186,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/d214d6b8e931bc4bf391e4aa19fdd4c3757f29bf.zip",
-  "checksum": "E29A6FA20464A82045996B217ECD36F902349F66D85F442FB0E29AE32E6F16C6"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/6683728daf6855939fe554e6cc2ae403fd7892f8.zip",
+  "checksum": "C5FB6BC0157AA92E972EA0344C83797B8F6ADC2450AFF8695F812CC5A95B2442"
 }

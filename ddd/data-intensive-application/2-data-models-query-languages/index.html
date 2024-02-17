@@ -17,7 +17,7 @@
                 <script src="prism-8FE3A42AD547E2DBBC9FE16BA059F8F1870D613AD0C5B0B013D6205B72A62BAF.js"></script>
                 <script src="default-C2CA3992428D050C1B2BBBA6D7DF81888C4ADE97BD649552485583B581E1C58F.js"></script>
                 <link rel="stylesheet" href="prism-73F718B9234C00C5C14AB6A11BF239A103F0B0F93B69CD55CB5C6530501182EB.css">
-                <script src="-/fastn-stack.github.io/fastn-js/download.js"></script><script src="-/arjaupashak.com/search.js"></script>
+                <script src="-/arjaupashak.com/search.js"></script><script src="-/fastn-stack.github.io/fastn-js/download.js"></script>
             
     
 
@@ -563,20 +563,20 @@ machines, because it specifies instructions that must be performed in a
 particular order.</div><div data-id="243" class="ft_column __w-501"><h2 data-id="244" id="declarative-queries-on-the-web" class="__rl-502 __w-503 __pt-504 __mb-505 __c-506">Declarative Queries on the Web</h2><comment data-id="245"></comment><div data-id="246" class="__rl-507 __w-508 __c-509">Let’s compare declarative and imperative approaches in a completely different
 environment: a web browser.</div><div data-id="247" class="ft_column __w-510"></div></div><div data-id="248" class="ft_column __w-511 __pt-512 __pb-513 __oy-514 __cur-515" style="position:relative"><comment data-id="249"></comment><div data-id="250" class="ft_row __w-516 __btlr-521 __btrr-522 __bgc-523" style="position:relative"><comment data-id="251"></comment><comment data-id="252"></comment><div data-id="253" class="ft_row __as-525 __pos-526 __t-527 __r-528 __jc-529 __ali-530 __g-531"><comment data-id="254"></comment><comment data-id="255"></comment><comment data-id="256"></comment></div><comment data-id="257"></comment></div><pre data-id="258" class="language-html fastn-theme-light __w-532 __pb-533 __btlr-534 __btrr-535 __bblr-536 __bbrr-537 __ox-538 __oy-539 __c-540 __bgc-541 __rl-544"><code data-id="259" class="language-html fastn-theme-light">&lt;ul>
  &lt;li class="selected">
- &lt;p>Sharks&lt;/p>
- &lt;ul>
- &lt;li>Great White Shark&lt;/li>
- &lt;li>Tiger Shark&lt;/li>
- &lt;li>Hammerhead Shark&lt;/li>
- &lt;/ul>
+     &lt;p>Sharks&lt;/p>
+     &lt;ul>
+         &lt;li>Great White Shark&lt;/li>
+         &lt;li>Tiger Shark&lt;/li>
+         &lt;li>Hammerhead Shark&lt;/li>
+     &lt;/ul>
  &lt;/li>
  &lt;li>
- &lt;p>Whales&lt;/p>
- &lt;ul>
- &lt;li>Blue Whale&lt;/li>
- &lt;li>Humpback Whale&lt;/li>
- &lt;li>Fin Whale&lt;/li>
- &lt;/ul>
+     &lt;p>Whales&lt;/p>
+     &lt;ul>
+         &lt;li>Blue Whale&lt;/li>
+         &lt;li>Humpback Whale&lt;/li>
+         &lt;li>Fin Whale&lt;/li>
+     &lt;/ul>
  &lt;/li>
 &lt;/ul>
 </code></pre><comment data-id="260"></comment><div data-id="261" class="ft_column __pos-545 __p-546 __bbrr-547 __b-548 __r-549 __z-550"><div data-id="262" class="ft_row __g-551"><comment data-id="263"></comment><div data-id="264" class="ft_row __g-552"><div data-id="265" class="__rl-553 __c-554">Lang:</div><div data-id="266" class="__rl-555 __c-556">html</div></div></div></div></div><div data-id="267" class="ft_column __w-557 __pt-558 __pb-559 __oy-560 __cur-561" style="position:relative"><comment data-id="268"></comment><div data-id="269" class="ft_row __w-562 __btlr-567 __btrr-568 __bgc-569" style="position:relative"><comment data-id="270"></comment><comment data-id="271"></comment><div data-id="272" class="ft_row __as-571 __pos-572 __t-573 __r-574 __jc-575 __ali-576 __g-577"><comment data-id="273"></comment><comment data-id="274"></comment><comment data-id="275"></comment></div><comment data-id="276"></comment></div><pre data-id="277" class="language-css fastn-theme-light __w-578 __pb-579 __btlr-580 __btrr-581 __bblr-582 __bbrr-583 __ox-584 __oy-585 __c-586 __bgc-587 __rl-590"><code data-id="278" class="language-css fastn-theme-light">li.selected > p {
@@ -663,13 +663,48 @@ once.</li>
 particular month.</li>
 <li>The final output is written to the collection monthlySharkReport.</li>
 </ul>
-The map and reduce functions are somewhat restricted in what they are allowed to
+<p>The map and reduce functions are somewhat restricted in what they are allowed to
 do. They must be pure functions, which means they only use the data that is passed to
 them as input, they cannot perform additional database queries, and they must not
 have any side effects. These restrictions allow the database to run the functions
 anywhere, in any order, and rerun them on failure. However, they are nevertheless
 powerful: they can parse strings, call library functions, perform calculations,
-and more.</div></div></div></div><comment data-id="372"></comment><comment data-id="373"></comment></div><div data-id="374" class="ft_column __w-812"></div><comment data-id="375"></comment></div><div data-id="376" class="ft_row __pos-813 __p-814 __bw-815 __br-816 __bc-817 __b-818 __r-819 __z-820 __bgc-821"><comment data-id="377"></comment><div data-id="378" class="ft_row __cur-822"><img data-id="379" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-823 __w-824 __h-825"></img></div><comment data-id="380"></comment><comment data-id="381"></comment></div><comment data-id="382"></comment></div></div></div></body><style id="styles">
+and more.</p>
+A usability problem with MapReduce is that you have to write two carefully
+coordinated JavaScript functions, which is often harder than writing a single
+query. Moreover, a declarative query language offers more opportunities for a
+query optimizer to improve the performance of a query. For these reasons,
+MongoDB 2.2 added support for a declarative query language called the aggregation
+pipeline. In this language, the same shark-counting query looks like this:</div><div data-id="372" class="ft_column __w-812 __pt-813 __pb-814 __oy-815 __cur-816" style="position:relative"><comment data-id="373"></comment><div data-id="374" class="ft_row __w-817 __btlr-822 __btrr-823 __bgc-824" style="position:relative"><comment data-id="375"></comment><comment data-id="376"></comment><div data-id="377" class="ft_row __as-826 __pos-827 __t-828 __r-829 __jc-830 __ali-831 __g-832"><comment data-id="378"></comment><comment data-id="379"></comment><comment data-id="380"></comment></div><comment data-id="381"></comment></div><pre data-id="382" class="language-js fastn-theme-light __w-833 __pb-834 __btlr-835 __btrr-836 __bblr-837 __bbrr-838 __ox-839 __oy-840 __c-841 __bgc-842 __rl-845"><code data-id="383" class="language-js fastn-theme-light">db.observations.aggregate([
+     { $match: { family: "Sharks" } },
+     { $group: {
+         _id: {
+             year: { $year: "$observationTimestamp" },
+             month: { $month: "$observationTimestamp" }
+         },
+         totalAnimals: { $sum: "$numAnimals" }
+     } }
+]);
+</code></pre><comment data-id="384"></comment><div data-id="385" class="ft_column __pos-846 __p-847 __bbrr-848 __b-849 __r-850 __z-851"><div data-id="386" class="ft_row __g-852"><comment data-id="387"></comment><div data-id="388" class="ft_row __g-853"><div data-id="389" class="__rl-854 __c-855">Lang:</div><div data-id="390" class="__rl-856 __c-857">js</div></div></div></div></div><div data-id="391" class="__rl-858 __w-859 __c-860">The aggregation pipeline language is similar in expressiveness to a subset of SQL, but
+it uses a JSON-based syntax rather than SQL’s English-sentence-style syntax; the
+difference is perhaps a matter of taste. The moral of the story is that a NoSQL
+system may find itself accidentally reinventing SQL, albeit in disguise.</div><div data-id="392" class="ft_column __w-861"><h2 data-id="393" id="graph-like-data-models" class="__rl-862 __w-863 __pt-864 __mb-865 __c-866">Graph-Like Data Models</h2><comment data-id="394"></comment><div data-id="395" class="__rl-867 __w-868 __c-869"><p>If your application has mostly one-to-many relationships (tree-structured data)
+or no relationships between records, the document model is appropriate.</p>
+<p>But what if many-to-many relationships are very common in your data? The
+relational model can handle simple cases of many-to-many relationships, but as
+the connections within your data become more complex, it becomes more natural to
+start modeling your data as a graph.</p>
+<p>A graph consists of two kinds of objects: vertices (also known as nodes or entities) and
+edges (also known as relationships or arcs).</p>
+<p>Graphs are not limited to such homogeneous data: an equally powerful use of graphs
+is to provide a consistent way of storing completely different types of objects
+in a single datastore.</p>
+<p>For example, Facebook maintains a single graph with many different types of vertices
+and edges: vertices represent people, locations, events, checkins, and comments
+made by users; edges indicate which people are friends with each other, which
+checkin happened in which location, who commented on which post, who attended which event,
+and so on.</p>
+More about this can be found in the book.</div><div data-id="396" class="ft_column __w-870"></div></div></div></div></div><comment data-id="397"></comment><comment data-id="398"></comment></div><div data-id="399" class="ft_column __w-871"></div><comment data-id="400"></comment></div><div data-id="401" class="ft_row __pos-872 __p-873 __bw-874 __br-875 __bc-876 __b-877 __r-878 __z-879 __bgc-880"><comment data-id="402"></comment><div data-id="403" class="ft_row __cur-881"><img data-id="404" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-882 __w-883 __h-884"></img></div><comment data-id="405"></comment><comment data-id="406"></comment></div><comment data-id="407"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1728,21 +1763,99 @@ and more.</div></div></div></div><comment data-id="372"></comment><comment data-
 	.__c-811:visited { color: #7C7C7C !important; }
 	body.dark  .__c-811:visited { color: #B8B8B8 !important; }
 	.__w-812 { width: 100%; }
-	.__pos-813 { position: fixed; }
-	.__p-814 { padding: 10px; }
-	.__bw-815 { border-width: 1px; }
-	.__br-816 { border-radius: 4px; }
-	.__bc-817 { border-color: #D2D2D2; }
-	body.dark .__bc-817 { border-color: #434547; }
-	.__b-818 { bottom: 25px; }
-	.__r-819 { right: 25px; }
-	.__z-820 { z-index: 99999999999999; }
-	.__bgc-821 { background-color: #FFFFFF; }
-	body.dark .__bgc-821 { background-color: #000000; }
-	.__cur-822 { cursor: pointer; }
-	.__as-823 { align-self: center; }
-	.__w-824 { width: 19px; }
-	.__h-825 { height: 19px; }
+	.__pt-813 { padding-top: 12px; }
+	.__pb-814 { padding-bottom: 12px; }
+	.__oy-815 { overflow-y: auto; }
+	.__cur-816 { cursor: default; }
+	.__w-817 { width: 100%; }
+	.__btlr-822 { border-top-left-radius: 4px; }
+	.__btrr-823 { border-top-right-radius: 4px; }
+	.__bgc-824 { background-color: #F8F8F8; }
+	body.dark .__bgc-824 { background-color: #111111; }
+	.__as-826 { align-self: end; }
+	.__pos-827 { position: absolute; }
+	.__t-828 { top: 12px; }
+	.__r-829 { right: 20px; }
+	.__jc-830 { justify-content: right; }
+	.__ali-831 { align-items: center; }
+	.__g-832 { gap: 10px; }
+	.__w-833 { width: 100%; }
+	.__pb-834 { padding-bottom: 24px; }
+	.__btlr-835 { border-top-left-radius: 4px; }
+	.__btrr-836 { border-top-right-radius: 4px; }
+	.__bblr-837 { border-bottom-left-radius: 4px; }
+	.__bbrr-838 { border-bottom-right-radius: 4px; }
+	.__ox-839 { overflow-x: auto; }
+	.__oy-840 { overflow-y: auto; }
+	.__c-841 { color: #7C7C7C !important; }
+	body.dark .__c-841 { color: #B8B8B8 !important; }
+	.__c-841:visited { color: #7C7C7C !important; }
+	body.dark  .__c-841:visited { color: #B8B8B8 !important; }
+	.__bgc-842 { background-color: #f5f5f5; }
+	body.dark .__bgc-842 { background-color: #21222c; }
+	.__rl-845 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-845 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-846 { position: absolute; }
+	.__p-847 { padding: 6px; }
+	.__bbrr-848 { border-bottom-right-radius: 4px; }
+	.__b-849 { bottom: 12px; }
+	.__r-850 { right: 12px; }
+	.__z-851 { z-index: 999; }
+	.__g-852 { gap: 16px; }
+	.__g-853 { gap: 4px; }
+	.__rl-854 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-854 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-855 { color: #7C7C7C !important; }
+	body.dark .__c-855 { color: #B8B8B8 !important; }
+	.__c-855:visited { color: #7C7C7C !important; }
+	body.dark  .__c-855:visited { color: #B8B8B8 !important; }
+	.__rl-856 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-856 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-857 { color: #7C7C7C !important; }
+	body.dark .__c-857 { color: #B8B8B8 !important; }
+	.__c-857:visited { color: #7C7C7C !important; }
+	body.dark  .__c-857:visited { color: #B8B8B8 !important; }
+	.__rl-858 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-858 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-859 { width: 100%; }
+	.__c-860 { color: #7C7C7C !important; }
+	body.dark .__c-860 { color: #B8B8B8 !important; }
+	.__c-860:visited { color: #7C7C7C !important; }
+	body.dark  .__c-860:visited { color: #B8B8B8 !important; }
+	.__w-861 { width: 100%; }
+	.__rl-862 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-862 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-863 { width: 100%; }
+	.__pt-864 { padding-top: 0.3em; }
+	.__mb-865 { margin-bottom: 0.5rem; }
+	.__c-866 { color: #333333 !important; }
+	body.dark .__c-866 { color: #FFFFFF !important; }
+	.__c-866:visited { color: #333333 !important; }
+	body.dark  .__c-866:visited { color: #FFFFFF !important; }
+	.__rl-867 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-867 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-868 { width: 100%; }
+	.__c-869 { color: #7C7C7C !important; }
+	body.dark .__c-869 { color: #B8B8B8 !important; }
+	.__c-869:visited { color: #7C7C7C !important; }
+	body.dark  .__c-869:visited { color: #B8B8B8 !important; }
+	.__w-870 { width: 100%; }
+	.__w-871 { width: 100%; }
+	.__pos-872 { position: fixed; }
+	.__p-873 { padding: 10px; }
+	.__bw-874 { border-width: 1px; }
+	.__br-875 { border-radius: 4px; }
+	.__bc-876 { border-color: #D2D2D2; }
+	body.dark .__bc-876 { border-color: #434547; }
+	.__b-877 { bottom: 25px; }
+	.__r-878 { right: 25px; }
+	.__z-879 { z-index: 99999999999999; }
+	.__bgc-880 { background-color: #FFFFFF; }
+	body.dark .__bgc-880 { background-color: #000000; }
+	.__cur-881 { cursor: pointer; }
+	.__as-882 { align-self: center; }
+	.__w-883 { width: 19px; }
+	.__h-884 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3837,7 +3950,7 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
-          body: "<ul>\n <li class=\"selected\">\n <p>Sharks</p>\n <ul>\n <li>Great White Shark</li>\n <li>Tiger Shark</li>\n <li>Hammerhead Shark</li>\n </ul>\n </li>\n <li>\n <p>Whales</p>\n <ul>\n <li>Blue Whale</li>\n <li>Humpback Whale</li>\n <li>Fin Whale</li>\n </ul>\n </li>\n</ul>",
+          body: "<ul>\n <li class=\"selected\">\n     <p>Sharks</p>\n     <ul>\n         <li>Great White Shark</li>\n         <li>Tiger Shark</li>\n         <li>Hammerhead Shark</li>\n     </ul>\n </li>\n <li>\n     <p>Whales</p>\n     <ul>\n         <li>Blue Whale</li>\n         <li>Humpback Whale</li>\n         <li>Fin Whale</li>\n     </ul>\n </li>\n</ul>",
           lang: "html"
         });
       },
@@ -3899,7 +4012,24 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
-          body: "- The filter to consider only shark species can be specified declaratively (this\nis a MongoDB-specific extension to MapReduce).\n- The JavaScript function map is called once for every document that matches\nquery, with this set to the document object.\n- The map function emits a key (a string consisting of year and month, such as\n\"2013-12\" or \"2014-1\") and a value (the number of animals in that observation).\n- The key-value pairs emitted by map are grouped by key. For all key-value pairs\nwith the same key (i.e., the same month and year), the reduce function is called\nonce.\n- The reduce function adds up the number of animals from all observations in a\nparticular month.\n- The final output is written to the collection monthlySharkReport.\n\nThe map and reduce functions are somewhat restricted in what they are allowed to\ndo. They must be pure functions, which means they only use the data that is passed to\nthem as input, they cannot perform additional database queries, and they must not\nhave any side effects. These restrictions allow the database to run the functions\nanywhere, in any order, and rerun them on failure. However, they are nevertheless\npowerful: they can parse strings, call library functions, perform calculations,\nand more."
+          body: "- The filter to consider only shark species can be specified declaratively (this\nis a MongoDB-specific extension to MapReduce).\n- The JavaScript function map is called once for every document that matches\nquery, with this set to the document object.\n- The map function emits a key (a string consisting of year and month, such as\n\"2013-12\" or \"2014-1\") and a value (the number of animals in that observation).\n- The key-value pairs emitted by map are grouped by key. For all key-value pairs\nwith the same key (i.e., the same month and year), the reduce function is called\nonce.\n- The reduce function adds up the number of animals from all observations in a\nparticular month.\n- The final output is written to the collection monthlySharkReport.\n\nThe map and reduce functions are somewhat restricted in what they are allowed to\ndo. They must be pure functions, which means they only use the data that is passed to\nthem as input, they cannot perform additional database queries, and they must not\nhave any side effects. These restrictions allow the database to run the functions\nanywhere, in any order, and rerun them on failure. However, they are nevertheless\npowerful: they can parse strings, call library functions, perform calculations,\nand more.\n\nA usability problem with MapReduce is that you have to write two carefully\ncoordinated JavaScript functions, which is often harder than writing a single\nquery. Moreover, a declarative query language offers more opportunities for a\nquery optimizer to improve the performance of a query. For these reasons,\nMongoDB 2.2 added support for a declarative query language called the aggregation\npipeline. In this language, the same shark-counting query looks like this:"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "db.observations.aggregate([\n     { $match: { family: \"Sharks\" } },\n     { $group: {\n         _id: {\n             year: { $year: \"$observationTimestamp\" },\n             month: { $month: \"$observationTimestamp\" }\n         },\n         totalAnimals: { $sum: \"$numAnimals\" }\n     } }\n]);",
+          lang: "js"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "The aggregation pipeline language is similar in expressiveness to a subset of SQL, but\nit uses a JSON-based syntax rather than SQL’s English-sentence-style syntax; the\ndifference is perhaps a matter of taste. The moral of the story is that a NoSQL\nsystem may find itself accidentally reinventing SQL, albeit in disguise."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Graph-Like Data Models",
+          body: "If your application has mostly one-to-many relationships (tree-structured data)\nor no relationships between records, the document model is appropriate.\n\nBut what if many-to-many relationships are very common in your data? The\nrelational model can handle simple cases of many-to-many relationships, but as\nthe connections within your data become more complex, it becomes more natural to\nstart modeling your data as a graph.\n\nA graph consists of two kinds of objects: vertices (also known as nodes or entities) and\nedges (also known as relationships or arcs).\n\nGraphs are not limited to such homogeneous data: an equally powerful use of graphs\nis to provide a consistent way of storing completely different types of objects\nin a single datastore.\n\nFor example, Facebook maintains a single graph with many different types of vertices\nand edges: vertices represent people, locations, events, checkins, and comments\nmade by users; edges indicate which people are friends with each other, which\ncheckin happened in which location, who commented on which post, who attended which event,\nand so on.\n\nMore about this can be found in the book."
         });
       }
       ]),
