@@ -157,7 +157,7 @@ padding-right.px: 12
 -- ftd.text: $blog-desktop.description
 role: $copy-regular
 padding-right.px: 50
-color: black
+color: $text-color
 
 -- end: ftd.column
 
@@ -166,6 +166,11 @@ color: black
 -- end: blog-desktop
 
 
+
+
+-- ftd.color text-color:
+light: black
+dark: white
 
 
 

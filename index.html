@@ -403,6 +403,9 @@ the new found power that fastn gives you while building your website.</div><div 
 	.__rl-59 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 400; line-height: 1.5em; }
 	.__pr-60 { padding-right: 50px; }
 	.__c-61 { color: black !important; }
+	body.dark .__c-61 { color: white !important; }
+	.__c-61:visited { color: black !important; }
+	body.dark  .__c-61:visited { color: white !important; }
 	.__rl-62 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 400; line-height: 1.5em; }
 	.__as-63 { align-self: center; }
 	.__c-64 { color: #fc9cd5 !important; }
@@ -2423,7 +2426,7 @@ fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.static.log
   let record = fastn.recordInstance({
   });
   record.set("light", "-/arjaupashak.com/static/logo.svg");
-  record.set("dark", "-/arjaupashak.com/static/logo.svg");
+  record.set("dark", "-/arjaupashak.com/static/logo-dark.svg");
   return record;
 }());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.search.js", "-/arjaupashak.com/search.js");
@@ -9697,6 +9700,13 @@ fastn_utils.createNestedObject(global, "arjaupashak_com___copy_regular", functio
   record.set("font_family", fastn.mutableList([global.fifthtry_github_io_inter_font_assets__fonts.get("Inter")]));
   return record;
 }());
+fastn_utils.createNestedObject(global, "arjaupashak_com___text_color", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "black");
+  record.set("dark", "white");
+  return record;
+}());
 let arjaupashak_com___blog_desktop = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -9764,13 +9774,7 @@ let arjaupashak_com___blog_desktop = function (parent, inherited, args)
         }(), inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.description, inherited);
         rooti0.setProperty(fastn_dom.PropertyKind.PaddingRight, fastn_dom.Length.Px(50), inherited);
-        rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
-          let record = fastn.recordInstance({
-          });
-          record.set("light", "black");
-          record.set("dark", "black");
-          return record;
-        }(), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, global.arjaupashak_com___text_color, inherited);
       }
       ]), inherited);
     }

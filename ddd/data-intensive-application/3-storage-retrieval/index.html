@@ -17,7 +17,7 @@
                 <script src="prism-8FE3A42AD547E2DBBC9FE16BA059F8F1870D613AD0C5B0B013D6205B72A62BAF.js"></script>
                 <script src="default-C2CA3992428D050C1B2BBBA6D7DF81888C4ADE97BD649552485583B581E1C58F.js"></script>
                 <link rel="stylesheet" href="prism-73F718B9234C00C5C14AB6A11BF239A103F0B0F93B69CD55CB5C6530501182EB.css">
-                <script src="-/arjaupashak.com/search.js"></script>
+                <script src="-/fastn-stack.github.io/fastn-js/download.js"></script><script src="-/arjaupashak.com/search.js"></script>
             
     
 
@@ -333,37 +333,192 @@ td {
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column ft_full_size"><div data-id="4" class="ft_column __w-3 __h-4 __bgc-5"><comment data-id="5"></comment><div data-id="6" class="ft_column"><comment data-id="7"></comment></div><comment data-id="8"></comment><comment data-id="9"></comment><div data-id="11" class="ft_column __w-6 __bgc-7"><div data-id="12" class="ft_column"><comment data-id="13"></comment></div><div data-id="14" class="ft_column __w-8"><comment data-id="15"></comment><comment data-id="16"></comment><comment data-id="17"></comment><comment data-id="18"></comment><div data-id="20" class="ft_column __w-9 __bgc-10"><div data-id="21" class="ft_row __w-11 __pl-12 __pr-13 __pt-14 __pb-15 __jc-16 __ali-17"><div data-id="22" class="ft_column"></div><div data-id="23" class="ft_row __w-18 __g-19"><img data-id="24" src="-/fastn-community.github.io/doc-site/static/header/hamburger.svg" class="__cur-20 __as-21 __w-22"></img><comment data-id="25"></comment><img data-id="26" src="-/arjaupashak.com/static/logo.svg" class="__h-23"></img><comment data-id="27"></comment><comment data-id="28"></comment><comment data-id="29"></comment></div><comment data-id="30"></comment></div><div data-id="31" class="ft_row __w-24 __bgc-25"></div><div data-id="32" class="ft_row __w-26"><div data-id="33" class="ft_row __as-27"><comment data-id="34"></comment><a data-id="35" href="ddd/" class="__rl-28 __w-29 __pl-30 __pr-31 __pt-32 __pb-33 __c-34 __bgc-35 __white-space-36">My Day to Day Learnings and Discoveries</a></div><div data-id="36" class="ft_row __w-37 __pt-38 __ox-39 __g-40"><comment data-id="37"></comment><div data-id="38" class="ft_column __cur-41"><comment data-id="39"></comment><a data-id="40" href="ddd/funny-github-workflow/" class="__rl-42 __pl-43 __ml-44 __c-45 __white-space-46">Personal</a></div><div data-id="41" class="ft_column __cur-47"><comment data-id="42"></comment><a data-id="43" href="/fifthtry/" class="__rl-48 __pl-49 __ml-50 __c-51 __white-space-52">FifthTry</a></div><div data-id="44" class="ft_column __cur-53"><comment data-id="45"></comment><a data-id="46" href="/rust/" class="__rl-54 __pl-55 __ml-56 __c-57 __white-space-58">Rust</a></div></div></div><comment data-id="47"></comment><div data-id="48" class="ft_row __cur-59 __w-60 __pl-61 __pr-62 __bgc-63"><div data-id="49" class="ft_row __w-64 __pt-65 __pb-66 __g-67"><comment data-id="50"></comment><div data-id="51" class="__rl-68 __c-69 __white-space-70">Personal</div><comment data-id="52"></comment><comment data-id="53"></comment><div data-id="54" class="ft_row"><comment data-id="55"></comment><div data-id="56" class="ft_row"><div data-id="57" class="__rl-71 __c-72 __white-space-73">-&gt;</div></div></div><comment data-id="58"></comment><div data-id="59" class="__rl-74 __c-75 __white-space-76">Struggle with CORS issue</div></div><div data-id="60" class="ft_row __as-77 __h-78"><div data-id="61" class="ft_row __as-79 __w-80"><comment data-id="62"></comment><img data-id="63" src="-/fastn-community.github.io/header/static/down-arrow-dark.svg" class="__w-81 __h-82"></img><comment data-id="64"></comment></div></div><comment data-id="65"></comment></div></div></div><div data-id="66" class="ft_column __w-83 __pl-84 __pr-85 __pt-86 __pb-87"><div data-id="67" class="ft_column __w-88"><div data-id="68" class="ft_row __w-89"><comment data-id="69"></comment><div data-id="70" class="ft_column __w-90"><h1 data-id="71" id="struggle-with-cors-issue" class="__rl-91 __w-92 __mb-93 __bbw-94 __bc-95 __c-96">Struggle with CORS issue</h1><comment data-id="72"></comment><div data-id="73" class="ft_column __w-97"></div></div><comment data-id="74"></comment></div><comment data-id="75"></comment></div><comment data-id="76"></comment><div data-id="77" class="ft_column __w-98"><comment data-id="78"></comment><div data-id="79" class="__rl-99 __w-100 __c-101"><p>The story goes like this. We were calling cross-origin API. When logged in, the
-preflight request is sent during API call; weirdly, when logged out, the
-preflight request is not sent. Also, the preflight request was failing, and so
-during the logged-in state, the request failed.</p>
-<p>And the more weird thing is people were adopting some weird solution of expiring
-the session and then making requests. This results in not sending the Preflight
-request. Hence (huh..) hack for them.</p>
-For all those who don’t know about <code>preflight request</code>, Visit
-<a href="learn/preflight-request">this</a>.</div><div data-id="80" class="ft_column __w-102 __g-103"><div data-id="81" class="ft_column __w-104 __mt-105 __g-106"><div data-id="82" class="ft_column __w-107"><h2 data-id="83" id="problem-1" class="__rl-108 __w-109 __pt-110 __mb-111 __c-112">Problem #1</h2><comment data-id="84"></comment><div data-id="85" class="__rl-113 __w-114 __c-115">Why is the preflight request not sent in a logged-out state? Or probably why is
-the preflight request sent in a logged-in state?</div><div data-id="86" class="ft_column __w-116"></div></div><div data-id="87" class="ft_column __w-117"><h3 data-id="88" id="observations" class="__rl-118 __w-119 __pt-120 __mb-121 __c-122">Observations</h3><comment data-id="89"></comment><div data-id="90" class="__rl-123 __w-124 __c-125"><ul>
-<li>The method of the request was <code>GET</code>.</li>
-<li>Logged-in state sets the browser COOKIE.</li>
-</ul></div><div data-id="91" class="ft_column __w-126"></div></div><div data-id="92" class="ft_column __w-127"><h3 data-id="93" id="conclusion" class="__rl-128 __w-129 __pt-130 __mb-131 __c-132">Conclusion</h3><comment data-id="94"></comment><div data-id="95" class="__rl-133 __w-134 __c-135">There must be some custom header set in the API request during the logged-in
-state that causes a preflight request. (Who is doing this??)</div><div data-id="96" class="ft_column __w-136"></div></div><div data-id="97" class="ft_column __w-137"><h2 data-id="98" id="problem-2" class="__rl-138 __w-139 __pt-140 __mb-141 __c-142">Problem #2</h2><comment data-id="99"></comment><div data-id="100" class="__rl-143 __w-144 __c-145">Why is the preflight request failing (in the logged-in state)?</div><div data-id="101" class="ft_column __w-146"></div></div><div data-id="102" class="ft_column __w-147"><h3 data-id="103" id="observations" class="__rl-148 __w-149 __pt-150 __mb-151 __c-152">Observations</h3><comment data-id="104"></comment><div data-id="105" class="__rl-153 __w-154 __c-155">The preflight request has the <code>OPTION</code> method and this is handled differently.
-Well, this part is of no interest, about like Why?, but the interesting thing is
-the response doesn’t contain headers like <code>Access-Control-Allow-Origin</code>,
-<code>Access-Control-Allow-Headers</code>, <code>Access-Control-Allow-Methods</code> etc.</div><div data-id="106" class="ft_column __w-156"></div></div><div data-id="107" class="ft_column __w-157"><h3 data-id="108" id="conclusion" class="__rl-158 __w-159 __pt-160 __mb-161 __c-162">Conclusion</h3><comment data-id="109"></comment><div data-id="110" class="__rl-163 __w-164 __c-165">We need to add the headers in the response which allows our API request which
-probably contains some custom header (set by still don&#39;t know who)</div><div data-id="111" class="ft_column __w-166"></div></div><div data-id="112" class="ft_column __w-167"><h2 data-id="113" id="problem-3" class="__rl-168 __w-169 __pt-170 __mb-171 __c-172">Problem #3</h2><comment data-id="114"></comment><div data-id="115" class="__rl-173 __w-174 __c-175">If the API request header has some custom header then who is setting it?</div><div data-id="116" class="ft_column __w-176"></div></div><div data-id="117" class="ft_column __w-177"><h3 data-id="118" id="observation" class="__rl-178 __w-179 __pt-180 __mb-181 __c-182">Observation</h3><comment data-id="119"></comment><div data-id="120" class="__rl-183 __w-184 __c-185"><ul>
-<li>Well obviously the caller of the API is setting it and the caller is React-JS
-(front-end). But nowhere in the code contains this logic to send some custom
-header during the logged-in state.</li>
-<li>The API was called using <code>axios</code></li>
-<li>After logged in, one of the interesting browser cookies was X-XSRF-TOKEN</li>
-</ul></div><div data-id="121" class="ft_column __w-186"></div></div><div data-id="122" class="ft_column __w-187"><h3 data-id="123" id="conclusion" class="__rl-188 __w-189 __pt-190 __mb-191 __c-192">Conclusion</h3><comment data-id="124"></comment><div data-id="125" class="__rl-193 __w-194 __c-195">The <code>axios</code> sets some headers from the cookie itself and <code>X-XSRF-TOKEN</code> is one of
-them. So <code>X-XSRF-TOKEN</code> header was sent during the logged-in state by <code>axios</code>,
-this results in a preflight request and hence the failure. After manual session
-expiration, the <code>X-XSRF-TOKEN</code> cookie was deleted, hence the successful request.</div><div data-id="126" class="ft_column __w-196"></div></div><div data-id="127" class="ft_column __w-197"><h2 data-id="128" id="possible-solutions" class="__rl-198 __w-199 __pt-200 __mb-201 __c-202">Possible solutions</h2><comment data-id="129"></comment><div data-id="130" class="__rl-203 __w-204 __c-205"><ul>
-<li>Either frontend stop axios from sending the <code>X-XSRF-TOKEN</code> header in the API
-request</li>
-<li>Or the backend can fix the handling of requests for <code>OPTION</code> method.</li>
-</ul></div><div data-id="131" class="ft_column __w-206"></div></div></div></div></div><comment data-id="132"></comment><comment data-id="133"></comment></div><div data-id="134" class="ft_column __w-207"></div><comment data-id="135"></comment></div><div data-id="136" class="ft_row __pos-208 __p-209 __bw-210 __br-211 __bc-212 __b-213 __r-214 __z-215 __bgc-216"><comment data-id="137"></comment><div data-id="138" class="ft_row __cur-217"><img data-id="139" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-218 __w-219 __h-220"></img></div><comment data-id="140"></comment><comment data-id="141"></comment></div><comment data-id="142"></comment></div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column ft_full_size"><div data-id="4" class="ft_column __w-3 __h-4 __bgc-5"><comment data-id="5"></comment><div data-id="6" class="ft_column"><comment data-id="7"></comment></div><comment data-id="8"></comment><comment data-id="9"></comment><div data-id="11" class="ft_column __w-6 __bgc-7"><div data-id="12" class="ft_column"><comment data-id="13"></comment></div><div data-id="14" class="ft_column __w-8"><comment data-id="15"></comment><comment data-id="16"></comment><comment data-id="17"></comment><comment data-id="18"></comment><div data-id="20" class="ft_column __w-9 __bgc-10"><div data-id="21" class="ft_row __w-11 __pl-12 __pr-13 __pt-14 __pb-15 __jc-16 __ali-17"><div data-id="22" class="ft_column"></div><div data-id="23" class="ft_row __w-18 __g-19"><img data-id="24" src="-/fastn-community.github.io/doc-site/static/header/hamburger.svg" class="__cur-20 __as-21 __w-22"></img><comment data-id="25"></comment><img data-id="26" src="-/arjaupashak.com/static/logo.svg" class="__h-23"></img><comment data-id="27"></comment><comment data-id="28"></comment><comment data-id="29"></comment></div><comment data-id="30"></comment></div><div data-id="31" class="ft_row __w-24 __bgc-25"></div><div data-id="32" class="ft_row __w-26"><div data-id="33" class="ft_row __as-27"><comment data-id="34"></comment></div><div data-id="35" class="ft_row __w-28 __pt-29 __ox-30 __g-31"><comment data-id="36"></comment></div></div><comment data-id="37"></comment></div></div><div data-id="38" class="ft_column __w-32 __pl-33 __pr-34 __pt-35 __pb-36"><div data-id="39" class="ft_column __w-37"><div data-id="40" class="ft_row __w-38"><comment data-id="41"></comment><div data-id="42" class="ft_column __w-39"><h1 data-id="43" id="storage-and-retrieval" class="__rl-40 __w-41 __mb-42 __bbw-43 __bc-44 __c-45">Storage and Retrieval</h1><comment data-id="44"></comment><div data-id="45" class="ft_column __w-46"></div></div><comment data-id="46"></comment></div><comment data-id="47"></comment></div><comment data-id="48"></comment><div data-id="49" class="ft_column __w-47"><comment data-id="50"></comment><div data-id="51" class="__rl-48 __w-49 __c-50"><strong>Note</strong>: The content is taken from <a href="https://public.nikhil.io/Designing%20Data%20Intensive%20Applications.pdf"><code>Designing Data Intensive Application by Martin Kleppmann</code></a></div><div data-id="52" class="ft_column __w-51 __g-52"><div data-id="53" class="ft_column __w-53 __mt-54 __g-55"><div data-id="54" class="ft_column __w-56"><h1 data-id="55" id="data-structures-that-power-your-database" class="__rl-57 __w-58 __pt-59 __mb-60 __bbw-61 __bc-62 __c-63">Data Structures That Power Your Database</h1><comment data-id="56"></comment><div data-id="57" class="__rl-64 __w-65 __c-66">Consider the world’s simplest database, implemented as two Bash functions:</div><div data-id="58" class="ft_column __w-67"></div></div><div data-id="59" class="ft_column __w-68 __pt-69 __pb-70 __oy-71 __cur-72" style="position:relative"><comment data-id="60"></comment><div data-id="61" class="ft_row __w-73 __btlr-78 __btrr-79 __bgc-80" style="position:relative"><comment data-id="62"></comment><comment data-id="63"></comment><div data-id="64" class="ft_row __as-82 __pos-83 __t-84 __r-85 __jc-86 __ali-87 __g-88"><comment data-id="65"></comment><comment data-id="66"></comment><comment data-id="67"></comment></div><comment data-id="68"></comment></div><pre data-id="69" class="language-sh fastn-theme-light __w-89 __pb-90 __btlr-91 __btrr-92 __bblr-93 __bbrr-94 __ox-95 __oy-96 __c-97 __bgc-98 __rl-101"><code data-id="70" class="language-sh fastn-theme-light">#!/bin/bash
+db_set () {
+ echo "$1,$2" >> database
+}
+db_get () {
+ grep "^$1," database | sed -e "s/^$1,//" | tail -n 1
+}
+
+$ db_set 42 '{"name":"San Francisco","attractions":["Golden Gate Bridge"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Golden Gate Bridge"]}
+
+$ db_set 42 '{"name":"San Francisco","attractions":["Exploratorium"]}'
+$ db_get 42
+{"name":"San Francisco","attractions":["Exploratorium"]}
+
+$ cat database
+42,{"name":"San Francisco","attractions":["Golden Gate Bridge"]}
+42,{"name":"San Francisco","attractions":["Exploratorium"]}
+</code></pre><comment data-id="71"></comment><div data-id="72" class="ft_column __pos-102 __p-103 __bbrr-104 __b-105 __r-106 __z-107"><div data-id="73" class="ft_row __g-108"><comment data-id="74"></comment><div data-id="75" class="ft_row __g-109"><div data-id="76" class="__rl-110 __c-111">Lang:</div><div data-id="77" class="__rl-112 __c-113">sh</div></div></div></div></div><div data-id="78" class="__rl-114 __w-115 __c-116"><p>Our db_set function actually has pretty good performance for something that is so
+simple, because appending to a file is generally very efficient. Similarly to what
+db_set does, many databases internally use a log, which is an append-only data file.</p>
+<p>On the other hand, our db_get function has terrible performance if you have a large
+number of records in your database. Every time you want to look up a key, db_get
+has to scan the entire database file from beginning to end, looking for occurrences of
+the key. In algorithmic terms, the cost of a lookup is O(n): if you double the number
+of records n in your database, a lookup takes twice as long. That’s not good.</p>
+<p>In order to efficiently find the value for a particular key in the database, we need a
+different data structure: an <em>index</em>.</p>
+<p>An index is an additional structure that is derived from the primary data.
+Maintaining additional structures incurs overhead, especially on writes. For
+writes, it’s hard to beat the performance of simply appending to a file, because
+that’s the simplest possible write operation. Any kind of index usually slows down
+writes, because the index also needs to be updated every time data is written.</p>
+This is an important trade-off in storage systems: well-chosen indexes speed up read
+queries, but every index slows down writes. For this reason, databases don’t usually
+index everything by default, but require you—the application developer or database
+administrator—to choose indexes manually, using your knowledge of the
+application’s typical query patterns.</div><div data-id="79" class="ft_column __w-117"><h2 data-id="80" id="hash-indexes" class="__rl-118 __w-119 __pt-120 __mb-121 __c-122">Hash Indexes</h2><comment data-id="81"></comment><div data-id="82" class="__rl-123 __w-124 __c-125"><p>Let’s say our data storage consists only of appending to a file, as in the preceding
+example. Then the simplest possible indexing strategy is this: keep an in-memory
+hash map where every key is mapped to a byte offset in the data file—the location at
+which the value can be found.</p>
+<p>This may sound simplistic, but it is a viable approach. In fact, this is essentially what
+Bitcask (the default storage engine in Riak) does. Bitcask offers high-performance
+reads and writes, subject to the requirement that all the keys fit in the available RAM,
+since the hash map is kept completely in memory.</p>
+<p>A storage engine like Bitcask is well suited to situations where the value for each key
+is updated frequently. For example, the key might be the URL of a cat video, and the
+value might be the number of times it has been played (incremented every time
+someone hits the play button). In this kind of workload, there are a lot of writes, but
+there are not too many distinct keys—you have a large number of writes per key, but
+it’s feasible to keep all keys in memory.</p>
+<em>So how do we avoid eventually running out of disk space?</em>
+A good solution is to break the log into segments of a certain size by closing a
+segment file when it reaches a certain size, and making subsequent writes to a
+new segment file. We can then perform compaction on these segment. Compaction
+means throwing away duplicate keys in the log, and keeping only the most recent
+update for each key.</div><div data-id="83" class="ft_column __w-126"></div></div><div data-id="84" class="ft_column __w-127 __pt-128 __pb-129 __oy-130 __cur-131" style="position:relative"><comment data-id="85"></comment><div data-id="86" class="ft_row __w-132 __btlr-137 __btrr-138 __bgc-139" style="position:relative"><comment data-id="87"></comment><comment data-id="88"></comment><div data-id="89" class="ft_row __as-141 __pos-142 __t-143 __r-144 __jc-145 __ali-146 __g-147"><comment data-id="90"></comment><comment data-id="91"></comment><comment data-id="92"></comment></div><comment data-id="93"></comment></div><pre data-id="94" class="language-txt fastn-theme-light __w-148 __pb-149 __btlr-150 __btrr-151 __bblr-152 __bbrr-153 __ox-154 __oy-155 __c-156 __bgc-157 __rl-160"><code data-id="95" class="language-txt fastn-theme-light">// Data file segment
+
+mew: 1078 | purr: 2108 | purr: 2304 | mew: 409 | yawn: 609 | yawn: 7809 | purr: 908
+
+// Compaction
+
+yawn: 7809 | purr: 908 | mew: 409
+</code></pre><comment data-id="96"></comment><div data-id="97" class="ft_column __pos-161 __p-162 __bbrr-163 __b-164 __r-165 __z-166"><div data-id="98" class="ft_row __g-167"><comment data-id="99"></comment><div data-id="100" class="ft_row __g-168"><div data-id="101" class="__rl-169 __c-170">Lang:</div><div data-id="102" class="__rl-171 __c-172">txt</div></div></div></div></div><div data-id="103" class="__rl-173 __w-174 __c-175"><p>Since compaction often makes segments much smaller, we can also merge several
+segments together at the same time as performing the compaction.</p>
+Each segment now has its own in-memory hash table, mapping keys to file offsets. In
+order to find the value for a key, we first check the most recent segment’s hash map;
+if the key is not present we check the second-most-recent segment, and so on. The
+merging process keeps the number of segments small, so lookups don’t need to check
+many hash maps.</div><div data-id="104" class="ft_column __w-176"><h3 data-id="105" id="implementation" class="__rl-177 __w-178 __pt-179 __mb-180 __c-181">Implementation</h3><comment data-id="106"></comment><div data-id="107" class="__rl-182 __w-183 __c-184"><p>Some of the issues that are important in a real implementation are:</p>
+<ul>
+<li><em>File format</em>:</li>
+</ul>
+<p>CSV is not the best format for a log. It’s faster and simpler to use a binary format
+that first encodes the length of a string in bytes, followed by the raw string</p>
+<ul>
+<li><em>Deleting records</em>:</li>
+</ul>
+<p>If you want to delete a key and its associated value, you have to append a special
+deletion record to the data file (sometimes called a tombstone). When log
+segments are merged, the tombstone tells the merging process to discard any
+previous values for the deleted key.</p>
+<ul>
+<li><em>Crash recovery</em>:</li>
+</ul>
+<p>Can read the entire segment file from beginning to end and noting the offset of
+the most recent value for every key, but then time consuming process.
+Bitcask speeds up recovery by storing a snapshot of each segment’s hash map on
+disk, which can be loaded into memory more quickly.</p>
+<ul>
+<li><em>Partially written records</em>:</li>
+</ul>
+<p>Handle by checking checksum of the record.</p>
+<ul>
+<li><em>Concurrency control</em>:</li>
+</ul>
+As writes are appended to the log in a strictly sequential order, a common
+implementation choice is to have only one writer thread. Data file segments are
+append-only and otherwise immutable, so they can be read concurrently by
+multiple threads.</div><div data-id="108" class="ft_column __w-185"></div></div><div data-id="109" class="ft_column __w-186"><h3 data-id="110" id="advantage-of-append-only-approach" class="__rl-187 __w-188 __pt-189 __mb-190 __c-191">Advantage of append-only approach</h3><comment data-id="111"></comment><div data-id="112" class="__rl-192 __w-193 __c-194"><p>An append-only log seems wasteful at first glance: why don’t you update the file in
+place, overwriting the old value with the new value? But an append-only design turns
+out to be good for several reasons:</p>
+<ul>
+<li><p>Appending and segment merging are sequential write operations, which are
+generally much faster than random writes, especially on magnetic spinning-disk
+hard drives.</p>
+</li>
+<li>Concurrency and crash recovery are much simpler if segment files are append
+only or immutable. For example, you don’t have to worry about the case where a
+crash happened while a value was being overwritten, leaving you with a file
+containing part of the old and part of the new value spliced together.
+</li>
+</ul></div><div data-id="113" class="ft_column __w-195"></div></div><div data-id="114" class="ft_column __w-196"><h3 data-id="115" id="limitation" class="__rl-197 __w-198 __pt-199 __mb-200 __c-201">Limitation</h3><comment data-id="116"></comment><div data-id="117" class="__rl-202 __w-203 __c-204"><p>However, the hash table index also has limitations:</p>
+<ul>
+<li><p>The hash table must fit in memory, so if you have a very large number of keys,
+you’re out of luck.</p>
+</li>
+<li>Range queries are not efficient. For example, you cannot easily scan over all
+keys between kitty00000 and kitty99999—you’d have to look up each key
+individually in the hash maps.
+</li>
+</ul></div><div data-id="118" class="ft_column __w-205"></div></div><div data-id="119" class="ft_column __w-206"><h2 data-id="120" id="sstables-and-lsm-trees" class="__rl-207 __w-208 __pt-209 __mb-210 __c-211">SSTables and LSM-Trees</h2><comment data-id="121"></comment><div data-id="122" class="__rl-212 __w-213 __c-214">The sequence of key-value pairs is sorted by key in our segment files.
+We call this format Sorted String Table, or SSTable for short. We also require
+that each key only appears once within each merged segment file.</div><div data-id="123" class="ft_column __w-215"></div></div><div data-id="124" class="ft_column __w-216"><h3 data-id="125" id="advantage" class="__rl-217 __w-218 __pt-219 __mb-220 __c-221">Advantage:</h3><comment data-id="126"></comment><div data-id="127" class="__rl-222 __w-223 __c-224"><ul>
+<li><p>Merging segments is simple and efficient, even if the files are bigger than the
+available memory. The approach is like the one used in the mergesort algorithm,
+you start reading the input files side by side, look at the first key in each
+file, copy the lowest key (according to the sort order) to the output file, and
+repeat. This produces a new merged segment file, also sorted by key.</p>
+</li>
+<li><p>In order to find a particular key in the file, you no longer need to keep an
+index of all the keys in memory. It&#39;s sorted so you&#39;ll get the key offset from
+key&#39;s present in the memory. In-memory key can be sparse: one key for every few
+kilobytes of segment file is sufficient.</p>
+</li>
+<li>It is possible to group those records into a block and compress it before
+writing it to disk. Each entry of the sparse in-memory index then points at the
+start of a compressed block.
+</li>
+</ul></div><div data-id="128" class="ft_column __w-225"></div></div><div data-id="129" class="ft_column __w-226"><h3 data-id="130" id="constructing-and-maintaining-sstables" class="__rl-227 __w-228 __pt-229 __mb-230 __c-231">Constructing and maintaining SSTables</h3><comment data-id="131"></comment><div data-id="132" class="__rl-232 __w-233 __c-234"><p>Maintaining a sorted structure on disk is possible but maintaining it in memory
+is much easier. There are plenty of well-known tree data structures that you can
+use, such as red-black trees or AVL trees. With these data structures, you can
+insert keys in any order and read them back in sorted order.</p>
+<ul>
+<li>In-memory balanced tree (eg red-black tree) is called a <code>memtable</code>.</li>
+<li>When the memtable gets bigger than some threshold—typically a few megabytes
+write it out to disk as an SSTable file where key-value pairs sorted by key.
+The new SSTable file becomes the most recent segment of the database.</li>
+<li>In order to serve a read request, first try to find the key in the memtable, then in
+the most recent on-disk segment, then in the next-older segment, etc</li>
+<li>Run a merging and compaction process in the background</li>
+</ul>
+In case of crash, the memtable can be restored by keeping a separate log on disk.</div><div data-id="133" class="ft_column __w-235"></div></div><div data-id="134" class="ft_column __w-236"><h3 data-id="135" id="making-an-lsm-tree-out-of-sstables" class="__rl-237 __w-238 __pt-239 __mb-240 __c-241">Making an LSM-tree out of SSTables</h3><comment data-id="136"></comment><div data-id="137" class="__rl-242 __w-243 __c-244"><p>Storage engines that are based on this principle of merging and compacting sorted
+files are often called LSM (Log-Structured Merge-Tree) storage engines.</p>
+Lucene, an indexing engine for full-text search used by Elasticsearch and Solr, uses a
+similar method for storing its term dictionary [12, 13]. A full-text index is much more
+complex than a key-value index but is based on a similar idea: given a word in a
+search query, find all the documents (web pages, product descriptions, etc.) that
+mention the word. This is implemented with a key-value structure where the key is a
+word (a term) and the value is the list of IDs of all the documents that contain the
+word (the postings list).</div><div data-id="138" class="ft_column __w-245"></div></div><div data-id="139" class="ft_column __w-246"><h3 data-id="140" id="performance-optimizations" class="__rl-247 __w-248 __pt-249 __mb-250 __c-251">Performance optimizations</h3><comment data-id="141"></comment><div data-id="142" class="__rl-252 __w-253 __c-254">In order to optimize access, storage engines often use additional <em>Bloom filters</em>.
+A Bloom filter is a memory-efficient data structure for approximating the contents
+of a set. It can tell you if a key does not appear in the database, and thus
+saves many unnecessary disk reads for nonexistent keys</div><div data-id="143" class="ft_column __w-255"></div></div><div data-id="144" class="ft_column __w-256"><h2 data-id="145" id="b-trees" class="__rl-257 __w-258 __pt-259 __mb-260 __c-261">B-Trees</h2><comment data-id="146"></comment><div data-id="147" class="__rl-262 __w-263 __c-264"><p>B-trees break the database down into fixed-size blocks or pages, traditionally
+4 KB in size (sometimes bigger), and read or write one page at a time. This
+design corresponds more closely to the underlying hardware, as disks are also arranged
+in fixed-size blocks.</p>
+Each page can be identified using an address or location, which allows one page to
+refer to another on disk. We can use these page references to construct a tree of pages</div><div data-id="148" class="ft_column __w-265"></div></div><div data-id="149" class="ft_column __w-266 __pt-267 __pb-268 __oy-269 __cur-270" style="position:relative"><comment data-id="150"></comment><div data-id="151" class="ft_row __w-271 __btlr-276 __btrr-277 __bgc-278" style="position:relative"><comment data-id="152"></comment><comment data-id="153"></comment><div data-id="154" class="ft_row __as-280 __pos-281 __t-282 __r-283 __jc-284 __ali-285 __g-286"><comment data-id="155"></comment><comment data-id="156"></comment><comment data-id="157"></comment></div><comment data-id="158"></comment></div><pre data-id="159" class="language-txt fastn-theme-light __w-287 __pb-288 __btlr-289 __btrr-290 __bblr-291 __bbrr-292 __ox-293 __oy-294 __c-295 __bgc-296 __rl-299"><code data-id="160" class="language-txt fastn-theme-light">Look up for user_id 251
+
+[100, **200**, 300, 400, ...]
+         |
+[200, 210, 220, 230, 240, **250**,...]
+                             |
+[250, **251**, 252, 253, 254, ...]
+</code></pre><comment data-id="161"></comment><div data-id="162" class="ft_column __pos-300 __p-301 __bbrr-302 __b-303 __r-304 __z-305"><div data-id="163" class="ft_row __g-306"><comment data-id="164"></comment><div data-id="165" class="ft_row __g-307"><div data-id="166" class="__rl-308 __c-309">Lang:</div><div data-id="167" class="__rl-310 __c-311">txt</div></div></div></div></div><div data-id="168" class="__rl-312 __w-313 __c-314"><p>This algorithm ensures that the tree remains balanced: a B-tree with n keys always
+has a depth of O(log n). Most databases can fit into a B-tree that is three or four levels
+deep, so you don’t need to follow many page references to find the page you are
+looking for. (A four-level tree of 4 KB pages with a branching factor of 500 can
+store up to 256 TB.)</p>
+In order to make the database resilient to crashes, it is common for B-tree
+implementations to include an additional data structure on disk: a write-ahead
+log (WAL, also known as a redo log). This is an append-only file to which every
+B-tree modification must be written before it can be applied to the pages of the
+tree itself.</div></div></div></div><comment data-id="169"></comment><comment data-id="170"></comment></div><div data-id="171" class="ft_column __w-315"></div><comment data-id="172"></comment></div><div data-id="173" class="ft_row __pos-316 __p-317 __bw-318 __br-319 __bc-320 __b-321 __r-322 __z-323 __bgc-324"><comment data-id="174"></comment><div data-id="175" class="ft_row __cur-325"><img data-id="176" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-326 __w-327 __h-328"></img></div><comment data-id="177"></comment><comment data-id="178"></comment></div><comment data-id="179"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -395,143 +550,129 @@ request</li>
 	body.dark .__bgc-25 { background-color: #111111; }
 	.__w-26 { width: 100%; }
 	.__as-27 { align-self: start; }
-	.__rl-28 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 18px; }
-	body.mobile .__rl-28 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__w-29 { width: 100%; }
-	.__pl-30 { padding-left: 8px; }
-	.__pr-31 { padding-right: 8px; }
-	.__pt-32 { padding-top: 8px; }
-	.__pb-33 { padding-bottom: 8px; }
-	.__c-34 { color: #333333 !important; }
-	body.dark .__c-34 { color: #F7F7F7 !important; }
-	.__c-34:visited { color: #333333 !important; }
-	body.dark  .__c-34:visited { color: #F7F7F7 !important; }
-	.__bgc-35 { background-color: #4A6490; }
-	.__white-space-36 { white-space: nowrap; }
+	.__w-28 { width: 100%; }
+	.__pt-29 { padding-top: 8px; }
+	.__ox-30 { overflow-x: auto; }
+	.__g-31 { gap: 8px; }
+	.__w-32 { width: 100%; }
+	.__pl-33 { padding-left: 24px; }
+	.__pr-34 { padding-right: 24px; }
+	.__pt-35 { padding-top: 24px; }
+	.__pb-36 { padding-bottom: 24px; }
 	.__w-37 { width: 100%; }
-	.__pt-38 { padding-top: 8px; }
-	.__ox-39 { overflow-x: auto; }
-	.__g-40 { gap: 8px; }
-	.__cur-41 { cursor: pointer; }
-	.__rl-42 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	body.mobile .__rl-42 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__pl-43 { padding-left: 10px; }
-	.__ml-44 { margin-left: 10px; }
-	.__c-45 { color: #EF8435 !important; }
-	.__white-space-46 { white-space: nowrap; }
-	.__cur-47 { cursor: pointer; }
-	.__rl-48 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	body.mobile .__rl-48 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__pl-49 { padding-left: 10px; }
-	.__ml-50 { margin-left: 10px; }
-	.__c-51 { color: #333333 !important; }
-	body.dark .__c-51 { color: #FFFFFF !important; }
-	.__c-51:visited { color: #333333 !important; }
-	body.dark  .__c-51:visited { color: #FFFFFF !important; }
-	.__white-space-52 { white-space: nowrap; }
-	.__cur-53 { cursor: pointer; }
-	.__rl-54 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	body.mobile .__rl-54 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__pl-55 { padding-left: 10px; }
-	.__ml-56 { margin-left: 10px; }
-	.__c-57 { color: #333333 !important; }
-	body.dark .__c-57 { color: #FFFFFF !important; }
-	.__c-57:visited { color: #333333 !important; }
-	body.dark  .__c-57:visited { color: #FFFFFF !important; }
-	.__white-space-58 { white-space: nowrap; }
-	.__cur-59 { cursor: pointer; }
-	.__w-60 { width: 100%; }
-	.__pl-61 { padding-left: 20px; }
-	.__pr-62 { padding-right: 20px; }
-	.__bgc-63 { background-color: #F5F5F5; }
-	body.dark .__bgc-63 { background-color: #2b2b2b; }
-	.__w-64 { width: 100%; }
-	.__pt-65 { padding-top: 16px; }
-	.__pb-66 { padding-bottom: 16px; }
-	.__g-67 { gap: 4px; }
-	.__rl-68 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 18px; }
-	body.mobile .__rl-68 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__c-69 { color: #333333 !important; }
-	body.dark .__c-69 { color: #FFFFFF !important; }
-	.__c-69:visited { color: #333333 !important; }
-	body.dark  .__c-69:visited { color: #FFFFFF !important; }
-	.__white-space-70 { white-space: nowrap; }
-	.__rl-71 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 18px; }
-	body.mobile .__rl-71 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__c-72 { color: #333333 !important; }
-	body.dark .__c-72 { color: #FFFFFF !important; }
-	.__c-72:visited { color: #333333 !important; }
-	body.dark  .__c-72:visited { color: #FFFFFF !important; }
-	.__white-space-73 { white-space: nowrap; }
-	.__rl-74 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 18px; }
-	body.mobile .__rl-74 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
-	.__c-75 { color: #333333 !important; }
-	body.dark .__c-75 { color: #FFFFFF !important; }
-	.__c-75:visited { color: #333333 !important; }
-	body.dark  .__c-75:visited { color: #FFFFFF !important; }
-	.__white-space-76 { white-space: nowrap; }
-	.__as-77 { align-self: end; }
-	.__h-78 { height: 100%; }
-	.__as-79 { align-self: center; }
-	.__w-80 { width: 100%; }
-	.__w-81 { width: 12px; }
-	.__h-82 { height: fit-content; }
-	.__w-83 { width: 100%; }
-	.__pl-84 { padding-left: 24px; }
-	.__pr-85 { padding-right: 24px; }
-	.__pt-86 { padding-top: 24px; }
-	.__pb-87 { padding-bottom: 24px; }
-	.__w-88 { width: 100%; }
+	.__w-38 { width: 100%; }
+	.__w-39 { width: 100%; }
+	.__rl-40 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 56px; font-weight: 700; line-height: 84px; }
+	body.mobile .__rl-40 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 48px; font-weight: 700; line-height: 64px; }
+	.__w-41 { width: 100%; }
+	.__mb-42 { margin-bottom: 0.5rem; }
+	.__bbw-43 { border-bottom-width: 1px; }
+	.__bc-44 { border-color: #D2D2D2; }
+	body.dark .__bc-44 { border-color: #434547; }
+	.__c-45 { color: #333333 !important; }
+	body.dark .__c-45 { color: #FFFFFF !important; }
+	.__c-45:visited { color: #333333 !important; }
+	body.dark  .__c-45:visited { color: #FFFFFF !important; }
+	.__w-46 { width: 100%; }
+	.__w-47 { width: 100%; }
+	.__rl-48 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-48 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-49 { width: 100%; }
+	.__c-50 { color: #7C7C7C !important; }
+	body.dark .__c-50 { color: #B8B8B8 !important; }
+	.__c-50:visited { color: #7C7C7C !important; }
+	body.dark  .__c-50:visited { color: #B8B8B8 !important; }
+	.__w-51 { width: 100%; }
+	.__g-52 { gap: 32px; }
+	.__w-53 { width: 100%; }
+	.__mt-54 { margin-top: 0.5em; }
+	.__g-55 { gap: 0.8em; }
+	.__w-56 { width: 100%; }
+	.__rl-57 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 40px; font-weight: 700; line-height: 60px; }
+	body.mobile .__rl-57 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 36px; font-weight: 700; line-height: 54px; }
+	.__w-58 { width: 100%; }
+	.__pt-59 { padding-top: 0.5em; }
+	.__mb-60 { margin-bottom: 0.5rem; }
+	.__bbw-61 { border-bottom-width: 1px; }
+	.__bc-62 { border-color: #D2D2D2; }
+	body.dark .__bc-62 { border-color: #434547; }
+	.__c-63 { color: #333333 !important; }
+	body.dark .__c-63 { color: #FFFFFF !important; }
+	.__c-63:visited { color: #333333 !important; }
+	body.dark  .__c-63:visited { color: #FFFFFF !important; }
+	.__rl-64 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-64 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-65 { width: 100%; }
+	.__c-66 { color: #7C7C7C !important; }
+	body.dark .__c-66 { color: #B8B8B8 !important; }
+	.__c-66:visited { color: #7C7C7C !important; }
+	body.dark  .__c-66:visited { color: #B8B8B8 !important; }
+	.__w-67 { width: 100%; }
+	.__w-68 { width: 100%; }
+	.__pt-69 { padding-top: 12px; }
+	.__pb-70 { padding-bottom: 12px; }
+	.__oy-71 { overflow-y: auto; }
+	.__cur-72 { cursor: default; }
+	.__w-73 { width: 100%; }
+	.__btlr-78 { border-top-left-radius: 4px; }
+	.__btrr-79 { border-top-right-radius: 4px; }
+	.__bgc-80 { background-color: #F8F8F8; }
+	body.dark .__bgc-80 { background-color: #111111; }
+	.__as-82 { align-self: end; }
+	.__pos-83 { position: absolute; }
+	.__t-84 { top: 12px; }
+	.__r-85 { right: 20px; }
+	.__jc-86 { justify-content: right; }
+	.__ali-87 { align-items: center; }
+	.__g-88 { gap: 10px; }
 	.__w-89 { width: 100%; }
-	.__w-90 { width: 100%; }
-	.__rl-91 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 56px; font-weight: 700; line-height: 84px; }
-	body.mobile .__rl-91 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 48px; font-weight: 700; line-height: 64px; }
-	.__w-92 { width: 100%; }
-	.__mb-93 { margin-bottom: 0.5rem; }
-	.__bbw-94 { border-bottom-width: 1px; }
-	.__bc-95 { border-color: #D2D2D2; }
-	body.dark .__bc-95 { border-color: #434547; }
-	.__c-96 { color: #333333 !important; }
-	body.dark .__c-96 { color: #FFFFFF !important; }
-	.__c-96:visited { color: #333333 !important; }
-	body.dark  .__c-96:visited { color: #FFFFFF !important; }
-	.__w-97 { width: 100%; }
-	.__w-98 { width: 100%; }
-	.__rl-99 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-99 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-100 { width: 100%; }
-	.__c-101 { color: #7C7C7C !important; }
-	body.dark .__c-101 { color: #B8B8B8 !important; }
-	.__c-101:visited { color: #7C7C7C !important; }
-	body.dark  .__c-101:visited { color: #B8B8B8 !important; }
-	.__w-102 { width: 100%; }
-	.__g-103 { gap: 32px; }
-	.__w-104 { width: 100%; }
-	.__mt-105 { margin-top: 0.5em; }
-	.__g-106 { gap: 0.8em; }
-	.__w-107 { width: 100%; }
-	.__rl-108 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
-	body.mobile .__rl-108 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
-	.__w-109 { width: 100%; }
-	.__pt-110 { padding-top: 0.3em; }
-	.__mb-111 { margin-bottom: 0.5rem; }
-	.__c-112 { color: #333333 !important; }
-	body.dark .__c-112 { color: #FFFFFF !important; }
-	.__c-112:visited { color: #333333 !important; }
-	body.dark  .__c-112:visited { color: #FFFFFF !important; }
-	.__rl-113 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-113 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-114 { width: 100%; }
-	.__c-115 { color: #7C7C7C !important; }
-	body.dark .__c-115 { color: #B8B8B8 !important; }
-	.__c-115:visited { color: #7C7C7C !important; }
-	body.dark  .__c-115:visited { color: #B8B8B8 !important; }
-	.__w-116 { width: 100%; }
+	.__pb-90 { padding-bottom: 24px; }
+	.__btlr-91 { border-top-left-radius: 4px; }
+	.__btrr-92 { border-top-right-radius: 4px; }
+	.__bblr-93 { border-bottom-left-radius: 4px; }
+	.__bbrr-94 { border-bottom-right-radius: 4px; }
+	.__ox-95 { overflow-x: auto; }
+	.__oy-96 { overflow-y: auto; }
+	.__c-97 { color: #7C7C7C !important; }
+	body.dark .__c-97 { color: #B8B8B8 !important; }
+	.__c-97:visited { color: #7C7C7C !important; }
+	body.dark  .__c-97:visited { color: #B8B8B8 !important; }
+	.__bgc-98 { background-color: #f5f5f5; }
+	body.dark .__bgc-98 { background-color: #21222c; }
+	.__rl-101 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-101 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-102 { position: absolute; }
+	.__p-103 { padding: 6px; }
+	.__bbrr-104 { border-bottom-right-radius: 4px; }
+	.__b-105 { bottom: 12px; }
+	.__r-106 { right: 12px; }
+	.__z-107 { z-index: 999; }
+	.__g-108 { gap: 16px; }
+	.__g-109 { gap: 4px; }
+	.__rl-110 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-110 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-111 { color: #7C7C7C !important; }
+	body.dark .__c-111 { color: #B8B8B8 !important; }
+	.__c-111:visited { color: #7C7C7C !important; }
+	body.dark  .__c-111:visited { color: #B8B8B8 !important; }
+	.__rl-112 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-112 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-113 { color: #7C7C7C !important; }
+	body.dark .__c-113 { color: #B8B8B8 !important; }
+	.__c-113:visited { color: #7C7C7C !important; }
+	body.dark  .__c-113:visited { color: #B8B8B8 !important; }
+	.__rl-114 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-114 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-115 { width: 100%; }
+	.__c-116 { color: #7C7C7C !important; }
+	body.dark .__c-116 { color: #B8B8B8 !important; }
+	.__c-116:visited { color: #7C7C7C !important; }
+	body.dark  .__c-116:visited { color: #B8B8B8 !important; }
 	.__w-117 { width: 100%; }
-	.__rl-118 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-118 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__rl-118 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-118 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
 	.__w-119 { width: 100%; }
-	.__pt-120 { padding-top: 0.17em; }
+	.__pt-120 { padding-top: 0.3em; }
 	.__mb-121 { margin-bottom: 0.5rem; }
 	.__c-122 { color: #333333 !important; }
 	body.dark .__c-122 { color: #FFFFFF !important; }
@@ -546,87 +687,58 @@ request</li>
 	body.dark  .__c-125:visited { color: #B8B8B8 !important; }
 	.__w-126 { width: 100%; }
 	.__w-127 { width: 100%; }
-	.__rl-128 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-128 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
-	.__w-129 { width: 100%; }
-	.__pt-130 { padding-top: 0.17em; }
-	.__mb-131 { margin-bottom: 0.5rem; }
-	.__c-132 { color: #333333 !important; }
-	body.dark .__c-132 { color: #FFFFFF !important; }
-	.__c-132:visited { color: #333333 !important; }
-	body.dark  .__c-132:visited { color: #FFFFFF !important; }
-	.__rl-133 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-133 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-134 { width: 100%; }
-	.__c-135 { color: #7C7C7C !important; }
-	body.dark .__c-135 { color: #B8B8B8 !important; }
-	.__c-135:visited { color: #7C7C7C !important; }
-	body.dark  .__c-135:visited { color: #B8B8B8 !important; }
-	.__w-136 { width: 100%; }
-	.__w-137 { width: 100%; }
-	.__rl-138 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
-	body.mobile .__rl-138 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
-	.__w-139 { width: 100%; }
-	.__pt-140 { padding-top: 0.3em; }
-	.__mb-141 { margin-bottom: 0.5rem; }
-	.__c-142 { color: #333333 !important; }
-	body.dark .__c-142 { color: #FFFFFF !important; }
-	.__c-142:visited { color: #333333 !important; }
-	body.dark  .__c-142:visited { color: #FFFFFF !important; }
-	.__rl-143 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-143 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-144 { width: 100%; }
-	.__c-145 { color: #7C7C7C !important; }
-	body.dark .__c-145 { color: #B8B8B8 !important; }
-	.__c-145:visited { color: #7C7C7C !important; }
-	body.dark  .__c-145:visited { color: #B8B8B8 !important; }
-	.__w-146 { width: 100%; }
-	.__w-147 { width: 100%; }
-	.__rl-148 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-148 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
-	.__w-149 { width: 100%; }
-	.__pt-150 { padding-top: 0.17em; }
-	.__mb-151 { margin-bottom: 0.5rem; }
-	.__c-152 { color: #333333 !important; }
-	body.dark .__c-152 { color: #FFFFFF !important; }
-	.__c-152:visited { color: #333333 !important; }
-	body.dark  .__c-152:visited { color: #FFFFFF !important; }
-	.__rl-153 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-153 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-154 { width: 100%; }
-	.__c-155 { color: #7C7C7C !important; }
-	body.dark .__c-155 { color: #B8B8B8 !important; }
-	.__c-155:visited { color: #7C7C7C !important; }
-	body.dark  .__c-155:visited { color: #B8B8B8 !important; }
-	.__w-156 { width: 100%; }
-	.__w-157 { width: 100%; }
-	.__rl-158 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-158 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
-	.__w-159 { width: 100%; }
-	.__pt-160 { padding-top: 0.17em; }
-	.__mb-161 { margin-bottom: 0.5rem; }
-	.__c-162 { color: #333333 !important; }
-	body.dark .__c-162 { color: #FFFFFF !important; }
-	.__c-162:visited { color: #333333 !important; }
-	body.dark  .__c-162:visited { color: #FFFFFF !important; }
-	.__rl-163 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-163 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-164 { width: 100%; }
-	.__c-165 { color: #7C7C7C !important; }
-	body.dark .__c-165 { color: #B8B8B8 !important; }
-	.__c-165:visited { color: #7C7C7C !important; }
-	body.dark  .__c-165:visited { color: #B8B8B8 !important; }
-	.__w-166 { width: 100%; }
-	.__w-167 { width: 100%; }
-	.__rl-168 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
-	body.mobile .__rl-168 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
-	.__w-169 { width: 100%; }
-	.__pt-170 { padding-top: 0.3em; }
-	.__mb-171 { margin-bottom: 0.5rem; }
-	.__c-172 { color: #333333 !important; }
-	body.dark .__c-172 { color: #FFFFFF !important; }
-	.__c-172:visited { color: #333333 !important; }
-	body.dark  .__c-172:visited { color: #FFFFFF !important; }
+	.__pt-128 { padding-top: 12px; }
+	.__pb-129 { padding-bottom: 12px; }
+	.__oy-130 { overflow-y: auto; }
+	.__cur-131 { cursor: default; }
+	.__w-132 { width: 100%; }
+	.__btlr-137 { border-top-left-radius: 4px; }
+	.__btrr-138 { border-top-right-radius: 4px; }
+	.__bgc-139 { background-color: #F8F8F8; }
+	body.dark .__bgc-139 { background-color: #111111; }
+	.__as-141 { align-self: end; }
+	.__pos-142 { position: absolute; }
+	.__t-143 { top: 12px; }
+	.__r-144 { right: 20px; }
+	.__jc-145 { justify-content: right; }
+	.__ali-146 { align-items: center; }
+	.__g-147 { gap: 10px; }
+	.__w-148 { width: 100%; }
+	.__pb-149 { padding-bottom: 24px; }
+	.__btlr-150 { border-top-left-radius: 4px; }
+	.__btrr-151 { border-top-right-radius: 4px; }
+	.__bblr-152 { border-bottom-left-radius: 4px; }
+	.__bbrr-153 { border-bottom-right-radius: 4px; }
+	.__ox-154 { overflow-x: auto; }
+	.__oy-155 { overflow-y: auto; }
+	.__c-156 { color: #7C7C7C !important; }
+	body.dark .__c-156 { color: #B8B8B8 !important; }
+	.__c-156:visited { color: #7C7C7C !important; }
+	body.dark  .__c-156:visited { color: #B8B8B8 !important; }
+	.__bgc-157 { background-color: #f5f5f5; }
+	body.dark .__bgc-157 { background-color: #21222c; }
+	.__rl-160 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-160 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-161 { position: absolute; }
+	.__p-162 { padding: 6px; }
+	.__bbrr-163 { border-bottom-right-radius: 4px; }
+	.__b-164 { bottom: 12px; }
+	.__r-165 { right: 12px; }
+	.__z-166 { z-index: 999; }
+	.__g-167 { gap: 16px; }
+	.__g-168 { gap: 4px; }
+	.__rl-169 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-169 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-170 { color: #7C7C7C !important; }
+	body.dark .__c-170 { color: #B8B8B8 !important; }
+	.__c-170:visited { color: #7C7C7C !important; }
+	body.dark  .__c-170:visited { color: #B8B8B8 !important; }
+	.__rl-171 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-171 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-172 { color: #7C7C7C !important; }
+	body.dark .__c-172 { color: #B8B8B8 !important; }
+	.__c-172:visited { color: #7C7C7C !important; }
+	body.dark  .__c-172:visited { color: #B8B8B8 !important; }
 	.__rl-173 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
 	body.mobile .__rl-173 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
 	.__w-174 { width: 100%; }
@@ -635,76 +747,243 @@ request</li>
 	.__c-175:visited { color: #7C7C7C !important; }
 	body.dark  .__c-175:visited { color: #B8B8B8 !important; }
 	.__w-176 { width: 100%; }
-	.__w-177 { width: 100%; }
-	.__rl-178 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-178 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
-	.__w-179 { width: 100%; }
-	.__pt-180 { padding-top: 0.17em; }
-	.__mb-181 { margin-bottom: 0.5rem; }
-	.__c-182 { color: #333333 !important; }
-	body.dark .__c-182 { color: #FFFFFF !important; }
-	.__c-182:visited { color: #333333 !important; }
-	body.dark  .__c-182:visited { color: #FFFFFF !important; }
-	.__rl-183 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-183 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-184 { width: 100%; }
-	.__c-185 { color: #7C7C7C !important; }
-	body.dark .__c-185 { color: #B8B8B8 !important; }
-	.__c-185:visited { color: #7C7C7C !important; }
-	body.dark  .__c-185:visited { color: #B8B8B8 !important; }
+	.__rl-177 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-177 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-178 { width: 100%; }
+	.__pt-179 { padding-top: 0.17em; }
+	.__mb-180 { margin-bottom: 0.5rem; }
+	.__c-181 { color: #333333 !important; }
+	body.dark .__c-181 { color: #FFFFFF !important; }
+	.__c-181:visited { color: #333333 !important; }
+	body.dark  .__c-181:visited { color: #FFFFFF !important; }
+	.__rl-182 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-182 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-183 { width: 100%; }
+	.__c-184 { color: #7C7C7C !important; }
+	body.dark .__c-184 { color: #B8B8B8 !important; }
+	.__c-184:visited { color: #7C7C7C !important; }
+	body.dark  .__c-184:visited { color: #B8B8B8 !important; }
+	.__w-185 { width: 100%; }
 	.__w-186 { width: 100%; }
-	.__w-187 { width: 100%; }
-	.__rl-188 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
-	body.mobile .__rl-188 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
-	.__w-189 { width: 100%; }
-	.__pt-190 { padding-top: 0.17em; }
-	.__mb-191 { margin-bottom: 0.5rem; }
-	.__c-192 { color: #333333 !important; }
-	body.dark .__c-192 { color: #FFFFFF !important; }
-	.__c-192:visited { color: #333333 !important; }
-	body.dark  .__c-192:visited { color: #FFFFFF !important; }
-	.__rl-193 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-193 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-194 { width: 100%; }
-	.__c-195 { color: #7C7C7C !important; }
-	body.dark .__c-195 { color: #B8B8B8 !important; }
-	.__c-195:visited { color: #7C7C7C !important; }
-	body.dark  .__c-195:visited { color: #B8B8B8 !important; }
+	.__rl-187 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-187 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-188 { width: 100%; }
+	.__pt-189 { padding-top: 0.17em; }
+	.__mb-190 { margin-bottom: 0.5rem; }
+	.__c-191 { color: #333333 !important; }
+	body.dark .__c-191 { color: #FFFFFF !important; }
+	.__c-191:visited { color: #333333 !important; }
+	body.dark  .__c-191:visited { color: #FFFFFF !important; }
+	.__rl-192 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-192 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-193 { width: 100%; }
+	.__c-194 { color: #7C7C7C !important; }
+	body.dark .__c-194 { color: #B8B8B8 !important; }
+	.__c-194:visited { color: #7C7C7C !important; }
+	body.dark  .__c-194:visited { color: #B8B8B8 !important; }
+	.__w-195 { width: 100%; }
 	.__w-196 { width: 100%; }
-	.__w-197 { width: 100%; }
-	.__rl-198 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
-	body.mobile .__rl-198 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
-	.__w-199 { width: 100%; }
-	.__pt-200 { padding-top: 0.3em; }
-	.__mb-201 { margin-bottom: 0.5rem; }
-	.__c-202 { color: #333333 !important; }
-	body.dark .__c-202 { color: #FFFFFF !important; }
-	.__c-202:visited { color: #333333 !important; }
-	body.dark  .__c-202:visited { color: #FFFFFF !important; }
-	.__rl-203 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
-	body.mobile .__rl-203 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
-	.__w-204 { width: 100%; }
-	.__c-205 { color: #7C7C7C !important; }
-	body.dark .__c-205 { color: #B8B8B8 !important; }
-	.__c-205:visited { color: #7C7C7C !important; }
-	body.dark  .__c-205:visited { color: #B8B8B8 !important; }
+	.__rl-197 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-197 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-198 { width: 100%; }
+	.__pt-199 { padding-top: 0.17em; }
+	.__mb-200 { margin-bottom: 0.5rem; }
+	.__c-201 { color: #333333 !important; }
+	body.dark .__c-201 { color: #FFFFFF !important; }
+	.__c-201:visited { color: #333333 !important; }
+	body.dark  .__c-201:visited { color: #FFFFFF !important; }
+	.__rl-202 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-202 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-203 { width: 100%; }
+	.__c-204 { color: #7C7C7C !important; }
+	body.dark .__c-204 { color: #B8B8B8 !important; }
+	.__c-204:visited { color: #7C7C7C !important; }
+	body.dark  .__c-204:visited { color: #B8B8B8 !important; }
+	.__w-205 { width: 100%; }
 	.__w-206 { width: 100%; }
-	.__w-207 { width: 100%; }
-	.__pos-208 { position: fixed; }
-	.__p-209 { padding: 10px; }
-	.__bw-210 { border-width: 1px; }
-	.__br-211 { border-radius: 4px; }
-	.__bc-212 { border-color: #D2D2D2; }
-	body.dark .__bc-212 { border-color: #434547; }
-	.__b-213 { bottom: 25px; }
-	.__r-214 { right: 25px; }
-	.__z-215 { z-index: 99999999999999; }
-	.__bgc-216 { background-color: #FFFFFF; }
-	body.dark .__bgc-216 { background-color: #000000; }
-	.__cur-217 { cursor: pointer; }
-	.__as-218 { align-self: center; }
-	.__w-219 { width: 19px; }
-	.__h-220 { height: 19px; }
+	.__rl-207 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-207 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-208 { width: 100%; }
+	.__pt-209 { padding-top: 0.3em; }
+	.__mb-210 { margin-bottom: 0.5rem; }
+	.__c-211 { color: #333333 !important; }
+	body.dark .__c-211 { color: #FFFFFF !important; }
+	.__c-211:visited { color: #333333 !important; }
+	body.dark  .__c-211:visited { color: #FFFFFF !important; }
+	.__rl-212 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-212 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-213 { width: 100%; }
+	.__c-214 { color: #7C7C7C !important; }
+	body.dark .__c-214 { color: #B8B8B8 !important; }
+	.__c-214:visited { color: #7C7C7C !important; }
+	body.dark  .__c-214:visited { color: #B8B8B8 !important; }
+	.__w-215 { width: 100%; }
+	.__w-216 { width: 100%; }
+	.__rl-217 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-217 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-218 { width: 100%; }
+	.__pt-219 { padding-top: 0.17em; }
+	.__mb-220 { margin-bottom: 0.5rem; }
+	.__c-221 { color: #333333 !important; }
+	body.dark .__c-221 { color: #FFFFFF !important; }
+	.__c-221:visited { color: #333333 !important; }
+	body.dark  .__c-221:visited { color: #FFFFFF !important; }
+	.__rl-222 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-222 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-223 { width: 100%; }
+	.__c-224 { color: #7C7C7C !important; }
+	body.dark .__c-224 { color: #B8B8B8 !important; }
+	.__c-224:visited { color: #7C7C7C !important; }
+	body.dark  .__c-224:visited { color: #B8B8B8 !important; }
+	.__w-225 { width: 100%; }
+	.__w-226 { width: 100%; }
+	.__rl-227 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-227 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-228 { width: 100%; }
+	.__pt-229 { padding-top: 0.17em; }
+	.__mb-230 { margin-bottom: 0.5rem; }
+	.__c-231 { color: #333333 !important; }
+	body.dark .__c-231 { color: #FFFFFF !important; }
+	.__c-231:visited { color: #333333 !important; }
+	body.dark  .__c-231:visited { color: #FFFFFF !important; }
+	.__rl-232 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-232 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-233 { width: 100%; }
+	.__c-234 { color: #7C7C7C !important; }
+	body.dark .__c-234 { color: #B8B8B8 !important; }
+	.__c-234:visited { color: #7C7C7C !important; }
+	body.dark  .__c-234:visited { color: #B8B8B8 !important; }
+	.__w-235 { width: 100%; }
+	.__w-236 { width: 100%; }
+	.__rl-237 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-237 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-238 { width: 100%; }
+	.__pt-239 { padding-top: 0.17em; }
+	.__mb-240 { margin-bottom: 0.5rem; }
+	.__c-241 { color: #333333 !important; }
+	body.dark .__c-241 { color: #FFFFFF !important; }
+	.__c-241:visited { color: #333333 !important; }
+	body.dark  .__c-241:visited { color: #FFFFFF !important; }
+	.__rl-242 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-242 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-243 { width: 100%; }
+	.__c-244 { color: #7C7C7C !important; }
+	body.dark .__c-244 { color: #B8B8B8 !important; }
+	.__c-244:visited { color: #7C7C7C !important; }
+	body.dark  .__c-244:visited { color: #B8B8B8 !important; }
+	.__w-245 { width: 100%; }
+	.__w-246 { width: 100%; }
+	.__rl-247 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-247 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-248 { width: 100%; }
+	.__pt-249 { padding-top: 0.17em; }
+	.__mb-250 { margin-bottom: 0.5rem; }
+	.__c-251 { color: #333333 !important; }
+	body.dark .__c-251 { color: #FFFFFF !important; }
+	.__c-251:visited { color: #333333 !important; }
+	body.dark  .__c-251:visited { color: #FFFFFF !important; }
+	.__rl-252 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-252 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-253 { width: 100%; }
+	.__c-254 { color: #7C7C7C !important; }
+	body.dark .__c-254 { color: #B8B8B8 !important; }
+	.__c-254:visited { color: #7C7C7C !important; }
+	body.dark  .__c-254:visited { color: #B8B8B8 !important; }
+	.__w-255 { width: 100%; }
+	.__w-256 { width: 100%; }
+	.__rl-257 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-257 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-258 { width: 100%; }
+	.__pt-259 { padding-top: 0.3em; }
+	.__mb-260 { margin-bottom: 0.5rem; }
+	.__c-261 { color: #333333 !important; }
+	body.dark .__c-261 { color: #FFFFFF !important; }
+	.__c-261:visited { color: #333333 !important; }
+	body.dark  .__c-261:visited { color: #FFFFFF !important; }
+	.__rl-262 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-262 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-263 { width: 100%; }
+	.__c-264 { color: #7C7C7C !important; }
+	body.dark .__c-264 { color: #B8B8B8 !important; }
+	.__c-264:visited { color: #7C7C7C !important; }
+	body.dark  .__c-264:visited { color: #B8B8B8 !important; }
+	.__w-265 { width: 100%; }
+	.__w-266 { width: 100%; }
+	.__pt-267 { padding-top: 12px; }
+	.__pb-268 { padding-bottom: 12px; }
+	.__oy-269 { overflow-y: auto; }
+	.__cur-270 { cursor: default; }
+	.__w-271 { width: 100%; }
+	.__btlr-276 { border-top-left-radius: 4px; }
+	.__btrr-277 { border-top-right-radius: 4px; }
+	.__bgc-278 { background-color: #F8F8F8; }
+	body.dark .__bgc-278 { background-color: #111111; }
+	.__as-280 { align-self: end; }
+	.__pos-281 { position: absolute; }
+	.__t-282 { top: 12px; }
+	.__r-283 { right: 20px; }
+	.__jc-284 { justify-content: right; }
+	.__ali-285 { align-items: center; }
+	.__g-286 { gap: 10px; }
+	.__w-287 { width: 100%; }
+	.__pb-288 { padding-bottom: 24px; }
+	.__btlr-289 { border-top-left-radius: 4px; }
+	.__btrr-290 { border-top-right-radius: 4px; }
+	.__bblr-291 { border-bottom-left-radius: 4px; }
+	.__bbrr-292 { border-bottom-right-radius: 4px; }
+	.__ox-293 { overflow-x: auto; }
+	.__oy-294 { overflow-y: auto; }
+	.__c-295 { color: #7C7C7C !important; }
+	body.dark .__c-295 { color: #B8B8B8 !important; }
+	.__c-295:visited { color: #7C7C7C !important; }
+	body.dark  .__c-295:visited { color: #B8B8B8 !important; }
+	.__bgc-296 { background-color: #f5f5f5; }
+	body.dark .__bgc-296 { background-color: #21222c; }
+	.__rl-299 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-299 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-300 { position: absolute; }
+	.__p-301 { padding: 6px; }
+	.__bbrr-302 { border-bottom-right-radius: 4px; }
+	.__b-303 { bottom: 12px; }
+	.__r-304 { right: 12px; }
+	.__z-305 { z-index: 999; }
+	.__g-306 { gap: 16px; }
+	.__g-307 { gap: 4px; }
+	.__rl-308 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-308 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-309 { color: #7C7C7C !important; }
+	body.dark .__c-309 { color: #B8B8B8 !important; }
+	.__c-309:visited { color: #7C7C7C !important; }
+	body.dark  .__c-309:visited { color: #B8B8B8 !important; }
+	.__rl-310 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-310 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-311 { color: #7C7C7C !important; }
+	body.dark .__c-311 { color: #B8B8B8 !important; }
+	.__c-311:visited { color: #7C7C7C !important; }
+	body.dark  .__c-311:visited { color: #B8B8B8 !important; }
+	.__rl-312 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-312 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-313 { width: 100%; }
+	.__c-314 { color: #7C7C7C !important; }
+	body.dark .__c-314 { color: #B8B8B8 !important; }
+	.__c-314:visited { color: #7C7C7C !important; }
+	body.dark  .__c-314:visited { color: #B8B8B8 !important; }
+	.__w-315 { width: 100%; }
+	.__pos-316 { position: fixed; }
+	.__p-317 { padding: 10px; }
+	.__bw-318 { border-width: 1px; }
+	.__br-319 { border-radius: 4px; }
+	.__bc-320 { border-color: #D2D2D2; }
+	body.dark .__bc-320 { border-color: #434547; }
+	.__b-321 { bottom: 25px; }
+	.__r-322 { right: 25px; }
+	.__z-323 { z-index: 99999999999999; }
+	.__bgc-324 { background-color: #FFFFFF; }
+	body.dark .__bgc-324 { background-color: #000000; }
+	.__cur-325 { cursor: pointer; }
+	.__as-326 { align-self: center; }
+	.__w-327 { width: 19px; }
+	.__h-328 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -2660,68 +2939,107 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
   try {
     let parenti0 = arjaupashak_com_FASTN_ds__page(parent, inherited, {
       wrapper: fastn.mutableList([function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
-          title: "Problem #1",
-          body: "Why is the preflight request not sent in a logged-out state? Or probably why is\nthe preflight request sent in a logged-in state?"
+        let rooti0 = arjaupashak_com_FASTN_ds__h1(root, inherited, {
+          title: "Data Structures That Power Your Database",
+          body: "Consider the world’s simplest database, implemented as two Bash functions:"
         });
       },
       function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Observations",
-          body: "- The method of the request was `GET`.\n- Logged-in state sets the browser COOKIE."
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "#!/bin/bash\ndb_set () {\n echo \"$1,$2\" >> database\n}\ndb_get () {\n grep \"^$1,\" database | sed -e \"s/^$1,//\" | tail -n 1\n}\n\n$ db_set 42 '{\"name\":\"San Francisco\",\"attractions\":[\"Golden Gate Bridge\"]}'\n$ db_get 42\n{\"name\":\"San Francisco\",\"attractions\":[\"Golden Gate Bridge\"]}\n\n$ db_set 42 '{\"name\":\"San Francisco\",\"attractions\":[\"Exploratorium\"]}'\n$ db_get 42\n{\"name\":\"San Francisco\",\"attractions\":[\"Exploratorium\"]}\n\n$ cat database\n42,{\"name\":\"San Francisco\",\"attractions\":[\"Golden Gate Bridge\"]}\n42,{\"name\":\"San Francisco\",\"attractions\":[\"Exploratorium\"]}",
+          lang: "sh"
         });
       },
       function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Conclusion",
-          body: "There must be some custom header set in the API request during the logged-in\nstate that causes a preflight request. (Who is doing this??)"
-        });
-      },
-      function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
-          title: "Problem #2",
-          body: "Why is the preflight request failing (in the logged-in state)?"
-        });
-      },
-      function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Observations",
-          body: "The preflight request has the `OPTION` method and this is handled differently.\nWell, this part is of no interest, about like Why?, but the interesting thing is\nthe response doesn’t contain headers like `Access-Control-Allow-Origin`,\n`Access-Control-Allow-Headers`, `Access-Control-Allow-Methods` etc."
-        });
-      },
-      function (root, inherited) {
-        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Conclusion",
-          body: "We need to add the headers in the response which allows our API request which\nprobably contains some custom header (set by still don't know who)"
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Our db_set function actually has pretty good performance for something that is so\nsimple, because appending to a file is generally very efficient. Similarly to what\ndb_set does, many databases internally use a log, which is an append-only data file.\n\nOn the other hand, our db_get function has terrible performance if you have a large\nnumber of records in your database. Every time you want to look up a key, db_get\nhas to scan the entire database file from beginning to end, looking for occurrences of\nthe key. In algorithmic terms, the cost of a lookup is O(n): if you double the number\nof records n in your database, a lookup takes twice as long. That’s not good.\n\nIn order to efficiently find the value for a particular key in the database, we need a\ndifferent data structure: an *index*.\n\nAn index is an additional structure that is derived from the primary data.\nMaintaining additional structures incurs overhead, especially on writes. For\nwrites, it’s hard to beat the performance of simply appending to a file, because\nthat’s the simplest possible write operation. Any kind of index usually slows down\nwrites, because the index also needs to be updated every time data is written.\n\nThis is an important trade-off in storage systems: well-chosen indexes speed up read\nqueries, but every index slows down writes. For this reason, databases don’t usually\nindex everything by default, but require you—the application developer or database\nadministrator—to choose indexes manually, using your knowledge of the\napplication’s typical query patterns."
         });
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
-          title: "Problem #3",
-          body: "If the API request header has some custom header then who is setting it?"
+          title: "Hash Indexes",
+          body: "Let’s say our data storage consists only of appending to a file, as in the preceding\nexample. Then the simplest possible indexing strategy is this: keep an in-memory\nhash map where every key is mapped to a byte offset in the data file—the location at\nwhich the value can be found.\n\nThis may sound simplistic, but it is a viable approach. In fact, this is essentially what\nBitcask (the default storage engine in Riak) does. Bitcask offers high-performance\nreads and writes, subject to the requirement that all the keys fit in the available RAM,\nsince the hash map is kept completely in memory.\n\nA storage engine like Bitcask is well suited to situations where the value for each key\nis updated frequently. For example, the key might be the URL of a cat video, and the\nvalue might be the number of times it has been played (incremented every time\nsomeone hits the play button). In this kind of workload, there are a lot of writes, but\nthere are not too many distinct keys—you have a large number of writes per key, but\nit’s feasible to keep all keys in memory.\n\n*So how do we avoid eventually running out of disk space?*\nA good solution is to break the log into segments of a certain size by closing a\nsegment file when it reaches a certain size, and making subsequent writes to a\nnew segment file. We can then perform compaction on these segment. Compaction\nmeans throwing away duplicate keys in the log, and keeping only the most recent\nupdate for each key."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "// Data file segment\n\nmew: 1078 | purr: 2108 | purr: 2304 | mew: 409 | yawn: 609 | yawn: 7809 | purr: 908\n\n\// Compaction\n\nyawn: 7809 | purr: 908 | mew: 409",
+          lang: "txt"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Since compaction often makes segments much smaller, we can also merge several\nsegments together at the same time as performing the compaction.\n\nEach segment now has its own in-memory hash table, mapping keys to file offsets. In\norder to find the value for a key, we first check the most recent segment’s hash map;\nif the key is not present we check the second-most-recent segment, and so on. The\nmerging process keeps the number of segments small, so lookups don’t need to check\nmany hash maps."
         });
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Observation",
-          body: "- Well obviously the caller of the API is setting it and the caller is React-JS\n(front-end). But nowhere in the code contains this logic to send some custom\nheader during the logged-in state.\n- The API was called using `axios`\n- After logged in, one of the interesting browser cookies was X-XSRF-TOKEN"
+          title: "Implementation",
+          body: "Some of the issues that are important in a real implementation are:\n\n- *File format*:\n\nCSV is not the best format for a log. It’s faster and simpler to use a binary format\nthat first encodes the length of a string in bytes, followed by the raw string\n\n- *Deleting records*:\n\nIf you want to delete a key and its associated value, you have to append a special\ndeletion record to the data file (sometimes called a tombstone). When log\nsegments are merged, the tombstone tells the merging process to discard any\nprevious values for the deleted key.\n\n- *Crash recovery*:\n\nCan read the entire segment file from beginning to end and noting the offset of\nthe most recent value for every key, but then time consuming process.\nBitcask speeds up recovery by storing a snapshot of each segment’s hash map on\ndisk, which can be loaded into memory more quickly.\n\n- *Partially written records*:\n\nHandle by checking checksum of the record.\n\n- *Concurrency control*:\n\nAs writes are appended to the log in a strictly sequential order, a common\nimplementation choice is to have only one writer thread. Data file segments are\nappend-only and otherwise immutable, so they can be read concurrently by\nmultiple threads."
         });
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Conclusion",
-          body: "The `axios` sets some headers from the cookie itself and `X-XSRF-TOKEN` is one of\nthem. So `X-XSRF-TOKEN` header was sent during the logged-in state by `axios`,\nthis results in a preflight request and hence the failure. After manual session\nexpiration, the `X-XSRF-TOKEN` cookie was deleted, hence the successful request."
+          title: "Advantage of append-only approach",
+          body: "An append-only log seems wasteful at first glance: why don’t you update the file in\nplace, overwriting the old value with the new value? But an append-only design turns\nout to be good for several reasons:\n\n\n- Appending and segment merging are sequential write operations, which are\ngenerally much faster than random writes, especially on magnetic spinning-disk\nhard drives.\n\n- Concurrency and crash recovery are much simpler if segment files are append\nonly or immutable. For example, you don’t have to worry about the case where a\ncrash happened while a value was being overwritten, leaving you with a file\ncontaining part of the old and part of the new value spliced together."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Limitation",
+          body: "However, the hash table index also has limitations:\n\n- The hash table must fit in memory, so if you have a very large number of keys,\nyou’re out of luck.\n\n- Range queries are not efficient. For example, you cannot easily scan over all\nkeys between kitty00000 and kitty99999—you’d have to look up each key\nindividually in the hash maps."
         });
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
-          title: "Possible solutions",
-          body: "- Either frontend stop axios from sending the `X-XSRF-TOKEN` header in the API\nrequest\n- Or the backend can fix the handling of requests for `OPTION` method."
+          title: "SSTables and LSM-Trees",
+          body: "The sequence of key-value pairs is sorted by key in our segment files.\nWe call this format Sorted String Table, or SSTable for short. We also require\nthat each key only appears once within each merged segment file."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Advantage:",
+          body: "- Merging segments is simple and efficient, even if the files are bigger than the\navailable memory. The approach is like the one used in the mergesort algorithm,\nyou start reading the input files side by side, look at the first key in each\nfile, copy the lowest key (according to the sort order) to the output file, and\nrepeat. This produces a new merged segment file, also sorted by key.\n\n- In order to find a particular key in the file, you no longer need to keep an\nindex of all the keys in memory. It's sorted so you'll get the key offset from\nkey's present in the memory. In-memory key can be sparse: one key for every few\nkilobytes of segment file is sufficient.\n\n- It is possible to group those records into a block and compress it before\nwriting it to disk. Each entry of the sparse in-memory index then points at the\nstart of a compressed block."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Constructing and maintaining SSTables",
+          body: "Maintaining a sorted structure on disk is possible but maintaining it in memory\nis much easier. There are plenty of well-known tree data structures that you can\nuse, such as red-black trees or AVL trees. With these data structures, you can\ninsert keys in any order and read them back in sorted order.\n\n- In-memory balanced tree (eg red-black tree) is called a `memtable`.\n- When the memtable gets bigger than some threshold—typically a few megabytes\n  write it out to disk as an SSTable file where key-value pairs sorted by key.\n  The new SSTable file becomes the most recent segment of the database.\n- In order to serve a read request, first try to find the key in the memtable, then in\n  the most recent on-disk segment, then in the next-older segment, etc\n- Run a merging and compaction process in the background\n\nIn case of crash, the memtable can be restored by keeping a separate log on disk."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Making an LSM-tree out of SSTables",
+          body: "Storage engines that are based on this principle of merging and compacting sorted\nfiles are often called LSM (Log-Structured Merge-Tree) storage engines.\n\nLucene, an indexing engine for full-text search used by Elasticsearch and Solr, uses a\nsimilar method for storing its term dictionary [12, 13]. A full-text index is much more\ncomplex than a key-value index but is based on a similar idea: given a word in a\nsearch query, find all the documents (web pages, product descriptions, etc.) that\nmention the word. This is implemented with a key-value structure where the key is a\nword (a term) and the value is the list of IDs of all the documents that contain the\nword (the postings list)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Performance optimizations",
+          body: "In order to optimize access, storage engines often use additional *Bloom filters*.\nA Bloom filter is a memory-efficient data structure for approximating the contents\nof a set. It can tell you if a key does not appear in the database, and thus\nsaves many unnecessary disk reads for nonexistent keys"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "B-Trees",
+          body: "B-trees break the database down into fixed-size blocks or pages, traditionally\n4 KB in size (sometimes bigger), and read or write one page at a time. This\ndesign corresponds more closely to the underlying hardware, as disks are also arranged\nin fixed-size blocks.\n\nEach page can be identified using an address or location, which allows one page to\nrefer to another on disk. We can use these page references to construct a tree of pages"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "Look up for user_id 251\n\n[100, **200**, 300, 400, ...]\n         |\n[200, 210, 220, 230, 240, **250**,...]\n                             |\n[250, **251**, 252, 253, 254, ...]",
+          lang: "txt"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "This algorithm ensures that the tree remains balanced: a B-tree with n keys always\nhas a depth of O(log n). Most databases can fit into a B-tree that is three or four levels\ndeep, so you don’t need to follow many page references to find the page you are\nlooking for. (A four-level tree of 4 KB pages with a branching factor of 500 can\nstore up to 256 TB.)\n\nIn order to make the database resilient to crashes, it is common for B-tree\nimplementations to include an additional data structure on disk: a write-ahead\nlog (WAL, also known as a redo log). This is an append-only file to which every\nB-tree modification must be written before it can be applied to the pages of the\ntree itself."
         });
       }
       ]),
-      title: "Struggle with CORS issue",
-      body: "The story goes like this. We were calling cross-origin API. When logged in, the\npreflight request is sent during API call; weirdly, when logged out, the\npreflight request is not sent. Also, the preflight request was failing, and so\nduring the logged-in state, the request failed.\n\nAnd the more weird thing is people were adopting some weird solution of expiring\nthe session and then making requests. This results in not sending the Preflight\nrequest. Hence (huh..) hack for them.\n\nFor all those who don’t know about `preflight request`, Visit\n[this](learn/preflight-request)."
+      title: "Storage and Retrieval",
+      body: "**Note**: The content is taken from [`Designing Data Intensive Application by\nMartin Kleppmann`](https://public.nikhil.io/Designing%20Data%20Intensive%20Applications.pdf)"
     });
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
@@ -4917,8 +5235,8 @@ fastn_utils.createNestedObject(global, "fastn_community_github_io_header__sitema
     record.set("document", null);
     record.set("is_heading", false);
     record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
+    record.set("is_active", false);
+    record.set("is_open", false);
     record.set("children", fastn.mutableList([]));
     return record;
   }(),
@@ -4941,288 +5259,11 @@ fastn_utils.createNestedObject(global, "fastn_community_github_io_header__sitema
     record.set("children", fastn.mutableList([]));
     return record;
   }()]));
-  record.set("subsections", fastn.mutableList([function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Personal");
-    record.set("url", "ddd/funny-github-workflow/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "FifthTry");
-    record.set("url", "/fifthtry/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Rust");
-    record.set("url", "/rust/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }()]));
-  record.set("toc", fastn.mutableList([function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Discoveries");
-    record.set("url", null);
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Funny github workflow behaviour");
-      record.set("url", "ddd/funny-github-workflow/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Struggle with CORS issue");
-      record.set("url", "ddd/preflight-cors-issue/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", true);
-      record.set("is_open", true);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Learning");
-    record.set("url", null);
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Preflight Request");
-      record.set("url", "learn/preflight-request/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Designing data intensive application");
-    record.set("url", "ddd/data-intensive-application/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Reliable Scalable and Maintainable Application");
-      record.set("url", "ddd/dia-1/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Data Models and Query Languages");
-      record.set("url", "ddd/dia-2/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Storage and Retrieval");
-      record.set("url", "ddd/dia-3/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }()]));
-  record.set("current_section", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "My Day to Day Learnings and Discoveries");
-    record.set("url", "ddd/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
-  record.set("current_subsection", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Personal");
-    record.set("url", "ddd/funny-github-workflow/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
-  record.set("current_page", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Struggle with CORS issue");
-    record.set("url", "ddd/preflight-cors-issue/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
+  record.set("subsections", fastn.mutableList([]));
+  record.set("toc", fastn.mutableList([]));
+  record.set("current_section", null);
+  record.set("current_subsection", null);
+  record.set("current_page", null);
   return record;
 }());
 let fastn_community_github_io_header__fallback_title = function (parent, inherited, args)
@@ -8208,8 +8249,8 @@ fastn_utils.createNestedObject(global, "fastn_community_github_io_doc_site_commo
     record.set("document", null);
     record.set("is_heading", false);
     record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
+    record.set("is_active", false);
+    record.set("is_open", false);
     record.set("children", fastn.mutableList([]));
     return record;
   }(),
@@ -8232,288 +8273,11 @@ fastn_utils.createNestedObject(global, "fastn_community_github_io_doc_site_commo
     record.set("children", fastn.mutableList([]));
     return record;
   }()]));
-  record.set("subsections", fastn.mutableList([function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Personal");
-    record.set("url", "ddd/funny-github-workflow/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "FifthTry");
-    record.set("url", "/fifthtry/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Rust");
-    record.set("url", "/rust/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }()]));
-  record.set("toc", fastn.mutableList([function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Discoveries");
-    record.set("url", null);
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Funny github workflow behaviour");
-      record.set("url", "ddd/funny-github-workflow/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Struggle with CORS issue");
-      record.set("url", "ddd/preflight-cors-issue/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", true);
-      record.set("is_open", true);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Learning");
-    record.set("url", null);
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Preflight Request");
-      record.set("url", "learn/preflight-request/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }(),
-  function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Designing data intensive application");
-    record.set("url", "ddd/data-intensive-application/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", false);
-    record.set("is_open", false);
-    record.set("children", fastn.mutableList([function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Reliable Scalable and Maintainable Application");
-      record.set("url", "ddd/dia-1/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Data Models and Query Languages");
-      record.set("url", "ddd/dia-2/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }(),
-    function () {
-      let record = fastn.recordInstance({
-      });
-      record.set("title", "Storage and Retrieval");
-      record.set("url", "ddd/dia-3/");
-      record.set("description", null);
-      record.set("path", null);
-      record.set("number", null);
-      record.set("font_icon", null);
-      record.set("img_src", null);
-      record.set("bury", false);
-      record.set("document", null);
-      record.set("is_heading", false);
-      record.set("is_disabled", false);
-      record.set("is_active", false);
-      record.set("is_open", false);
-      record.set("children", fastn.mutableList([]));
-      return record;
-    }()]));
-    return record;
-  }()]));
-  record.set("current_section", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "My Day to Day Learnings and Discoveries");
-    record.set("url", "ddd/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
-  record.set("current_subsection", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Personal");
-    record.set("url", "ddd/funny-github-workflow/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
-  record.set("current_page", function () {
-    let record = fastn.recordInstance({
-    });
-    record.set("title", "Struggle with CORS issue");
-    record.set("url", "ddd/preflight-cors-issue/");
-    record.set("description", null);
-    record.set("path", null);
-    record.set("number", null);
-    record.set("font_icon", null);
-    record.set("img_src", null);
-    record.set("bury", false);
-    record.set("document", null);
-    record.set("is_heading", false);
-    record.set("is_disabled", false);
-    record.set("is_active", true);
-    record.set("is_open", true);
-    record.set("children", fastn.mutableList([]));
-    return record;
-  }());
+  record.set("subsections", fastn.mutableList([]));
+  record.set("toc", fastn.mutableList([]));
+  record.set("current_section", null);
+  record.set("current_subsection", null);
+  record.set("current_page", null);
   return record;
 }());
 fastn_utils.createNestedObject(global, "fastn_community_github_io_doc_site_common__login_button", false);
@@ -10522,6 +10286,527 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+let fastn_community_github_io_typography__h1 = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "arjaupashak_com";
+  try {
+    let __args__ = {
+      body: null,
+      inner: fastn.mutableList([]),
+      id: null,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Id, fastn.formula([__args__.id,
+    __args__.id], function () {
+      if (function () {
+        return (fastn_utils.getStaticValue(__args__.id) !== null);
+      }()) {
+        return __args__.id;
+      }
+    }
+    ), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_large"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.title, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Region, fastn_dom.Region.H1, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn_dom.Length.Em(0.5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MarginBottom, fastn_dom.Length.Rem(0.5), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomWidth, fastn_dom.Length.Px(1), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderColor, inherited.get("colors").get("border"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"), inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.body
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.body) !== null);
+      }, function (root) {
+        let rooti0 = fastn_community_github_io_typography__markdown(root, inherited, {
+          body: __args__.body
+        });
+        return rooti0;
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Children, __args__.inner, inherited);
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_typography__h1"] = fastn_community_github_io_typography__h1;
+fastn_utils.createNestedObject(global, "fastn_community_github_io_code_block_assets__files.static.copy.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/code-block/static/copy.svg");
+  record.set("dark", "-/fastn-community.github.io/code-block/static/copy-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_code_block_assets__files.static.download_hover.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/code-block/static/download-hover.svg");
+  record.set("dark", "-/fastn-community.github.io/code-block/static/download-hover-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_code_block_assets__files.static.download.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/code-block/static/download.svg");
+  record.set("dark", "-/fastn-community.github.io/code-block/static/download-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_code_block_assets__files.static.tick.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/code-block/static/tick.svg");
+  record.set("dark", "-/fastn-community.github.io/code-block/static/tick-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_community_github_io_code_block_assets__files.static.copy_hover.svg", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/fastn-community.github.io/code-block/static/copy-hover.svg");
+  record.set("dark", "-/fastn-community.github.io/code-block/static/copy-hover-dark.svg");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "fastn_stack_github_io_fastn_js_assets__files.download.js", "-/fastn-stack.github.io/fastn-js/download.js");
+let fastn_community_github_io_code_block__download_text = function (args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "arjaupashak_com";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (download_text(__args__.filename, __args__.text));
+  } catch (e) {
+    if (!ssr) {
+      throw e;
+    }
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_code_block__download_text"] = fastn_community_github_io_code_block__download_text;
+let fastn_community_github_io_code_block__code = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "arjaupashak_com";
+  try {
+    let __args__ = {
+      caption: null,
+      download: null,
+      lang: "ftd",
+      copy: true,
+      copy_text: fastn.wrapMutable("null"),
+      copy_mouse_in: fastn.wrapMutable(false),
+      download_mouse_in: fastn.wrapMutable(false),
+      mouse_in: fastn.wrapMutable(false),
+      max_height: null,
+      max_width: null,
+      line_numbers: false,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    __args__.text = __args__.text ? __args__.text : __args__.body;
+    __args__.clean_code = __args__.clean_code ? __args__.clean_code : fastn.formula([__args__.text,
+    __args__.lang], function () {
+      return ftd.clean_code({
+        a: __args__.text,
+        lang: __args__.lang,
+      });
+    });
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+      ftd.set_bool({
+        a: __args__.mouse_in,
+        v: true,
+      }, parenti0);
+    });
+    parenti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+      ftd.set_bool({
+        a: __args__.mouse_in,
+        v: false,
+      }, parenti0);
+    });
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn_dom.Length.Px(12), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn_dom.Length.Px(12), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Auto, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Default, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.caption,
+        __args__.copy,
+        __args__.download
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.caption) !== null || fastn_utils.getStaticValue(__args__.download) !== null || fastn_utils.getStaticValue(__args__.copy));
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingLeft, fastn.formula([__args__.caption], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.caption) !== null);
+          }()) {
+            return fastn_dom.Length.Px(20);
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingRight, fastn.formula([__args__.caption], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.caption) !== null);
+          }()) {
+            return fastn_dom.Length.Px(20);
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingTop, fastn.formula([__args__.caption], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.caption) !== null);
+          }()) {
+            return fastn_dom.Length.Px(10);
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn.formula([__args__.caption], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.caption) !== null);
+          }()) {
+            return fastn_dom.Length.Px(10);
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderTopLeftRadius, fastn_dom.Length.Px(4), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderTopRightRadius, fastn_dom.Length.Px(4), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("step_1")), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn.formula([__args__.max_width,
+        __args__.max_width], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.max_width) !== null);
+          }()) {
+            return __args__.max_width;
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.caption
+          ], function () {
+            return (fastn_utils.getStaticValue(__args__.caption) !== null);
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.caption, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Start, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+            return rooti0;
+          });
+        },
+        function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.copy
+          ], function () {
+            return fastn_utils.getStaticValue(__args__.copy);
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+            rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+              ftd.set_string({
+                a: __args__.copy_text,
+                v: "null",
+              }, rooti0);
+            });
+            rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Parent, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(12), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn.formula([__args__.download], function () {
+              if (function () {
+                return (fastn_utils.getStaticValue(__args__.download) !== null);
+              }()) {
+                return fastn_dom.Length.Px(56);
+              } else {
+                return fastn_dom.Length.Px(20);
+              }
+            }
+            ), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Right, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+              fastn_dom.conditionalDom(root, [
+                __args__.copy_text,
+                __args__.mouse_in
+              ], function () {
+                return (fastn_utils.getStaticValue(__args__.copy_text) == "null" && fastn_utils.getStaticValue(__args__.mouse_in));
+              }, function (root) {
+                let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+                rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.formula([global.fastn_community_github_io_code_block_assets__files.get("static").get("copy").get("svg"),
+                global.fastn_community_github_io_code_block_assets__files.get("static").get("copy_hover").get("svg"),
+                __args__.copy_mouse_in], function () {
+                  if (function () {
+                    return fastn_utils.getStaticValue(__args__.copy_mouse_in);
+                  }()) {
+                    return global.fastn_community_github_io_code_block_assets__files.get("static").get("copy_hover").get("svg");
+                  } else {
+                    return global.fastn_community_github_io_code_block_assets__files.get("static").get("copy").get("svg");
+                  }
+                }
+                ), inherited);
+                rooti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+                  ftd.set_bool({
+                    a: __args__.copy_mouse_in,
+                    v: true,
+                  }, rooti0);
+                });
+                rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+                  ftd.set_bool({
+                    a: __args__.copy_mouse_in,
+                    v: false,
+                  }, rooti0);
+                });
+                rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+                  ftd.copy_to_clipboard({
+                    a: __args__.clean_code,
+                  }, rooti0);
+                });
+                rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+                  ftd.set_string({
+                    a: __args__.copy_text,
+                    v: "Copied!",
+                  }, rooti0);
+                });
+                rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(18)), inherited);
+                return rooti0;
+              });
+            },
+            function (root, inherited) {
+              fastn_dom.conditionalDom(root, [
+                __args__.copy_text
+              ], function () {
+                return (fastn_utils.getStaticValue(__args__.copy_text) !== "null");
+              }, function (root) {
+                let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+                rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, global.fastn_community_github_io_code_block_assets__files.get("static").get("tick").get("svg"), inherited);
+                rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(18)), inherited);
+                return rooti0;
+              });
+            },
+            function (root, inherited) {
+              fastn_dom.conditionalDom(root, [
+                __args__.copy_text
+              ], function () {
+                return (fastn_utils.getStaticValue(__args__.copy_text) !== "null");
+              }, function (root) {
+                let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+                rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+                rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.copy_text, inherited);
+                rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+                return rooti0;
+              });
+            }
+            ]), inherited);
+            return rooti0;
+          });
+        },
+        function (root, inherited) {
+          fastn_dom.conditionalDom(root, [
+            __args__.download,
+            __args__.mouse_in
+          ], function () {
+            return (fastn_utils.getStaticValue(__args__.download) !== null && fastn_utils.getStaticValue(__args__.mouse_in));
+          }, function (root) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+            rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, fastn.formula([global.fastn_community_github_io_code_block_assets__files.get("static").get("download").get("svg"),
+            global.fastn_community_github_io_code_block_assets__files.get("static").get("download_hover").get("svg"),
+            __args__.download_mouse_in], function () {
+              if (function () {
+                return fastn_utils.getStaticValue(__args__.download_mouse_in);
+              }()) {
+                return global.fastn_community_github_io_code_block_assets__files.get("static").get("download_hover").get("svg");
+              } else {
+                return global.fastn_community_github_io_code_block_assets__files.get("static").get("download").get("svg");
+              }
+            }
+            ), inherited);
+            rooti0.addEventHandler(fastn_dom.Event.MouseEnter, function () {
+              ftd.set_bool({
+                a: __args__.download_mouse_in,
+                v: true,
+              }, rooti0);
+            });
+            rooti0.addEventHandler(fastn_dom.Event.MouseLeave, function () {
+              ftd.set_bool({
+                a: __args__.download_mouse_in,
+                v: false,
+              }, rooti0);
+            });
+            rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+              fastn_community_github_io_code_block__download_text({
+                filename: __args__.download,
+                text: __args__.clean_code,
+              }, rooti0);
+            });
+            rooti0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Parent, inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(12), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn_dom.Length.Px(20), inherited);
+            return rooti0;
+          });
+        }
+        ]), inherited);
+        return rooti0;
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Code);
+      rooti0.setProperty(fastn_dom.PropertyKind.Code, __args__.body, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, __args__.lang, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeTheme, fastn.formula([ftd.dark_mode], function () {
+        if (function () {
+          return fastn_utils.getStaticValue(ftd.dark_mode);
+        }()) {
+          return "fastn-theme.dark";
+        } else {
+          return "fastn-theme.light";
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, fastn.formula([__args__.line_numbers], function () {
+        if (function () {
+          return fastn_utils.getStaticValue(__args__.line_numbers);
+        }()) {
+          return true;
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.PaddingBottom, fastn_dom.Length.Px(24), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopLeftRadius, fastn.formula([__args__.caption], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.caption) == null);
+        }()) {
+          return fastn_dom.Length.Px(4);
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderTopRightRadius, fastn.formula([__args__.caption], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.caption) == null);
+        }()) {
+          return fastn_dom.Length.Px(4);
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomLeftRadius, fastn.formula([__args__.caption], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.caption) == null);
+        }()) {
+          return fastn_dom.Length.Px(4);
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomRightRadius, fastn.formula([__args__.caption], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.caption) == null);
+        }()) {
+          return fastn_dom.Length.Px(4);
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowX, fastn_dom.Overflow.Auto, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.OverflowY, fastn_dom.Overflow.Auto, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("code")), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxHeight, fastn.formula([__args__.max_height,
+      __args__.max_height], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.max_height) !== null);
+        }()) {
+          return __args__.max_height;
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn.formula([__args__.max_width,
+      __args__.max_width], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.max_width) !== null);
+        }()) {
+          return __args__.max_width;
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.lang
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.lang) !== null);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Parent, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(6), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomRightRadius, fastn_dom.Length.Px(4), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Bottom, fastn_dom.Length.Px(12), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Right, fastn_dom.Length.Px(12), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.ZIndex, 999, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+          rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(16)), inherited);
+          rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+            fastn_dom.conditionalDom(root, [
+              __args__.download
+            ], function () {
+              return (fastn_utils.getStaticValue(__args__.download) !== null);
+            }, function (root) {
+              let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+              rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("fine_print"), inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.download, inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+              return rooti0;
+            });
+          },
+          function (root, inherited) {
+            let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Row);
+            rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(4)), inherited);
+            rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+              let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+              rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("fine_print"), inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Lang:", inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+            },
+            function (root, inherited) {
+              let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+              rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("fine_print"), inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.lang, inherited);
+              rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+            }
+            ]), inherited);
+          }
+          ]), inherited);
+        }
+        ]), inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_code_block__code"] = fastn_community_github_io_code_block__code;
 let fastn_community_github_io_typography__h2 = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -10636,6 +10921,18 @@ let fastn_community_github_io_typography__h3 = function (parent, inherited, args
   }
 }
 global["fastn_community_github_io_typography__h3"] = fastn_community_github_io_typography__h3;
+let arjaupashak_com_FASTN_ds__h1 = global["fastn_community_github_io_typography__h1"];
+global["arjaupashak_com_FASTN_ds__h1"] = arjaupashak_com_FASTN_ds__h1;
+let fastn_community_github_io_doc_site__h1 = global["fastn_community_github_io_typography__h1"];
+global["fastn_community_github_io_doc_site__h1"] = fastn_community_github_io_doc_site__h1;
+let arjaupashak_com_FASTN_ds__code = global["fastn_community_github_io_code_block__code"];
+global["arjaupashak_com_FASTN_ds__code"] = arjaupashak_com_FASTN_ds__code;
+let fastn_community_github_io_doc_site__code = global["fastn_community_github_io_code_block__code"];
+global["fastn_community_github_io_doc_site__code"] = fastn_community_github_io_doc_site__code;
+let arjaupashak_com_FASTN_ds__markdown = global["fastn_community_github_io_typography__markdown"];
+global["arjaupashak_com_FASTN_ds__markdown"] = arjaupashak_com_FASTN_ds__markdown;
+let fastn_community_github_io_doc_site__markdown = global["fastn_community_github_io_typography__markdown"];
+global["fastn_community_github_io_doc_site__markdown"] = fastn_community_github_io_doc_site__markdown;
 let arjaupashak_com_FASTN_ds__h2 = global["fastn_community_github_io_typography__h2"];
 global["arjaupashak_com_FASTN_ds__h2"] = arjaupashak_com_FASTN_ds__h2;
 let fastn_community_github_io_doc_site__h2 = global["fastn_community_github_io_typography__h2"];

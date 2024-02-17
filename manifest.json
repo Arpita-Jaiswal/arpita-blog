@@ -7,8 +7,8 @@
     },
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "FD679E14B0C8B23F6DAE8969A728AF61EA15A7FAE91A7CCA872BD093D546EEAE",
-      "size": 2151
+      "checksum": "9565EBC53EAA7DE85B662014C689894C495E84EF5A82CC7E7C7351B2FEAFBB3E",
+      "size": 2259
     },
     "FASTN/ds.ftd": {
       "name": "FASTN/ds.ftd",
@@ -55,6 +55,11 @@
       "checksum": "0CE6A8F3D2E5E5E5805D128C95DF1E31D36C311996037BA71E5236ABE9879BDC",
       "size": 23417
     },
+    "ddd/data-intensive-application/3-storage-retrieval.ftd": {
+      "name": "ddd/data-intensive-application/3-storage-retrieval.ftd",
+      "checksum": "F5458BC5E279AADD185A6A5F2CD5086604E21B485A51EDF8F042AD61612EEA5A",
+      "size": 11549
+    },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
       "checksum": "536948486B92058D581FDE46AAFD713079E8F04C62F7D2B87B946EC20199337E",
@@ -92,8 +97,8 @@
     },
     "index.ftd": {
       "name": "index.ftd",
-      "checksum": "DA24117836A151BDCE291676ED8352AD47E88A49A40F4DBC51E58F090679057A",
-      "size": 2590
+      "checksum": "CC9790EF796D1ECED5D040A5AB849EC496208DCF324AFD02A2EE5897A16D2B6B",
+      "size": 2648
     },
     "learn/preflight-request.ftd": {
       "name": "learn/preflight-request.ftd",
@@ -180,12 +185,17 @@
       "checksum": "6EBE288BDAE48BE87B1DB8294E2A8196FED564804BF2286FB1282C6D33AD24CB",
       "size": 10109
     },
+    "static/logo-dark.svg": {
+      "name": "static/logo-dark.svg",
+      "checksum": "7444D8A95AC59DB081B700105708262F69D65055578F33ED02018DE3E2D7E7F0",
+      "size": 11331
+    },
     "static/logo.svg": {
       "name": "static/logo.svg",
       "checksum": "74F0C948795ED4E212520F47CFF49927B9B9F82008750315F4AC5268899798DD",
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/6683728daf6855939fe554e6cc2ae403fd7892f8.zip",
-  "checksum": "C5FB6BC0157AA92E972EA0344C83797B8F6ADC2450AFF8695F812CC5A95B2442"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/008b75d8f1635617cf98b814c5d34ffac515fd40.zip",
+  "checksum": "3525BCAE66DC53E5C312687EF2560CDCF9289E82E9F8C3FB8ADA6D9F32656617"
 }
