@@ -498,6 +498,62 @@ so the kth bit in one column’s bitmap corresponds to the same row as the kth b
 in another column’s bitmap.
 
 
+-- ds.h2: Sort Order in Column Storage
+
+We can choose to impose an order, like we did with SSTables previously, and use
+that as an indexing mechanism.
+
+The administrator of the database can choose the columns by which the table
+should be sorted, using their knowledge of common queries. For example, if
+queries often target date ranges, such as the last month, it might make sense to
+make `date_key` the first sort key.
+
+If `date_key` is the first sort key, it might make sense for `product_sk` to be
+the second sort key so that all sales for the same product on the same day are
+grouped together in storage. That will help queries that need to group or filter
+sales by product within a certain date range.
+
+Another advantage of sorted order is that it can help with compression of columns. If
+the primary sort column does not have many distinct values, then after sorting, it will
+have long sequences where the same value is repeated many times in a row. A simple
+run-length encoding, like we used for the bitmaps, could compress that column down
+to a few kilobytes—even if the table has billions of rows.
+
+That compression effect is strongest on the first sort key. The second and third sort
+keys will be more jumbled up, and thus not have such long runs of repeated values.
+Columns further down the sorting priority appear in essentially random order, so
+they probably won’t compress as well. But having the first few columns sorted is still
+a win overall.
+
+-- ds.h3: Several different sort orders
+
+Having multiple sort orders in a column-oriented store is a bit similar to having
+multiple secondary indexes in a row-oriented store. But the big difference is
+that the row-oriented store keeps every row in one place (in the heap file or a
+clustered index), and secondary indexes just contain pointers to the matching
+rows. In a column store, there normally aren’t any pointers to data elsewhere,
+only columns containing values.
+
+
+-- ds.h2: Aggregation: Data Cubes and Materialized Views
+
+Some aggregate function are common, such as COUNT, SUM, AVG, MIN, or MAX in SQL.
+If the same aggregates are used by many different queries, it can be wasteful to
+crunch through the raw data every time. Why not cache some of the counts or sums
+that queries use most often?
+
+**Materialized view** is a table-like object whose contents are the results of
+some query.
+
+When the underlying data changes, a materialized view needs to be updated, because
+it is a denormalized copy of the data. The database can do that automatically, but
+such updates make writes more expensive, which is why materialized views are not
+often used in OLTP databases. In read-heavy data warehouses they can make more
+sense (whether or not they actually improve read performance depends on the
+individual case).
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.3-5.png
 
 
 -- end: ds.page
