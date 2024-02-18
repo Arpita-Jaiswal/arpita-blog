@@ -558,7 +558,75 @@ distance of 1 means that one letter has been added, removed, or replaced)</p>
 <em>Lucene</em> uses a SSTable-like structure for its term dictionary. In LevelDB, this
 in-memory index is a sparse collection of some of the keys, but in Lucene, the
 in-memory index is a finite state automaton over the characters in the keys,
-similar to a <em>trie</em>.</div><div data-id="236" class="ft_column __w-454"></div></div></div></div></div><comment data-id="237"></comment><comment data-id="238"></comment></div><div data-id="239" class="ft_column __w-455"></div><comment data-id="240"></comment></div><div data-id="241" class="ft_row __pos-456 __p-457 __bw-458 __br-459 __bc-460 __b-461 __r-462 __z-463 __bgc-464"><comment data-id="242"></comment><div data-id="243" class="ft_row __cur-465"><img data-id="244" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-466 __w-467 __h-468"></img></div><comment data-id="245"></comment><comment data-id="246"></comment></div><comment data-id="247"></comment></div></div></div></body><style id="styles">
+similar to a <em>trie</em>.</div><div data-id="236" class="ft_column __w-454"></div></div><div data-id="237" class="ft_column __w-455"><h1 data-id="238" id="transaction-processing-or-analytics" class="__rl-456 __w-457 __pt-458 __mb-459 __bbw-460 __bc-461 __c-462">Transaction Processing or Analytics?</h1><comment data-id="239"></comment><div data-id="240" class="__rl-463 __w-464 __c-465"><p><strong>Online transaction processing (OLTP)</strong> looks up a small number of records by some
+key, using an index. Records are inserted or updated based on the user’s input.</p>
+<strong>Online analytic processing (OLAP)</strong> are analytic queries that are often written
+by business analysts, and feed into reports that help the management of a company
+make better decisions (business intelligence)</div><div data-id="241" class="ft_column __w-466"></div></div><div data-id="242" class="ft_column __w-467"><h2 data-id="243" id="data-warehousing" class="__rl-468 __w-469 __pt-470 __mb-471 __c-472">Data Warehousing</h2><comment data-id="244"></comment><div data-id="245" class="__rl-473 __w-474 __c-475">A data warehouse, by contrast, is a separate database that analysts can query to
+their hearts’ content, without affecting OLTP operations. The data warehouse
+contains a read-only copy of the data in all the various OLTP systems in the
+company. Data is extracted from OLTP databases (using either a periodic data dump
+or a continuous stream of updates), transformed into an analysis-friendly schema,
+cleaned up, and then loaded into the data warehouse. This process of getting data
+into the warehouse is known as <strong>Extract–Transform–Load (ETL)</strong>.</div><div data-id="246" class="ft_column __w-476"></div></div><div data-id="247" class="ft_column __w-477 __h-478 __jc-479 __ali-480"><img data-id="248" src="-/arjaupashak.com/ddd/data-intensive-application/images/3-1.png" class="__w-481 __h-482 __mxw-483"></img><comment data-id="249"></comment><comment data-id="250"></comment></div><div data-id="251" class="ft_column __w-484"><h3 data-id="252" id="the-divergence-between-oltp-databases-and-data-warehouses" class="__rl-485 __w-486 __pt-487 __mb-488 __c-489">The divergence between OLTP databases and data warehouses</h3><comment data-id="253"></comment><div data-id="254" class="__rl-490 __w-491 __c-492">On the surface, a data warehouse and a relational OLTP database look similar,
+because they both have a SQL query interface. However, the internals of the systems
+can look quite different, because they are optimized for very different query patterns.
+Many database vendors now focus on supporting either transaction processing or
+analytics workloads, but not both.</div><div data-id="255" class="ft_column __w-493"></div></div><div data-id="256" class="ft_column __w-494"><h2 data-id="257" id="stars-and-snowflakes-schemas-for-analytics" class="__rl-495 __w-496 __pt-497 __mb-498 __c-499">Stars and Snowflakes: Schemas for Analytics</h2><comment data-id="258"></comment><div data-id="259" class="__rl-500 __w-501 __c-502"><p>Many data warehouses are used in a fairly formulaic style, known as a star schema
+(also known as dimensional modeling).</p>
+The example schema shows a data warehouse that might be found at a grocery retailer.
+At the center of the schema is a so-called fact table (in this example, it is
+called <strong>fact_sales</strong>). Each row of the fact table represents an event that
+occurred at a particular time (here, each row represents a customer’s purchase
+of a product).</div><div data-id="260" class="ft_column __w-503"></div></div><div data-id="261" class="ft_column __w-504 __h-505 __jc-506 __ali-507"><img data-id="262" src="-/arjaupashak.com/ddd/data-intensive-application/images/3-2.png" class="__w-508 __h-509 __mxw-510"></img><comment data-id="263"></comment><comment data-id="264"></comment></div><div data-id="265" class="__rl-511 __w-512 __c-513"><p>Usually, facts are captured as individual events, because this allows maximum
+flexibility of analysis later. However, this means that the fact table can become
+extremely large.</p>
+<p>The name “star schema” comes from the fact that when the table relationships are
+visualized, the fact table is in the middle, surrounded by its dimension tables; the
+connections to these tables are like the rays of a star.</p>
+A variation of this template is known as the <strong>snowflake schema</strong>, where
+dimensions are further broken down into subdimensions. For example, there could
+be separate tables for brands and product categories, and each row in the
+<code>dim_product</code> table could reference the brand and category as foreign keys,
+rather than storing them as strings in the <code>dim_product</code> table. Snowflake
+schemas are more normalized than star schemas, but star schemas are often
+preferred because they are simpler for analysts to work with</div><div data-id="266" class="ft_column __w-514"><h2 data-id="267" id="column-oriented-storage" class="__rl-515 __w-516 __pt-517 __mb-518 __c-519">Column-Oriented Storage</h2><comment data-id="268"></comment><div data-id="269" class="__rl-520 __w-521 __c-522">Although fact tables are often over 100 columns wide, a typical data warehouse
+query only accesses 4 or 5 of them at one time.</div><div data-id="270" class="ft_column __w-523"></div></div><div data-id="271" class="ft_column __w-524 __pt-525 __pb-526 __oy-527 __cur-528" style="position:relative"><comment data-id="272"></comment><div data-id="273" class="ft_row __w-529 __btlr-534 __btrr-535 __bgc-536" style="position:relative"><comment data-id="274"></comment><comment data-id="275"></comment><div data-id="276" class="ft_row __as-538 __pos-539 __t-540 __r-541 __jc-542 __ali-543 __g-544"><comment data-id="277"></comment><comment data-id="278"></comment><comment data-id="279"></comment></div><comment data-id="280"></comment></div><pre data-id="281" class="language-sql fastn-theme-light __w-545 __pb-546 __btlr-547 __btrr-548 __bblr-549 __bbrr-550 __ox-551 __oy-552 __c-553 __bgc-554 __rl-557"><code data-id="282" class="language-sql fastn-theme-light">SELECT
+ dim_date.weekday, dim_product.category,
+ SUM(fact_sales.quantity) AS quantity_sold
+FROM fact_sales
+ JOIN dim_date ON fact_sales.date_key = dim_date.date_key
+ JOIN dim_product ON fact_sales.product_sk = dim_product.product_sk
+WHERE
+ dim_date.year = 2013 AND
+ dim_product.category IN ('Fresh fruit', 'Candy')
+GROUP BY
+ dim_date.weekday, dim_product.category;
+</code></pre><comment data-id="283"></comment><div data-id="284" class="ft_column __pos-558 __p-559 __bbrr-560 __b-561 __r-562 __z-563"><div data-id="285" class="ft_row __g-564"><comment data-id="286"></comment><div data-id="287" class="ft_row __g-565"><div data-id="288" class="__rl-566 __c-567">Lang:</div><div data-id="289" class="__rl-568 __c-569">sql</div></div></div></div></div><div data-id="290" class="__rl-570 __w-571 __c-572"><p>The query only needs to access three columns of the fact_sales table: <code>date_key</code>,
+<code>product_sk</code>, and <code>quantity</code>. It ignores all other columns.</p>
+<p><em>How can we execute this query efficiently?</em></p>
+<p>In order to process a query, you may have indexes on <code>fact_sales.date_key</code>
+and/or <code>fact_sales.product_sk</code> that tell the storage engine where to find all
+the sales for a particular date or for a particular product. But then, a
+row-oriented storage engine still needs to load all of those rows (each
+consisting of over 100 attributes) from disk into memory, parse them, and filter
+out those that don’t meet the required conditions. That can take a long time.</p>
+The idea behind column-oriented storage is simple: don’t store all the values from one
+row together, but store all the values from each column together instead. If each col‐
+umn is stored in a separate file, a query only needs to read and parse those columns
+that are used in that query, which can save a lot of work.</div><div data-id="291" class="ft_column __w-573 __h-574 __jc-575 __ali-576"><img data-id="292" src="-/arjaupashak.com/ddd/data-intensive-application/images/3-3.png" class="__w-577 __h-578 __mxw-579"></img><comment data-id="293"></comment><comment data-id="294"></comment></div><div data-id="295" class="__rl-580 __w-581 __c-582">The column-oriented storage layout relies on each column file containing the rows in
+the same order.</div><div data-id="296" class="ft_column __w-583"><h2 data-id="297" id="column-compression" class="__rl-584 __w-585 __pt-586 __mb-587 __c-588">Column Compression</h2><comment data-id="298"></comment><div data-id="299" class="__rl-589 __w-590 __c-591"><p>Take a look at the sequences of values for each column in above image they often
+look quite repetitive, which is a good sign for compression.</p>
+<strong>Bitmap encoding</strong> is effective compression techniques</div><div data-id="300" class="ft_column __w-592"></div></div><div data-id="301" class="ft_column __w-593 __h-594 __jc-595 __ali-596"><img data-id="302" src="-/arjaupashak.com/ddd/data-intensive-application/images/3-4.png" class="__w-597 __h-598 __mxw-599"></img><comment data-id="303"></comment><comment data-id="304"></comment></div><div data-id="305" class="__rl-600 __w-601 __c-602"><p>Bitmap indexes such as these are very well suited for the kinds of queries that are
+common in a data warehouse. For example:</p>
+<p><code>WHERE product_sk IN (30, 68, 69):</code></p>
+<p>Load the three bitmaps for <code>product_sk = 30</code>, <code>product_sk = 68</code>, and <code>product_sk = 69</code>, and calculate the bitwise <em>OR</em> of the three bitmaps, which can be done very
+efficiently.</p>
+<p><code>WHERE product_sk = 31 AND store_sk = 3:</code></p>
+Load the bitmaps for <code>product_sk = 31</code> and <code>store_sk = 3</code>, and calculate the
+bitwise <em>AND</em>. This works because the columns contain the rows in the same order,
+so the kth bit in one column’s bitmap corresponds to the same row as the kth bit
+in another column’s bitmap.</div></div></div></div><comment data-id="306"></comment><comment data-id="307"></comment></div><div data-id="308" class="ft_column __w-603"></div><comment data-id="309"></comment></div><div data-id="310" class="ft_row __pos-604 __p-605 __bw-606 __br-607 __bc-608 __b-609 __r-610 __z-611 __bgc-612"><comment data-id="311"></comment><div data-id="312" class="ft_row __cur-613"><img data-id="313" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-614 __w-615 __h-616"></img></div><comment data-id="314"></comment><comment data-id="315"></comment></div><comment data-id="316"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1218,21 +1286,241 @@ similar to a <em>trie</em>.</div><div data-id="236" class="ft_column __w-454"></
 	body.dark  .__c-453:visited { color: #B8B8B8 !important; }
 	.__w-454 { width: 100%; }
 	.__w-455 { width: 100%; }
-	.__pos-456 { position: fixed; }
-	.__p-457 { padding: 10px; }
-	.__bw-458 { border-width: 1px; }
-	.__br-459 { border-radius: 4px; }
-	.__bc-460 { border-color: #D2D2D2; }
-	body.dark .__bc-460 { border-color: #434547; }
-	.__b-461 { bottom: 25px; }
-	.__r-462 { right: 25px; }
-	.__z-463 { z-index: 99999999999999; }
-	.__bgc-464 { background-color: #FFFFFF; }
-	body.dark .__bgc-464 { background-color: #000000; }
-	.__cur-465 { cursor: pointer; }
-	.__as-466 { align-self: center; }
-	.__w-467 { width: 19px; }
-	.__h-468 { height: 19px; }
+	.__rl-456 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 40px; font-weight: 700; line-height: 60px; }
+	body.mobile .__rl-456 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 36px; font-weight: 700; line-height: 54px; }
+	.__w-457 { width: 100%; }
+	.__pt-458 { padding-top: 0.5em; }
+	.__mb-459 { margin-bottom: 0.5rem; }
+	.__bbw-460 { border-bottom-width: 1px; }
+	.__bc-461 { border-color: #D2D2D2; }
+	body.dark .__bc-461 { border-color: #434547; }
+	.__c-462 { color: #333333 !important; }
+	body.dark .__c-462 { color: #FFFFFF !important; }
+	.__c-462:visited { color: #333333 !important; }
+	body.dark  .__c-462:visited { color: #FFFFFF !important; }
+	.__rl-463 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-463 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-464 { width: 100%; }
+	.__c-465 { color: #7C7C7C !important; }
+	body.dark .__c-465 { color: #B8B8B8 !important; }
+	.__c-465:visited { color: #7C7C7C !important; }
+	body.dark  .__c-465:visited { color: #B8B8B8 !important; }
+	.__w-466 { width: 100%; }
+	.__w-467 { width: 100%; }
+	.__rl-468 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-468 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-469 { width: 100%; }
+	.__pt-470 { padding-top: 0.3em; }
+	.__mb-471 { margin-bottom: 0.5rem; }
+	.__c-472 { color: #333333 !important; }
+	body.dark .__c-472 { color: #FFFFFF !important; }
+	.__c-472:visited { color: #333333 !important; }
+	body.dark  .__c-472:visited { color: #FFFFFF !important; }
+	.__rl-473 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-473 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-474 { width: 100%; }
+	.__c-475 { color: #7C7C7C !important; }
+	body.dark .__c-475 { color: #B8B8B8 !important; }
+	.__c-475:visited { color: #7C7C7C !important; }
+	body.dark  .__c-475:visited { color: #B8B8B8 !important; }
+	.__w-476 { width: 100%; }
+	.__w-477 { width: 100%; }
+	.__h-478 { height: null; }
+	.__jc-479 { justify-content: center; }
+	.__ali-480 { align-items: center; }
+	.__w-481 { width: auto; }
+	.__h-482 { height: auto; }
+	.__mxw-483 { max-width: 100%; }
+	.__w-484 { width: 100%; }
+	.__rl-485 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-485 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-486 { width: 100%; }
+	.__pt-487 { padding-top: 0.17em; }
+	.__mb-488 { margin-bottom: 0.5rem; }
+	.__c-489 { color: #333333 !important; }
+	body.dark .__c-489 { color: #FFFFFF !important; }
+	.__c-489:visited { color: #333333 !important; }
+	body.dark  .__c-489:visited { color: #FFFFFF !important; }
+	.__rl-490 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-490 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-491 { width: 100%; }
+	.__c-492 { color: #7C7C7C !important; }
+	body.dark .__c-492 { color: #B8B8B8 !important; }
+	.__c-492:visited { color: #7C7C7C !important; }
+	body.dark  .__c-492:visited { color: #B8B8B8 !important; }
+	.__w-493 { width: 100%; }
+	.__w-494 { width: 100%; }
+	.__rl-495 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-495 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-496 { width: 100%; }
+	.__pt-497 { padding-top: 0.3em; }
+	.__mb-498 { margin-bottom: 0.5rem; }
+	.__c-499 { color: #333333 !important; }
+	body.dark .__c-499 { color: #FFFFFF !important; }
+	.__c-499:visited { color: #333333 !important; }
+	body.dark  .__c-499:visited { color: #FFFFFF !important; }
+	.__rl-500 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-500 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-501 { width: 100%; }
+	.__c-502 { color: #7C7C7C !important; }
+	body.dark .__c-502 { color: #B8B8B8 !important; }
+	.__c-502:visited { color: #7C7C7C !important; }
+	body.dark  .__c-502:visited { color: #B8B8B8 !important; }
+	.__w-503 { width: 100%; }
+	.__w-504 { width: 100%; }
+	.__h-505 { height: null; }
+	.__jc-506 { justify-content: center; }
+	.__ali-507 { align-items: center; }
+	.__w-508 { width: auto; }
+	.__h-509 { height: auto; }
+	.__mxw-510 { max-width: 100%; }
+	.__rl-511 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-511 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-512 { width: 100%; }
+	.__c-513 { color: #7C7C7C !important; }
+	body.dark .__c-513 { color: #B8B8B8 !important; }
+	.__c-513:visited { color: #7C7C7C !important; }
+	body.dark  .__c-513:visited { color: #B8B8B8 !important; }
+	.__w-514 { width: 100%; }
+	.__rl-515 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-515 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-516 { width: 100%; }
+	.__pt-517 { padding-top: 0.3em; }
+	.__mb-518 { margin-bottom: 0.5rem; }
+	.__c-519 { color: #333333 !important; }
+	body.dark .__c-519 { color: #FFFFFF !important; }
+	.__c-519:visited { color: #333333 !important; }
+	body.dark  .__c-519:visited { color: #FFFFFF !important; }
+	.__rl-520 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-520 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-521 { width: 100%; }
+	.__c-522 { color: #7C7C7C !important; }
+	body.dark .__c-522 { color: #B8B8B8 !important; }
+	.__c-522:visited { color: #7C7C7C !important; }
+	body.dark  .__c-522:visited { color: #B8B8B8 !important; }
+	.__w-523 { width: 100%; }
+	.__w-524 { width: 100%; }
+	.__pt-525 { padding-top: 12px; }
+	.__pb-526 { padding-bottom: 12px; }
+	.__oy-527 { overflow-y: auto; }
+	.__cur-528 { cursor: default; }
+	.__w-529 { width: 100%; }
+	.__btlr-534 { border-top-left-radius: 4px; }
+	.__btrr-535 { border-top-right-radius: 4px; }
+	.__bgc-536 { background-color: #F8F8F8; }
+	body.dark .__bgc-536 { background-color: #111111; }
+	.__as-538 { align-self: end; }
+	.__pos-539 { position: absolute; }
+	.__t-540 { top: 12px; }
+	.__r-541 { right: 20px; }
+	.__jc-542 { justify-content: right; }
+	.__ali-543 { align-items: center; }
+	.__g-544 { gap: 10px; }
+	.__w-545 { width: 100%; }
+	.__pb-546 { padding-bottom: 24px; }
+	.__btlr-547 { border-top-left-radius: 4px; }
+	.__btrr-548 { border-top-right-radius: 4px; }
+	.__bblr-549 { border-bottom-left-radius: 4px; }
+	.__bbrr-550 { border-bottom-right-radius: 4px; }
+	.__ox-551 { overflow-x: auto; }
+	.__oy-552 { overflow-y: auto; }
+	.__c-553 { color: #7C7C7C !important; }
+	body.dark .__c-553 { color: #B8B8B8 !important; }
+	.__c-553:visited { color: #7C7C7C !important; }
+	body.dark  .__c-553:visited { color: #B8B8B8 !important; }
+	.__bgc-554 { background-color: #f5f5f5; }
+	body.dark .__bgc-554 { background-color: #21222c; }
+	.__rl-557 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-557 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-558 { position: absolute; }
+	.__p-559 { padding: 6px; }
+	.__bbrr-560 { border-bottom-right-radius: 4px; }
+	.__b-561 { bottom: 12px; }
+	.__r-562 { right: 12px; }
+	.__z-563 { z-index: 999; }
+	.__g-564 { gap: 16px; }
+	.__g-565 { gap: 4px; }
+	.__rl-566 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-566 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-567 { color: #7C7C7C !important; }
+	body.dark .__c-567 { color: #B8B8B8 !important; }
+	.__c-567:visited { color: #7C7C7C !important; }
+	body.dark  .__c-567:visited { color: #B8B8B8 !important; }
+	.__rl-568 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-568 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-569 { color: #7C7C7C !important; }
+	body.dark .__c-569 { color: #B8B8B8 !important; }
+	.__c-569:visited { color: #7C7C7C !important; }
+	body.dark  .__c-569:visited { color: #B8B8B8 !important; }
+	.__rl-570 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-570 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-571 { width: 100%; }
+	.__c-572 { color: #7C7C7C !important; }
+	body.dark .__c-572 { color: #B8B8B8 !important; }
+	.__c-572:visited { color: #7C7C7C !important; }
+	body.dark  .__c-572:visited { color: #B8B8B8 !important; }
+	.__w-573 { width: 100%; }
+	.__h-574 { height: null; }
+	.__jc-575 { justify-content: center; }
+	.__ali-576 { align-items: center; }
+	.__w-577 { width: auto; }
+	.__h-578 { height: auto; }
+	.__mxw-579 { max-width: 100%; }
+	.__rl-580 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-580 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-581 { width: 100%; }
+	.__c-582 { color: #7C7C7C !important; }
+	body.dark .__c-582 { color: #B8B8B8 !important; }
+	.__c-582:visited { color: #7C7C7C !important; }
+	body.dark  .__c-582:visited { color: #B8B8B8 !important; }
+	.__w-583 { width: 100%; }
+	.__rl-584 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-584 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-585 { width: 100%; }
+	.__pt-586 { padding-top: 0.3em; }
+	.__mb-587 { margin-bottom: 0.5rem; }
+	.__c-588 { color: #333333 !important; }
+	body.dark .__c-588 { color: #FFFFFF !important; }
+	.__c-588:visited { color: #333333 !important; }
+	body.dark  .__c-588:visited { color: #FFFFFF !important; }
+	.__rl-589 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-589 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-590 { width: 100%; }
+	.__c-591 { color: #7C7C7C !important; }
+	body.dark .__c-591 { color: #B8B8B8 !important; }
+	.__c-591:visited { color: #7C7C7C !important; }
+	body.dark  .__c-591:visited { color: #B8B8B8 !important; }
+	.__w-592 { width: 100%; }
+	.__w-593 { width: 100%; }
+	.__h-594 { height: null; }
+	.__jc-595 { justify-content: center; }
+	.__ali-596 { align-items: center; }
+	.__w-597 { width: auto; }
+	.__h-598 { height: auto; }
+	.__mxw-599 { max-width: 100%; }
+	.__rl-600 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-600 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-601 { width: 100%; }
+	.__c-602 { color: #7C7C7C !important; }
+	body.dark .__c-602 { color: #B8B8B8 !important; }
+	.__c-602:visited { color: #7C7C7C !important; }
+	body.dark  .__c-602:visited { color: #B8B8B8 !important; }
+	.__w-603 { width: 100%; }
+	.__pos-604 { position: fixed; }
+	.__p-605 { padding: 10px; }
+	.__bw-606 { border-width: 1px; }
+	.__br-607 { border-radius: 4px; }
+	.__bc-608 { border-color: #D2D2D2; }
+	body.dark .__bc-608 { border-color: #434547; }
+	.__b-609 { bottom: 25px; }
+	.__r-610 { right: 25px; }
+	.__z-611 { z-index: 99999999999999; }
+	.__bgc-612 { background-color: #FFFFFF; }
+	body.dark .__bgc-612 { background-color: #000000; }
+	.__cur-613 { cursor: pointer; }
+	.__as-614 { align-self: center; }
+	.__w-615 { width: 19px; }
+	.__h-616 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3319,6 +3607,88 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
           title: "Full-text search and fuzzy indexes",
           body: "Full-text search engines commonly allow a search for one word to be expanded to\ninclude synonyms of the word, to ignore grammatical variations of words, and to\nsearch for occurrences of words near each other in the same document, and support\nvarious other features that depend on linguistic analysis of the text.\nLucene is able to search text for words within a certain edit distance (an edit\ndistance of 1 means that one letter has been added, removed, or replaced)\n\n*Lucene* uses a SSTable-like structure for its term dictionary. In LevelDB, this\nin-memory index is a sparse collection of some of the keys, but in Lucene, the\nin-memory index is a finite state automaton over the characters in the keys,\nsimilar to a *trie*."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h1(root, inherited, {
+          title: "Transaction Processing or Analytics?",
+          body: "**Online transaction processing (OLTP)** looks up a small number of records by some\nkey, using an index. Records are inserted or updated based on the user’s input.\n\n**Online analytic processing (OLAP)** are analytic queries that are often written\nby business analysts, and feed into reports that help the management of a company\nmake better decisions (business intelligence)"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Data Warehousing",
+          body: "A data warehouse, by contrast, is a separate database that analysts can query to\ntheir hearts’ content, without affecting OLTP operations. The data warehouse\ncontains a read-only copy of the data in all the various OLTP systems in the\ncompany. Data is extracted from OLTP databases (using either a periodic data dump\nor a continuous stream of updates), transformed into an analysis-friendly schema,\ncleaned up, and then loaded into the data warehouse. This process of getting data\ninto the warehouse is known as **Extract–Transform–Load (ETL)**."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd").get("data_intensive_application").get("images").get("_3_1").get("png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "The divergence between OLTP databases and data warehouses",
+          body: "On the surface, a data warehouse and a relational OLTP database look similar,\nbecause they both have a SQL query interface. However, the internals of the systems\ncan look quite different, because they are optimized for very different query patterns.\nMany database vendors now focus on supporting either transaction processing or\nanalytics workloads, but not both."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Stars and Snowflakes: Schemas for Analytics",
+          body: "Many data warehouses are used in a fairly formulaic style, known as a star schema\n(also known as dimensional modeling).\n\nThe example schema shows a data warehouse that might be found at a grocery retailer.\nAt the center of the schema is a so-called fact table (in this example, it is\ncalled **fact_sales**). Each row of the fact table represents an event that\noccurred at a particular time (here, each row represents a customer’s purchase\nof a product)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd").get("data_intensive_application").get("images").get("_3_2").get("png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Usually, facts are captured as individual events, because this allows maximum\nflexibility of analysis later. However, this means that the fact table can become\nextremely large.\n\nThe name “star schema” comes from the fact that when the table relationships are\nvisualized, the fact table is in the middle, surrounded by its dimension tables; the\nconnections to these tables are like the rays of a star.\n\nA variation of this template is known as the **snowflake schema**, where\ndimensions are further broken down into subdimensions. For example, there could\nbe separate tables for brands and product categories, and each row in the\n`dim_product` table could reference the brand and category as foreign keys,\nrather than storing them as strings in the `dim_product` table. Snowflake\nschemas are more normalized than star schemas, but star schemas are often\npreferred because they are simpler for analysts to work with"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Column-Oriented Storage",
+          body: "Although fact tables are often over 100 columns wide, a typical data warehouse\nquery only accesses 4 or 5 of them at one time."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "SELECT\n dim_date.weekday, dim_product.category,\n SUM(fact_sales.quantity) AS quantity_sold\nFROM fact_sales\n JOIN dim_date ON fact_sales.date_key = dim_date.date_key\n JOIN dim_product ON fact_sales.product_sk = dim_product.product_sk\nWHERE\n dim_date.year = 2013 AND\n dim_product.category IN ('Fresh fruit', 'Candy')\nGROUP BY\n dim_date.weekday, dim_product.category;",
+          lang: "sql"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "The query only needs to access three columns of the fact_sales table: `date_key`,\n`product_sk`, and `quantity`. It ignores all other columns.\n\n*How can we execute this query efficiently?*\n\nIn order to process a query, you may have indexes on `fact_sales.date_key`\nand/or `fact_sales.product_sk` that tell the storage engine where to find all\nthe sales for a particular date or for a particular product. But then, a\nrow-oriented storage engine still needs to load all of those rows (each\nconsisting of over 100 attributes) from disk into memory, parse them, and filter\nout those that don’t meet the required conditions. That can take a long time.\n\nThe idea behind column-oriented storage is simple: don’t store all the values from one\nrow together, but store all the values from each column together instead. If each col‐\numn is stored in a separate file, a query only needs to read and parse those columns\nthat are used in that query, which can save a lot of work."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd").get("data_intensive_application").get("images").get("_3_3").get("png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "The column-oriented storage layout relies on each column file containing the rows in\nthe same order."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Column Compression",
+          body: "Take a look at the sequences of values for each column in above image they often\nlook quite repetitive, which is a good sign for compression.\n\n**Bitmap encoding** is effective compression techniques"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd").get("data_intensive_application").get("images").get("_3_4").get("png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Bitmap indexes such as these are very well suited for the kinds of queries that are\ncommon in a data warehouse. For example:\n\n`WHERE product_sk IN (30, 68, 69):`\n\nLoad the three bitmaps for `product_sk = 30`, `product_sk = 68`, and `product_sk\n= 69`, and calculate the bitwise *OR* of the three bitmaps, which can be done very\nefficiently.\n\n`WHERE product_sk = 31 AND store_sk = 3:`\n\nLoad the bitmaps for `product_sk = 31` and `store_sk = 3`, and calculate the\nbitwise *AND*. This works because the columns contain the rows in the same order,\nso the kth bit in one column’s bitmap corresponds to the same row as the kth bit\nin another column’s bitmap."
         });
       }
       ]),
@@ -11124,6 +11494,34 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_4.png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/3-4.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/3-4-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_3.png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/3-3.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/3-3-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_2.png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/3-2.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/3-2-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_1.png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/3-1.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/3-1-dark.png");
+  return record;
+}());
 let fastn_community_github_io_typography__h1 = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -11759,6 +12157,113 @@ let fastn_community_github_io_typography__h3 = function (parent, inherited, args
   }
 }
 global["fastn_community_github_io_typography__h3"] = fastn_community_github_io_typography__h3;
+let fastn_community_github_io_doc_site__image = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "arjaupashak_com";
+  try {
+    let __args__ = {
+      caption: null,
+      body: null,
+      link: null,
+      alignment: fastn_dom.AlignContent.Center,
+      width: null,
+      height: null,
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Height, __args__.height, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn.formula([__args__.alignment,
+    __args__.alignment], function () {
+      if (function () {
+        return (fastn_utils.getStaticValue(__args__.alignment) !== null);
+      }()) {
+        return __args__.alignment;
+      }
+    }
+    ), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Image);
+      rooti0.setProperty(fastn_dom.PropertyKind.ImageSrc, __args__.src, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([__args__.width,
+      __args__.width], function () {
+        if (function () {
+          return (fastn_utils.getStaticValue(__args__.width) !== null);
+        }()) {
+          return __args__.width;
+        } else {
+          return fastn_dom.Resizing.Auto;
+        }
+      }
+      ), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Auto, inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.MaxWidth, fastn_dom.Resizing.FillContainer, inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.caption
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.caption) !== null);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("label_large"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.caption, inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(20), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(8), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomLeftRadius, fastn_dom.Length.Px(5), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.BorderBottomRightRadius, fastn_dom.Length.Px(5), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(inherited.get("colors").get("background").get("step_1")), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center, inherited);
+        return rooti0;
+      });
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.body
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.body) !== null);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+        rooti0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([__args__.width,
+        __args__.width], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.width) !== null);
+          }()) {
+            return __args__.width;
+          } else {
+            return fastn_dom.Resizing.Auto;
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.MarginTop, fastn_dom.Length.Px(20), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn.formula([__args__.alignment,
+        __args__.alignment], function () {
+          if (function () {
+            return (fastn_utils.getStaticValue(__args__.alignment) !== null);
+          }()) {
+            return __args__.alignment;
+          }
+        }
+        ), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+          let rooti0 = fastn_community_github_io_typography__markdown(root, inherited, {
+            body: __args__.body
+          });
+        }
+        ]), inherited);
+        return rooti0;
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["fastn_community_github_io_doc_site__image"] = fastn_community_github_io_doc_site__image;
 let arjaupashak_com_FASTN_ds__h1 = global["fastn_community_github_io_typography__h1"];
 global["arjaupashak_com_FASTN_ds__h1"] = arjaupashak_com_FASTN_ds__h1;
 let fastn_community_github_io_doc_site__h1 = global["fastn_community_github_io_typography__h1"];
@@ -11779,6 +12284,8 @@ let arjaupashak_com_FASTN_ds__h3 = global["fastn_community_github_io_typography_
 global["arjaupashak_com_FASTN_ds__h3"] = arjaupashak_com_FASTN_ds__h3;
 let fastn_community_github_io_doc_site__h3 = global["fastn_community_github_io_typography__h3"];
 global["fastn_community_github_io_doc_site__h3"] = fastn_community_github_io_doc_site__h3;
+let arjaupashak_com_FASTN_ds__image = global["fastn_community_github_io_doc_site__image"];
+global["arjaupashak_com_FASTN_ds__image"] = arjaupashak_com_FASTN_ds__image;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "code-theme-9A3284FD117DFF7CFD432FF860A5E14169FA592BC3DA4F5E8A6975143F5EA07F.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "code-theme-99CD7B013C96C4632F0AEA39AC265387B814AE85A7D33666A4AE4BEFF59016D0.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "code-theme-B3AEA322EADEDA61F0E219845A0E9C8E73F6345E49362B46E6F52CEE40471248.css";

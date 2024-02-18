@@ -57,8 +57,48 @@
     },
     "ddd/data-intensive-application/3-storage-retrieval.ftd": {
       "name": "ddd/data-intensive-application/3-storage-retrieval.ftd",
-      "checksum": "C8F4DF5DA92F25F8DA4CF8A6CCF214CAC0E4177A73D30ACAF98E2DF692DCA475",
-      "size": 15130
+      "checksum": "446B2FDB132FE464E3CA6023B9ECBE273053E1A27DB3204FA11E46430212AA9A",
+      "size": 20912
+    },
+    "ddd/data-intensive-application/images/3-1-dark.png": {
+      "name": "ddd/data-intensive-application/images/3-1-dark.png",
+      "checksum": "36F60D865FB68C4C1672885CCB2D7690C43EDD0C971A43EF112681093C5E7F1D",
+      "size": 96828
+    },
+    "ddd/data-intensive-application/images/3-1.png": {
+      "name": "ddd/data-intensive-application/images/3-1.png",
+      "checksum": "D58DD9D1F94EEC3998BB022FF8929F6B7AAEDA5EA2CE6F41660D2DCF66FB582F",
+      "size": 71668
+    },
+    "ddd/data-intensive-application/images/3-2-dark.png": {
+      "name": "ddd/data-intensive-application/images/3-2-dark.png",
+      "checksum": "F74AA433A4B70D6C646E33E65BA159EB2EEAE8EF93FFF6BAE39E185D6F1E04E2",
+      "size": 143663
+    },
+    "ddd/data-intensive-application/images/3-2.png": {
+      "name": "ddd/data-intensive-application/images/3-2.png",
+      "checksum": "32FF44F827D77E4B560AADF6BB32C4DD6021A156530108B7187CA23AD08B1BD6",
+      "size": 110630
+    },
+    "ddd/data-intensive-application/images/3-3-dark.png": {
+      "name": "ddd/data-intensive-application/images/3-3-dark.png",
+      "checksum": "B789E8F89CBCC638AF854348448CE4CD37B8D879AF037A4C3DD688D6482B0D8A",
+      "size": 180597
+    },
+    "ddd/data-intensive-application/images/3-3.png": {
+      "name": "ddd/data-intensive-application/images/3-3.png",
+      "checksum": "AD29AD2757DE06C0F6CF927BA1436E6CF1700F6D7F80E13632EF74D5BBDA5137",
+      "size": 136588
+    },
+    "ddd/data-intensive-application/images/3-4-dark.png": {
+      "name": "ddd/data-intensive-application/images/3-4-dark.png",
+      "checksum": "381523688C0D070C34F35E4AEB2A052D33076D0B53374A5B51D8AAC8C22EA940",
+      "size": 170937
+    },
+    "ddd/data-intensive-application/images/3-4.png": {
+      "name": "ddd/data-intensive-application/images/3-4.png",
+      "checksum": "CC1DADF511C648F70549DFE574AA96E72C3AD9F18BFCFD06954D547B7EDF7E90",
+      "size": 127874
     },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
@@ -196,6 +236,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/f9acab62d3000608ee10c85c7f4cf6336daee25d.zip",
-  "checksum": "FE61FFA5D3B258C3F4F3E00B8A4F370B032C1EA6167CD7FCD4DE2C717CFC2264"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/4aa100b00e070aa2e184144fb2b1ea1bc98d4ae0.zip",
+  "checksum": "61208784B11A49AF432C911964E0C4CD16DC89A66FA2303EB8FEBBE980EE966D"
 }
