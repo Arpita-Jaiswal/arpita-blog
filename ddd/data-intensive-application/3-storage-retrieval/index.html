@@ -518,7 +518,47 @@ In order to make the database resilient to crashes, it is common for B-tree
 implementations to include an additional data structure on disk: a write-ahead
 log (WAL, also known as a redo log). This is an append-only file to which every
 B-tree modification must be written before it can be applied to the pages of the
-tree itself.</div></div></div></div><comment data-id="169"></comment><comment data-id="170"></comment></div><div data-id="171" class="ft_column __w-315"></div><comment data-id="172"></comment></div><div data-id="173" class="ft_row __pos-316 __p-317 __bw-318 __br-319 __bc-320 __b-321 __r-322 __z-323 __bgc-324"><comment data-id="174"></comment><div data-id="175" class="ft_row __cur-325"><img data-id="176" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-326 __w-327 __h-328"></img></div><comment data-id="177"></comment><comment data-id="178"></comment></div><comment data-id="179"></comment></div></div></div></body><style id="styles">
+tree itself.</div><div data-id="169" class="ft_column __w-315"><h2 data-id="170" id="other-indexing-structures" class="__rl-316 __w-317 __pt-318 __mb-319 __c-320">Other Indexing Structures</h2><comment data-id="171"></comment><div data-id="172" class="__rl-321 __w-322 __c-323">A secondary index can easily be constructed from a key-value index. The main
+difference is that keys are not unique. This can be solved in two ways: either
+by making each value in the index a list of matching row identifiers or by making
+each key unique by appending a row identifier to it.</div><div data-id="173" class="ft_column __w-324"></div></div><div data-id="174" class="ft_column __w-325"><h3 data-id="175" id="storing-values-within-the-index" class="__rl-326 __w-327 __pt-328 __mb-329 __c-330">Storing values within the index</h3><comment data-id="176"></comment><div data-id="177" class="__rl-331 __w-332 __c-333"><p>The key in an index is the thing that queries search for, but the value can be one of
+two things: it could be the actual row (document, vertex) in question, or it could be a
+reference to the row stored elsewhere. In the latter case, the place where rows are
+stored is known as a heap file, and it stores data in no particular order (it may be
+append-only, or it may keep track of deleted rows in order to overwrite them with
+new data later). The heap file approach is common because it avoids duplicating data
+when multiple secondary indexes are present.</p>
+<p>It can be desirable to store the indexed row directly within an index. This is
+known as a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine,
+the primary key of a table is always a clustered index, and secondary indexes
+refer to the primary key (rather than a heap file location).</p>
+A compromise between a <em>clustered index</em> (storing all row data within the index) and
+a <em>nonclustered index</em> (storing only references to the data within the index) is known
+as a covering index or index with included columns, which stores some of a table’s
+columns within the index. This allows some queries to be answered by using the
+index alone (in which case, the index is said to cover the query).</div><div data-id="178" class="ft_column __w-334"></div></div><div data-id="179" class="ft_column __w-335"><h3 data-id="180" id="multi-column-indexes" class="__rl-336 __w-337 __pt-338 __mb-339 __c-340">Multi-column indexes</h3><comment data-id="181"></comment><div data-id="182" class="__rl-341 __w-342 __c-343"><p>The most common type of multi-column index is called a concatenated index, which
+simply combines several fields into one key by appending one column to another.
+This is like an old-fashioned paper phone book, which provides an index from
+(lastname, firstname) to phone number. Due to the sort order, the index can be
+used to find all the people with a particular last name, or all the people with
+a particular lastname-firstname combination. However, the index is useless if
+you want to find all the people with a particular first name.</p>
+A restaurant search website may have a database containing the latitude and
+longitude of each restaurant. When a user is looking at the restaurants on a map
+requires a two-dimensional range query like the following:</div><div data-id="183" class="ft_column __w-344"></div></div><div data-id="184" class="ft_column __w-345 __pt-346 __pb-347 __oy-348 __cur-349" style="position:relative"><comment data-id="185"></comment><div data-id="186" class="ft_row __w-350 __btlr-355 __btrr-356 __bgc-357" style="position:relative"><comment data-id="187"></comment><comment data-id="188"></comment><div data-id="189" class="ft_row __as-359 __pos-360 __t-361 __r-362 __jc-363 __ali-364 __g-365"><comment data-id="190"></comment><comment data-id="191"></comment><comment data-id="192"></comment></div><comment data-id="193"></comment></div><pre data-id="194" class="language-sql fastn-theme-light __w-366 __pb-367 __btlr-368 __btrr-369 __bblr-370 __bbrr-371 __ox-372 __oy-373 __c-374 __bgc-375 __rl-378"><code data-id="195" class="language-sql fastn-theme-light">SELECT * FROM restaurants WHERE latitude > 51.4946 AND latitude &lt; 51.5079
+ AND longitude > -0.1162 AND longitude &lt; -0.1004;
+</code></pre><comment data-id="196"></comment><div data-id="197" class="ft_column __pos-379 __p-380 __bbrr-381 __b-382 __r-383 __z-384"><div data-id="198" class="ft_row __g-385"><comment data-id="199"></comment><div data-id="200" class="ft_row __g-386"><div data-id="201" class="__rl-387 __c-388">Lang:</div><div data-id="202" class="__rl-389 __c-390">sql</div></div></div></div></div><div data-id="203" class="__rl-391 __w-392 __c-393">One option is to translate a two-dimensional location into a single number using a
+space-filling curve, and then to use a regular B-tree index [34]. More commonly,
+specialized spatial indexes such as <em>R-trees</em> are used.</div><div data-id="204" class="ft_column __w-394"><h3 data-id="205" id="full-text-search-and-fuzzy-indexes" class="__rl-395 __w-396 __pt-397 __mb-398 __c-399">Full-text search and fuzzy indexes</h3><comment data-id="206"></comment><div data-id="207" class="__rl-400 __w-401 __c-402"><p>Full-text search engines commonly allow a search for one word to be expanded to
+include synonyms of the word, to ignore grammatical variations of words, and to
+search for occurrences of words near each other in the same document, and support
+various other features that depend on linguistic analysis of the text.
+Lucene is able to search text for words within a certain edit distance (an edit
+distance of 1 means that one letter has been added, removed, or replaced)</p>
+<em>Lucene</em> uses a SSTable-like structure for its term dictionary. In LevelDB, this
+in-memory index is a sparse collection of some of the keys, but in Lucene, the
+in-memory index is a finite state automaton over the characters in the keys,
+similar to a <em>trie</em>.</div><div data-id="208" class="ft_column __w-403"></div></div></div></div></div><comment data-id="209"></comment><comment data-id="210"></comment></div><div data-id="211" class="ft_column __w-404"></div><comment data-id="212"></comment></div><div data-id="213" class="ft_row __pos-405 __p-406 __bw-407 __br-408 __bc-409 __b-410 __r-411 __z-412 __bgc-413"><comment data-id="214"></comment><div data-id="215" class="ft_row __cur-414"><img data-id="216" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-415 __w-416 __h-417"></img></div><comment data-id="217"></comment><comment data-id="218"></comment></div><comment data-id="219"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -969,21 +1009,153 @@ tree itself.</div></div></div></div><comment data-id="169"></comment><comment da
 	.__c-314:visited { color: #7C7C7C !important; }
 	body.dark  .__c-314:visited { color: #B8B8B8 !important; }
 	.__w-315 { width: 100%; }
-	.__pos-316 { position: fixed; }
-	.__p-317 { padding: 10px; }
-	.__bw-318 { border-width: 1px; }
-	.__br-319 { border-radius: 4px; }
-	.__bc-320 { border-color: #D2D2D2; }
-	body.dark .__bc-320 { border-color: #434547; }
-	.__b-321 { bottom: 25px; }
-	.__r-322 { right: 25px; }
-	.__z-323 { z-index: 99999999999999; }
-	.__bgc-324 { background-color: #FFFFFF; }
-	body.dark .__bgc-324 { background-color: #000000; }
-	.__cur-325 { cursor: pointer; }
-	.__as-326 { align-self: center; }
-	.__w-327 { width: 19px; }
-	.__h-328 { height: 19px; }
+	.__rl-316 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-316 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-317 { width: 100%; }
+	.__pt-318 { padding-top: 0.3em; }
+	.__mb-319 { margin-bottom: 0.5rem; }
+	.__c-320 { color: #333333 !important; }
+	body.dark .__c-320 { color: #FFFFFF !important; }
+	.__c-320:visited { color: #333333 !important; }
+	body.dark  .__c-320:visited { color: #FFFFFF !important; }
+	.__rl-321 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-321 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-322 { width: 100%; }
+	.__c-323 { color: #7C7C7C !important; }
+	body.dark .__c-323 { color: #B8B8B8 !important; }
+	.__c-323:visited { color: #7C7C7C !important; }
+	body.dark  .__c-323:visited { color: #B8B8B8 !important; }
+	.__w-324 { width: 100%; }
+	.__w-325 { width: 100%; }
+	.__rl-326 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-326 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-327 { width: 100%; }
+	.__pt-328 { padding-top: 0.17em; }
+	.__mb-329 { margin-bottom: 0.5rem; }
+	.__c-330 { color: #333333 !important; }
+	body.dark .__c-330 { color: #FFFFFF !important; }
+	.__c-330:visited { color: #333333 !important; }
+	body.dark  .__c-330:visited { color: #FFFFFF !important; }
+	.__rl-331 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-331 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-332 { width: 100%; }
+	.__c-333 { color: #7C7C7C !important; }
+	body.dark .__c-333 { color: #B8B8B8 !important; }
+	.__c-333:visited { color: #7C7C7C !important; }
+	body.dark  .__c-333:visited { color: #B8B8B8 !important; }
+	.__w-334 { width: 100%; }
+	.__w-335 { width: 100%; }
+	.__rl-336 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-336 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-337 { width: 100%; }
+	.__pt-338 { padding-top: 0.17em; }
+	.__mb-339 { margin-bottom: 0.5rem; }
+	.__c-340 { color: #333333 !important; }
+	body.dark .__c-340 { color: #FFFFFF !important; }
+	.__c-340:visited { color: #333333 !important; }
+	body.dark  .__c-340:visited { color: #FFFFFF !important; }
+	.__rl-341 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-341 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-342 { width: 100%; }
+	.__c-343 { color: #7C7C7C !important; }
+	body.dark .__c-343 { color: #B8B8B8 !important; }
+	.__c-343:visited { color: #7C7C7C !important; }
+	body.dark  .__c-343:visited { color: #B8B8B8 !important; }
+	.__w-344 { width: 100%; }
+	.__w-345 { width: 100%; }
+	.__pt-346 { padding-top: 12px; }
+	.__pb-347 { padding-bottom: 12px; }
+	.__oy-348 { overflow-y: auto; }
+	.__cur-349 { cursor: default; }
+	.__w-350 { width: 100%; }
+	.__btlr-355 { border-top-left-radius: 4px; }
+	.__btrr-356 { border-top-right-radius: 4px; }
+	.__bgc-357 { background-color: #F8F8F8; }
+	body.dark .__bgc-357 { background-color: #111111; }
+	.__as-359 { align-self: end; }
+	.__pos-360 { position: absolute; }
+	.__t-361 { top: 12px; }
+	.__r-362 { right: 20px; }
+	.__jc-363 { justify-content: right; }
+	.__ali-364 { align-items: center; }
+	.__g-365 { gap: 10px; }
+	.__w-366 { width: 100%; }
+	.__pb-367 { padding-bottom: 24px; }
+	.__btlr-368 { border-top-left-radius: 4px; }
+	.__btrr-369 { border-top-right-radius: 4px; }
+	.__bblr-370 { border-bottom-left-radius: 4px; }
+	.__bbrr-371 { border-bottom-right-radius: 4px; }
+	.__ox-372 { overflow-x: auto; }
+	.__oy-373 { overflow-y: auto; }
+	.__c-374 { color: #7C7C7C !important; }
+	body.dark .__c-374 { color: #B8B8B8 !important; }
+	.__c-374:visited { color: #7C7C7C !important; }
+	body.dark  .__c-374:visited { color: #B8B8B8 !important; }
+	.__bgc-375 { background-color: #f5f5f5; }
+	body.dark .__bgc-375 { background-color: #21222c; }
+	.__rl-378 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-378 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__pos-379 { position: absolute; }
+	.__p-380 { padding: 6px; }
+	.__bbrr-381 { border-bottom-right-radius: 4px; }
+	.__b-382 { bottom: 12px; }
+	.__r-383 { right: 12px; }
+	.__z-384 { z-index: 999; }
+	.__g-385 { gap: 16px; }
+	.__g-386 { gap: 4px; }
+	.__rl-387 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-387 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-388 { color: #7C7C7C !important; }
+	body.dark .__c-388 { color: #B8B8B8 !important; }
+	.__c-388:visited { color: #7C7C7C !important; }
+	body.dark  .__c-388:visited { color: #B8B8B8 !important; }
+	.__rl-389 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	body.mobile .__rl-389 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 12px; font-weight: 400; line-height: 16px; }
+	.__c-390 { color: #7C7C7C !important; }
+	body.dark .__c-390 { color: #B8B8B8 !important; }
+	.__c-390:visited { color: #7C7C7C !important; }
+	body.dark  .__c-390:visited { color: #B8B8B8 !important; }
+	.__rl-391 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-391 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-392 { width: 100%; }
+	.__c-393 { color: #7C7C7C !important; }
+	body.dark .__c-393 { color: #B8B8B8 !important; }
+	.__c-393:visited { color: #7C7C7C !important; }
+	body.dark  .__c-393:visited { color: #B8B8B8 !important; }
+	.__w-394 { width: 100%; }
+	.__rl-395 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-395 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-396 { width: 100%; }
+	.__pt-397 { padding-top: 0.17em; }
+	.__mb-398 { margin-bottom: 0.5rem; }
+	.__c-399 { color: #333333 !important; }
+	body.dark .__c-399 { color: #FFFFFF !important; }
+	.__c-399:visited { color: #333333 !important; }
+	body.dark  .__c-399:visited { color: #FFFFFF !important; }
+	.__rl-400 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-400 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-401 { width: 100%; }
+	.__c-402 { color: #7C7C7C !important; }
+	body.dark .__c-402 { color: #B8B8B8 !important; }
+	.__c-402:visited { color: #7C7C7C !important; }
+	body.dark  .__c-402:visited { color: #B8B8B8 !important; }
+	.__w-403 { width: 100%; }
+	.__w-404 { width: 100%; }
+	.__pos-405 { position: fixed; }
+	.__p-406 { padding: 10px; }
+	.__bw-407 { border-width: 1px; }
+	.__br-408 { border-radius: 4px; }
+	.__bc-409 { border-color: #D2D2D2; }
+	body.dark .__bc-409 { border-color: #434547; }
+	.__b-410 { bottom: 25px; }
+	.__r-411 { right: 25px; }
+	.__z-412 { z-index: 99999999999999; }
+	.__bgc-413 { background-color: #FFFFFF; }
+	body.dark .__bgc-413 { background-color: #000000; }
+	.__cur-414 { cursor: pointer; }
+	.__as-415 { align-self: center; }
+	.__w-416 { width: 19px; }
+	.__h-417 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3035,6 +3207,41 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
           body: "This algorithm ensures that the tree remains balanced: a B-tree with n keys always\nhas a depth of O(log n). Most databases can fit into a B-tree that is three or four levels\ndeep, so you don’t need to follow many page references to find the page you are\nlooking for. (A four-level tree of 4 KB pages with a branching factor of 500 can\nstore up to 256 TB.)\n\nIn order to make the database resilient to crashes, it is common for B-tree\nimplementations to include an additional data structure on disk: a write-ahead\nlog (WAL, also known as a redo log). This is an append-only file to which every\nB-tree modification must be written before it can be applied to the pages of the\ntree itself."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Other Indexing Structures",
+          body: "A secondary index can easily be constructed from a key-value index. The main\ndifference is that keys are not unique. This can be solved in two ways: either\nby making each value in the index a list of matching row identifiers or by making\neach key unique by appending a row identifier to it."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Storing values within the index",
+          body: "The key in an index is the thing that queries search for, but the value can be one of\ntwo things: it could be the actual row (document, vertex) in question, or it could be a\nreference to the row stored elsewhere. In the latter case, the place where rows are\nstored is known as a heap file, and it stores data in no particular order (it may be\nappend-only, or it may keep track of deleted rows in order to overwrite them with\nnew data later). The heap file approach is common because it avoids duplicating data\nwhen multiple secondary indexes are present.\n\nIt can be desirable to store the indexed row directly within an index. This is\nknown as a **clustered index**. For example, in MySQL’s InnoDB storage engine,\nthe primary key of a table is always a clustered index, and secondary indexes\nrefer to the primary key (rather than a heap file location).\n\nA compromise between a *clustered index* (storing all row data within the index) and\na *nonclustered index* (storing only references to the data within the index) is known\nas a covering index or index with included columns, which stores some of a table’s\ncolumns within the index. This allows some queries to be answered by using the\nindex alone (in which case, the index is said to cover the query)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Multi-column indexes",
+          body: "The most common type of multi-column index is called a concatenated index, which\nsimply combines several fields into one key by appending one column to another.\nThis is like an old-fashioned paper phone book, which provides an index from\n(lastname, firstname) to phone number. Due to the sort order, the index can be\nused to find all the people with a particular last name, or all the people with\na particular lastname-firstname combination. However, the index is useless if\nyou want to find all the people with a particular first name.\n\nA restaurant search website may have a database containing the latitude and\nlongitude of each restaurant. When a user is looking at the restaurants on a map\nrequires a two-dimensional range query like the following:"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__code(root, inherited, {
+          body: "SELECT * FROM restaurants WHERE latitude > 51.4946 AND latitude < 51.5079\n AND longitude > -0.1162 AND longitude < -0.1004;",
+          lang: "sql"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "One option is to translate a two-dimensional location into a single number using a\nspace-filling curve, and then to use a regular B-tree index [34]. More commonly,\nspecialized spatial indexes such as *R-trees* are used."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Full-text search and fuzzy indexes",
+          body: "Full-text search engines commonly allow a search for one word to be expanded to\ninclude synonyms of the word, to ignore grammatical variations of words, and to\nsearch for occurrences of words near each other in the same document, and support\nvarious other features that depend on linguistic analysis of the text.\nLucene is able to search text for words within a certain edit distance (an edit\ndistance of 1 means that one letter has been added, removed, or replaced)\n\n*Lucene* uses a SSTable-like structure for its term dictionary. In LevelDB, this\nin-memory index is a sparse collection of some of the keys, but in Lucene, the\nin-memory index is a finite state automaton over the characters in the keys,\nsimilar to a *trie*."
         });
       }
       ]),
