@@ -626,7 +626,42 @@ efficiently.</p>
 Load the bitmaps for <code>product_sk = 31</code> and <code>store_sk = 3</code>, and calculate the
 bitwise <em>AND</em>. This works because the columns contain the rows in the same order,
 so the kth bit in one column’s bitmap corresponds to the same row as the kth bit
-in another column’s bitmap.</div></div></div></div><comment data-id="278"></comment><comment data-id="279"></comment></div><div data-id="280" class="ft_column __w-552"></div><comment data-id="281"></comment></div><div data-id="282" class="ft_row __pos-553 __p-554 __bw-555 __br-556 __bc-557 __b-558 __r-559 __z-560 __bgc-561"><comment data-id="283"></comment><div data-id="284" class="ft_row __cur-562"><img data-id="285" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-563 __w-564 __h-565"></img></div><comment data-id="286"></comment><comment data-id="287"></comment></div><comment data-id="288"></comment></div></div></div></body><style id="styles">
+in another column’s bitmap.</div><div data-id="278" class="ft_column __w-552"><h2 data-id="279" id="sort-order-in-column-storage" class="__rl-553 __w-554 __pt-555 __mb-556 __c-557">Sort Order in Column Storage</h2><comment data-id="280"></comment><div data-id="281" class="__rl-558 __w-559 __c-560"><p>We can choose to impose an order, like we did with SSTables previously, and use
+that as an indexing mechanism.</p>
+<p>The administrator of the database can choose the columns by which the table
+should be sorted, using their knowledge of common queries. For example, if
+queries often target date ranges, such as the last month, it might make sense to
+make <code>date_key</code> the first sort key.</p>
+<p>If <code>date_key</code> is the first sort key, it might make sense for <code>product_sk</code> to be
+the second sort key so that all sales for the same product on the same day are
+grouped together in storage. That will help queries that need to group or filter
+sales by product within a certain date range.</p>
+<p>Another advantage of sorted order is that it can help with compression of columns. If
+the primary sort column does not have many distinct values, then after sorting, it will
+have long sequences where the same value is repeated many times in a row. A simple
+run-length encoding, like we used for the bitmaps, could compress that column down
+to a few kilobytes—even if the table has billions of rows.</p>
+That compression effect is strongest on the first sort key. The second and third sort
+keys will be more jumbled up, and thus not have such long runs of repeated values.
+Columns further down the sorting priority appear in essentially random order, so
+they probably won’t compress as well. But having the first few columns sorted is still
+a win overall.</div><div data-id="282" class="ft_column __w-561"></div></div><div data-id="283" class="ft_column __w-562"><h3 data-id="284" id="several-different-sort-orders" class="__rl-563 __w-564 __pt-565 __mb-566 __c-567">Several different sort orders</h3><comment data-id="285"></comment><div data-id="286" class="__rl-568 __w-569 __c-570">Having multiple sort orders in a column-oriented store is a bit similar to having
+multiple secondary indexes in a row-oriented store. But the big difference is
+that the row-oriented store keeps every row in one place (in the heap file or a
+clustered index), and secondary indexes just contain pointers to the matching
+rows. In a column store, there normally aren’t any pointers to data elsewhere,
+only columns containing values.</div><div data-id="287" class="ft_column __w-571"></div></div><div data-id="288" class="ft_column __w-572"><h2 data-id="289" id="aggregation-data-cubes-and-materialized-views" class="__rl-573 __w-574 __pt-575 __mb-576 __c-577">Aggregation: Data Cubes and Materialized Views</h2><comment data-id="290"></comment><div data-id="291" class="__rl-578 __w-579 __c-580"><p>Some aggregate function are common, such as COUNT, SUM, AVG, MIN, or MAX in SQL.
+If the same aggregates are used by many different queries, it can be wasteful to
+crunch through the raw data every time. Why not cache some of the counts or sums
+that queries use most often?</p>
+<p><strong>Materialized view</strong> is a table-like object whose contents are the results of
+some query.</p>
+When the underlying data changes, a materialized view needs to be updated, because
+it is a denormalized copy of the data. The database can do that automatically, but
+such updates make writes more expensive, which is why materialized views are not
+often used in OLTP databases. In read-heavy data warehouses they can make more
+sense (whether or not they actually improve read performance depends on the
+individual case).</div><div data-id="292" class="ft_column __w-581"></div></div><div data-id="293" class="ft_column __w-582 __h-583 __jc-584 __ali-585"><img data-id="294" src="-/arjaupashak.com/ddd/data-intensive-application/images/3-5.png" class="__w-586 __h-587 __mxw-588"></img><comment data-id="295"></comment><comment data-id="296"></comment></div></div></div></div><comment data-id="297"></comment><comment data-id="298"></comment></div><div data-id="299" class="ft_column __w-589"></div><comment data-id="300"></comment></div><div data-id="301" class="ft_row __pos-590 __p-591 __bw-592 __br-593 __bc-594 __b-595 __r-596 __z-597 __bgc-598"><comment data-id="302"></comment><div data-id="303" class="ft_row __cur-599"><img data-id="304" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-600 __w-601 __h-602"></img></div><comment data-id="305"></comment><comment data-id="306"></comment></div><comment data-id="307"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1429,21 +1464,82 @@ in another column’s bitmap.</div></div></div></div><comment data-id="278"></co
 	.__c-551:visited { color: #7C7C7C !important; }
 	body.dark  .__c-551:visited { color: #B8B8B8 !important; }
 	.__w-552 { width: 100%; }
-	.__pos-553 { position: fixed; }
-	.__p-554 { padding: 10px; }
-	.__bw-555 { border-width: 1px; }
-	.__br-556 { border-radius: 4px; }
-	.__bc-557 { border-color: #D2D2D2; }
-	body.dark .__bc-557 { border-color: #434547; }
-	.__b-558 { bottom: 25px; }
-	.__r-559 { right: 25px; }
-	.__z-560 { z-index: 99999999999999; }
-	.__bgc-561 { background-color: #FFFFFF; }
-	body.dark .__bgc-561 { background-color: #000000; }
-	.__cur-562 { cursor: pointer; }
-	.__as-563 { align-self: center; }
-	.__w-564 { width: 19px; }
-	.__h-565 { height: 19px; }
+	.__rl-553 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-553 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-554 { width: 100%; }
+	.__pt-555 { padding-top: 0.3em; }
+	.__mb-556 { margin-bottom: 0.5rem; }
+	.__c-557 { color: #333333 !important; }
+	body.dark .__c-557 { color: #FFFFFF !important; }
+	.__c-557:visited { color: #333333 !important; }
+	body.dark  .__c-557:visited { color: #FFFFFF !important; }
+	.__rl-558 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-558 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-559 { width: 100%; }
+	.__c-560 { color: #7C7C7C !important; }
+	body.dark .__c-560 { color: #B8B8B8 !important; }
+	.__c-560:visited { color: #7C7C7C !important; }
+	body.dark  .__c-560:visited { color: #B8B8B8 !important; }
+	.__w-561 { width: 100%; }
+	.__w-562 { width: 100%; }
+	.__rl-563 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-563 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-564 { width: 100%; }
+	.__pt-565 { padding-top: 0.17em; }
+	.__mb-566 { margin-bottom: 0.5rem; }
+	.__c-567 { color: #333333 !important; }
+	body.dark .__c-567 { color: #FFFFFF !important; }
+	.__c-567:visited { color: #333333 !important; }
+	body.dark  .__c-567:visited { color: #FFFFFF !important; }
+	.__rl-568 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-568 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-569 { width: 100%; }
+	.__c-570 { color: #7C7C7C !important; }
+	body.dark .__c-570 { color: #B8B8B8 !important; }
+	.__c-570:visited { color: #7C7C7C !important; }
+	body.dark  .__c-570:visited { color: #B8B8B8 !important; }
+	.__w-571 { width: 100%; }
+	.__w-572 { width: 100%; }
+	.__rl-573 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-573 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-574 { width: 100%; }
+	.__pt-575 { padding-top: 0.3em; }
+	.__mb-576 { margin-bottom: 0.5rem; }
+	.__c-577 { color: #333333 !important; }
+	body.dark .__c-577 { color: #FFFFFF !important; }
+	.__c-577:visited { color: #333333 !important; }
+	body.dark  .__c-577:visited { color: #FFFFFF !important; }
+	.__rl-578 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-578 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-579 { width: 100%; }
+	.__c-580 { color: #7C7C7C !important; }
+	body.dark .__c-580 { color: #B8B8B8 !important; }
+	.__c-580:visited { color: #7C7C7C !important; }
+	body.dark  .__c-580:visited { color: #B8B8B8 !important; }
+	.__w-581 { width: 100%; }
+	.__w-582 { width: 100%; }
+	.__h-583 { height: null; }
+	.__jc-584 { justify-content: center; }
+	.__ali-585 { align-items: center; }
+	.__w-586 { width: auto; }
+	.__h-587 { height: auto; }
+	.__mxw-588 { max-width: 100%; }
+	.__w-589 { width: 100%; }
+	.__pos-590 { position: fixed; }
+	.__p-591 { padding: 10px; }
+	.__bw-592 { border-width: 1px; }
+	.__br-593 { border-radius: 4px; }
+	.__bc-594 { border-color: #D2D2D2; }
+	body.dark .__bc-594 { border-color: #434547; }
+	.__b-595 { bottom: 25px; }
+	.__r-596 { right: 25px; }
+	.__z-597 { z-index: 99999999999999; }
+	.__bgc-598 { background-color: #FFFFFF; }
+	body.dark .__bgc-598 { background-color: #000000; }
+	.__cur-599 { cursor: pointer; }
+	.__as-600 { align-self: center; }
+	.__w-601 { width: 19px; }
+	.__h-602 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3612,6 +3708,29 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
           body: "Bitmap indexes such as these are very well suited for the kinds of queries that are\ncommon in a data warehouse. For example:\n\n`WHERE product_sk IN (30, 68, 69):`\n\nLoad the three bitmaps for `product_sk = 30`, `product_sk = 68`, and `product_sk\n= 69`, and calculate the bitwise *OR* of the three bitmaps, which can be done very\nefficiently.\n\n`WHERE product_sk = 31 AND store_sk = 3:`\n\nLoad the bitmaps for `product_sk = 31` and `store_sk = 3`, and calculate the\nbitwise *AND*. This works because the columns contain the rows in the same order,\nso the kth bit in one column’s bitmap corresponds to the same row as the kth bit\nin another column’s bitmap."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Sort Order in Column Storage",
+          body: "We can choose to impose an order, like we did with SSTables previously, and use\nthat as an indexing mechanism.\n\nThe administrator of the database can choose the columns by which the table\nshould be sorted, using their knowledge of common queries. For example, if\nqueries often target date ranges, such as the last month, it might make sense to\nmake `date_key` the first sort key.\n\nIf `date_key` is the first sort key, it might make sense for `product_sk` to be\nthe second sort key so that all sales for the same product on the same day are\ngrouped together in storage. That will help queries that need to group or filter\nsales by product within a certain date range.\n\nAnother advantage of sorted order is that it can help with compression of columns. If\nthe primary sort column does not have many distinct values, then after sorting, it will\nhave long sequences where the same value is repeated many times in a row. A simple\nrun-length encoding, like we used for the bitmaps, could compress that column down\nto a few kilobytes—even if the table has billions of rows.\n\nThat compression effect is strongest on the first sort key. The second and third sort\nkeys will be more jumbled up, and thus not have such long runs of repeated values.\nColumns further down the sorting priority appear in essentially random order, so\nthey probably won’t compress as well. But having the first few columns sorted is still\na win overall."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Several different sort orders",
+          body: "Having multiple sort orders in a column-oriented store is a bit similar to having\nmultiple secondary indexes in a row-oriented store. But the big difference is\nthat the row-oriented store keeps every row in one place (in the heap file or a\nclustered index), and secondary indexes just contain pointers to the matching\nrows. In a column store, there normally aren’t any pointers to data elsewhere,\nonly columns containing values."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Aggregation: Data Cubes and Materialized Views",
+          body: "Some aggregate function are common, such as COUNT, SUM, AVG, MIN, or MAX in SQL.\nIf the same aggregates are used by many different queries, it can be wasteful to\ncrunch through the raw data every time. Why not cache some of the counts or sums\nthat queries use most often?\n\n**Materialized view** is a table-like object whose contents are the results of\nsome query.\n\nWhen the underlying data changes, a materialized view needs to be updated, because\nit is a denormalized copy of the data. The database can do that automatically, but\nsuch updates make writes more expensive, which is why materialized views are not\noften used in OLTP databases. In read-heavy data warehouses they can make more\nsense (whether or not they actually improve read performance depends on the\nindividual case)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd").get("data_intensive_application").get("images").get("_3_5").get("png")
         });
       }
       ]),
@@ -10863,6 +10982,13 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_5.png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/3-5.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/3-5-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd.data_intensive_application.images.3_4.png", function () {
   let record = fastn.recordInstance({
   });
