@@ -350,4 +350,154 @@ similar to a *trie*.
 
 
 
+
+
+
+
+
+
+-- ds.h1: Transaction Processing or Analytics?
+
+**Online transaction processing (OLTP)** looks up a small number of records by some
+key, using an index. Records are inserted or updated based on the user’s input.
+
+**Online analytic processing (OLAP)** are analytic queries that are often written
+by business analysts, and feed into reports that help the management of a company
+make better decisions (business intelligence)
+
+-- ds.h2: Data Warehousing
+
+A data warehouse, by contrast, is a separate database that analysts can query to
+their hearts’ content, without affecting OLTP operations. The data warehouse
+contains a read-only copy of the data in all the various OLTP systems in the
+company. Data is extracted from OLTP databases (using either a periodic data dump
+or a continuous stream of updates), transformed into an analysis-friendly schema,
+cleaned up, and then loaded into the data warehouse. This process of getting data
+into the warehouse is known as **Extract–Transform–Load (ETL)**.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.3-1.png
+
+-- ds.h3: The divergence between OLTP databases and data warehouses
+
+On the surface, a data warehouse and a relational OLTP database look similar,
+because they both have a SQL query interface. However, the internals of the systems
+can look quite different, because they are optimized for very different query patterns.
+Many database vendors now focus on supporting either transaction processing or
+analytics workloads, but not both.
+
+
+-- ds.h2: Stars and Snowflakes: Schemas for Analytics
+
+Many data warehouses are used in a fairly formulaic style, known as a star schema
+(also known as dimensional modeling).
+
+The example schema shows a data warehouse that might be found at a grocery retailer.
+At the center of the schema is a so-called fact table (in this example, it is
+called **fact_sales**). Each row of the fact table represents an event that
+occurred at a particular time (here, each row represents a customer’s purchase
+of a product).
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.3-2.png
+
+-- ds.markdown:
+
+Usually, facts are captured as individual events, because this allows maximum
+flexibility of analysis later. However, this means that the fact table can become
+extremely large.
+
+The name “star schema” comes from the fact that when the table relationships are
+visualized, the fact table is in the middle, surrounded by its dimension tables; the
+connections to these tables are like the rays of a star.
+
+A variation of this template is known as the **snowflake schema**, where
+dimensions are further broken down into subdimensions. For example, there could
+be separate tables for brands and product categories, and each row in the
+`dim_product` table could reference the brand and category as foreign keys,
+rather than storing them as strings in the `dim_product` table. Snowflake
+schemas are more normalized than star schemas, but star schemas are often
+preferred because they are simpler for analysts to work with
+
+
+-- ds.h2: Column-Oriented Storage
+
+Although fact tables are often over 100 columns wide, a typical data warehouse
+query only accesses 4 or 5 of them at one time.
+
+-- ds.code:
+lang: sql
+
+SELECT
+ dim_date.weekday, dim_product.category,
+ SUM(fact_sales.quantity) AS quantity_sold
+FROM fact_sales
+ JOIN dim_date ON fact_sales.date_key = dim_date.date_key
+ JOIN dim_product ON fact_sales.product_sk = dim_product.product_sk
+WHERE
+ dim_date.year = 2013 AND
+ dim_product.category IN ('Fresh fruit', 'Candy')
+GROUP BY
+ dim_date.weekday, dim_product.category;
+
+-- ds.markdown:
+
+The query only needs to access three columns of the fact_sales table: `date_key`,
+`product_sk`, and `quantity`. It ignores all other columns.
+
+*How can we execute this query efficiently?*
+
+In order to process a query, you may have indexes on `fact_sales.date_key`
+and/or `fact_sales.product_sk` that tell the storage engine where to find all
+the sales for a particular date or for a particular product. But then, a
+row-oriented storage engine still needs to load all of those rows (each
+consisting of over 100 attributes) from disk into memory, parse them, and filter
+out those that don’t meet the required conditions. That can take a long time.
+
+The idea behind column-oriented storage is simple: don’t store all the values from one
+row together, but store all the values from each column together instead. If each col‐
+umn is stored in a separate file, a query only needs to read and parse those columns
+that are used in that query, which can save a lot of work.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.3-3.png
+
+-- ds.markdown:
+
+The column-oriented storage layout relies on each column file containing the rows in
+the same order.
+
+
+
+-- ds.h2: Column Compression
+
+Take a look at the sequences of values for each column in above image they often
+look quite repetitive, which is a good sign for compression.
+
+**Bitmap encoding** is effective compression techniques
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.3-4.png
+
+-- ds.markdown:
+
+Bitmap indexes such as these are very well suited for the kinds of queries that are
+common in a data warehouse. For example:
+
+`WHERE product_sk IN (30, 68, 69):`
+
+Load the three bitmaps for `product_sk = 30`, `product_sk = 68`, and `product_sk
+= 69`, and calculate the bitwise *OR* of the three bitmaps, which can be done very
+efficiently.
+
+`WHERE product_sk = 31 AND store_sk = 3:`
+
+Load the bitmaps for `product_sk = 31` and `store_sk = 3`, and calculate the
+bitwise *AND*. This works because the columns contain the rows in the same order,
+so the kth bit in one column’s bitmap corresponds to the same row as the kth bit
+in another column’s bitmap.
+
+
+
+
 -- end: ds.page
