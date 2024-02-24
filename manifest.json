@@ -10,10 +10,15 @@
       "checksum": "9D8E539139F947B9A1B29176B470E2A702E68F71D5976FCBA38FA7753EC9658C",
       "size": 2426
     },
+    "FASTN/colors.ftd": {
+      "name": "FASTN/colors.ftd",
+      "checksum": "B80C277FCDAB5565326B1C958FE8454DEC5C83DA039F426D1219E91802F018B5",
+      "size": 6956
+    },
     "FASTN/ds.ftd": {
       "name": "FASTN/ds.ftd",
-      "checksum": "B23AC59790DC499946940A6C9B8A1D3087583D3EFF6B89B77B2794042F3AC2FA",
-      "size": 1881
+      "checksum": "93FD665BEAC57E50CE368E6D3F5C7C2A738DA99A52900A1C88AF668A697099A1",
+      "size": 1863
     },
     "LICENSE": {
       "name": "LICENSE",
@@ -291,6 +296,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/8af7ce020698a7e1fc05ad3398fc85ceb612c917.zip",
-  "checksum": "5A46A0E017416B4D9077BC21945406FFC205565E26B43FCE258C77A5EBE55665"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/cb2c86848acda69bc995f5a779084604b29ea784.zip",
+  "checksum": "71A927344EB0AEC6BDA0BAE73D6BF4ED1793D527A4BD92C27C95EBEBE84AA719"
 }
