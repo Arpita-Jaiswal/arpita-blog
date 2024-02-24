@@ -52,6 +52,8 @@ nav-title: My Day to Day Learnings and Discoveries
     document: ddd/data-intensive-application/2-data-models-query-languages.ftd
   - Storage and Retrieval: /ddd/dia-3/
     document: ddd/data-intensive-application/3-storage-retrieval.ftd
+  - Encoding and Evolution: /ddd/dia-4/
+    document: ddd/data-intensive-application/4-encoding-and-evolution.ftd
 
 ## FifthTry: /fifthtry/
 
