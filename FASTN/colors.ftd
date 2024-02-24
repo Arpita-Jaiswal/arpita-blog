@@ -7,7 +7,7 @@ light: #F8F8F8
 dark: #260B40
 
 -- ftd.color step-2-:
-light: #F5F5F5
+light: #F2E6FF
 dark: #460F7B
 
 -- ftd.color overlay-:
@@ -15,7 +15,7 @@ light: #130224
 dark: #130224
 
 -- ftd.color code-:
-light: #f5f5f5
+light: #F2E6FF
 dark: #21222c
 
 -- ftd.background-colors background-:
@@ -101,7 +101,7 @@ light: #F9F9F9
 dark: #1C1C1C
 
 -- ftd.color cta-secondary-hover-:
-light: #F5F5F5
+light: #F2E6FF
 dark: #242424
 
 -- ftd.color cta-secondary-pressed-:
