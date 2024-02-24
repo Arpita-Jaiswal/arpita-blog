@@ -69,9 +69,10 @@ string cta-text:
 
 -- ftd.row:
 width: fill-container
-background.solid: #fc9cd5
+background.solid: $step-2-bg
 padding-vertical.px: 75
 padding-horizontal.px: 60
+spacing.fixed.px: 30
 
 -- ftd.text: $banner-with-cta.message
 role: $copy-regular
@@ -79,10 +80,11 @@ align-self: center
 color: white
 
 -- ftd.text: $banner-with-cta.cta-text
-background.solid: #b58fdc
+background.solid: $title-bg
 color: white
 padding-vertical.px: 21
 padding-horizontal.px: 34
+border-radius.px: 15
 
 -- end: ftd.row
 
@@ -147,7 +149,7 @@ margin-bottom.rem: 0.5
 padding-top.em: 0.5
 
 -- ftd.text: $blog-desktop.title
-background.solid: #b58fdc
+background.solid: $title-bg
 color: white
 display: inline
 padding-right.px: 12
@@ -171,6 +173,16 @@ color: $text-color
 -- ftd.color text-color:
 light: black
 dark: white
+
+
+-- ftd.color title-bg:
+light: #b58fdc
+dark: #460F7B
+
+
+-- ftd.color step-2-bg:
+light: #fc9cd5
+dark: #4d002e
 
 
 

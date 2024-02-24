@@ -202,8 +202,8 @@
     },
     "index.ftd": {
       "name": "index.ftd",
-      "checksum": "CC9790EF796D1ECED5D040A5AB849EC496208DCF324AFD02A2EE5897A16D2B6B",
-      "size": 2648
+      "checksum": "A227846C9E8991DC8092B09A9689ABD570CAACAAC65A053871CFA6012000F7F0",
+      "size": 2806
     },
     "learn/preflight-request.ftd": {
       "name": "learn/preflight-request.ftd",
@@ -301,6 +301,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/dcb043e6ad2de05dffa8409de493350587c370ff.zip",
-  "checksum": "EA04E59157CB6FD1404175DA7BB60F0991724E3729C09A2F579A6A5FE15F81DF"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/6c4f3882674a83c67d276f51a9c98f4d0f06e843.zip",
+  "checksum": "2138333D4CDD2EF18FCD110C6D912058AF4B3CF20CC927741F8B27AE34163995"
 }
