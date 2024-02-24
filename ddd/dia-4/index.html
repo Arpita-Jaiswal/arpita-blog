@@ -496,7 +496,161 @@ other service. This way of building applications has traditionally been called a
 architecture</strong>.</p>
 We should expect old and new versions of servers and clients to be running at the
 same time, and so the data encoding used by servers and clients must be compatible
-across versions of the service API.</div><div data-id="214" class="ft_column __w-403"></div></div></div></div></div><comment data-id="215"></comment><comment data-id="216"></comment></div><div data-id="217" class="ft_column __w-404"></div><comment data-id="218"></comment></div><div data-id="219" class="ft_row __pos-405 __p-406 __bw-407 __br-408 __bc-409 __b-410 __r-411 __z-412 __bgc-413"><comment data-id="220"></comment><div data-id="221" class="ft_row __cur-414"><img data-id="222" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-415 __w-416 __h-417"></img></div><comment data-id="223"></comment><comment data-id="224"></comment></div><comment data-id="225"></comment></div></div></div></body><style id="styles">
+across versions of the service API.</div><div data-id="214" class="ft_column __w-403"></div></div><div data-id="215" class="ft_column __w-404"><h3 data-id="216" id="web-services" class="__rl-405 __w-406 __pt-407 __mb-408 __c-409">Web services</h3><comment data-id="217"></comment><div data-id="218" class="__rl-410 __w-411 __c-412"><p>When HTTP is used as the underlying protocol for talking to the service, it is called a
+web service. This is perhaps a slight misnomer, because web services are not only used
+on the web, but in several different contexts. For example:</p>
+<ul>
+<li><p>A client application running on a user’s device (e.g., a native app on a mobile
+device, or JavaScript web app using Ajax) making requests to a service over
+HTTP. These requests typically go over the public internet.</p>
+</li>
+<li><p>One service making requests to another service owned by the same organization,
+often located within the same datacenter, as part of a service-oriented/microser‐
+vices architecture. (Software that supports this kind of use case is sometimes
+called middleware.)</p>
+</li>
+<li><p>One service making requests to a service owned by a different organization, usu‐
+ally via the internet. This is used for data exchange between different organiza‐
+tions’ backend systems. This category includes public APIs provided by online
+services, such as credit card processing systems, or OAuth for shared access to
+user data.</p>
+</li>
+</ul>
+<p>There are two popular approaches to web services: REST and SOAP.</p>
+<p>REST is not a protocol, but rather a design philosophy that builds upon the principles
+of HTTP. It emphasizes simple data formats, using URLs for identifying resources
+and using HTTP features for cache control, authentication, and content type negotiation.</p>
+<p>By contrast, SOAP is an XML-based protocol for making network API requests.vii
+Although it is most commonly used over HTTP, it aims to be independent from
+HTTP and avoids using most HTTP features. Instead, it comes with a sprawling and
+complex multitude of related standards (the web service framework, known as WS-*)
+that add various features.</p>
+<p>The API of a SOAP web service is described using an XML-based language called the
+Web Services Description Language, or WSDL. WSDL enables code generation so
+that a client can access a remote service using local classes and method calls.
+This is useful in statically typed programming languages, but less so in dynamically
+typed ones.</p>
+<p>As WSDL is not designed to be human-readable, and as SOAP messages are often too
+complex to construct manually, users of SOAP rely heavily on tool support, code
+generation, and IDEs.</p>
+RESTful APIs tend to favor simpler approaches, typically involving less code genera‐
+tion and automated tooling. A definition format such as OpenAPI, also known as
+<strong>Swagger</strong>, can be used to describe RESTful APIs and produce documentation.</div><div data-id="219" class="ft_column __w-413"></div></div><div data-id="220" class="ft_column __w-414"><h3 data-id="221" id="the-problems-with-remote-procedure-calls-rpcs" class="__rl-415 __w-416 __pt-417 __mb-418 __c-419">The problems with remote procedure calls (RPCs)</h3><comment data-id="222"></comment><div data-id="223" class="__rl-420 __w-421 __c-422"><p>The <strong>remote procedure call</strong> (RPC) model tries to make a request to a remote
+network service look the same as calling a function or method in your programming
+language, within the same process (this abstraction is called <strong>location transparency</strong>).</p>
+<p>The approach is fundamentally flawed. A network request is very different from a
+local function call:</p>
+<ul>
+<li><p>A local function call is predictable and either succeeds or fails, depending only on
+parameters that are under your control. A network request is unpredictable: the
+request or response may be lost due to a network problem, or the remote
+machine may be slow or unavailable, and such problems are entirely outside of
+your control.</p>
+</li>
+<li><p>A local function call either returns a result, or throws an exception, or never
+returns. A network request has another possible outcome: it may return without
+a result, due to a timeout. In that case, you simply don’t know what happened.</p>
+</li>
+<li><p>If you retry a failed network request, it could happen that the requests are
+actually getting through, and only the responses are getting lost. In that case,
+retrying will cause the action to be performed multiple times.</p>
+</li>
+<li><p>Every time you call a local function, it normally takes about the same time to exe‐
+cute. A network request is much slower than a function call, and its latency is
+also wildly variable.</p>
+</li>
+<li><p>When you call a local function, you can efficiently pass it references (pointers) to
+objects in local memory. When you make a network request, all those parameters
+need to be encoded into a sequence of bytes that can be sent over the network.</p>
+</li>
+<li>The client and the service may be implemented in different programming
+languages, so the RPC framework must translate datatypes from one language into
+another.
+</li>
+</ul></div><div data-id="224" class="ft_column __w-423"></div></div><div data-id="225" class="ft_column __w-424"><h3 data-id="226" id="current-directions-for-rpc" class="__rl-425 __w-426 __pt-427 __mb-428 __c-429">Current directions for RPC</h3><comment data-id="227"></comment><div data-id="228" class="__rl-430 __w-431 __c-432"><p>This new generation of RPC frameworks is more explicit about the fact that a remote
+request is different from a local function call. For example, Finagle and Rest.li use
+<strong>futures</strong> (promises) to encapsulate asynchronous actions that may fail. Futures also
+simplify situations where you need to make requests to multiple services in parallel,
+and combine their results. gRPC supports <strong>streams</strong>, where a call consists of not
+just one request and one response, but a series of requests and responses over time.</p>
+<p>Some of these frameworks also provide <strong>service discovery</strong> —that is, allowing a client to
+find out at which IP address and port number it can find a particular service.</p>
+Custom RPC protocols with a binary encoding format can achieve better performance
+than something generic like JSON over REST. However, a RESTful API has other
+significant advantages: it is good for experimentation and debugging (you can
+simply make requests to it using a web browser or the command-line tool curl,
+without any code generation or software installation), it is supported by all
+mainstream programming languages and platforms, and there is a vast ecosystem of tools
+available (servers, caches, load balancers, proxies, firewalls, monitoring, debugging
+tools, testing tools, etc.).</div><div data-id="229" class="ft_column __w-433"></div></div><div data-id="230" class="ft_column __w-434"><h3 data-id="231" id="data-encoding-and-evolution-for-rpc" class="__rl-435 __w-436 __pt-437 __mb-438 __c-439">Data encoding and evolution for RPC</h3><comment data-id="232"></comment><div data-id="233" class="__rl-440 __w-441 __c-442"><p>It is reasonable to assume that all the servers will be updated first, and all
+the clients second. Thus, you only need backward compatibility on requests, and
+forward compatibility on responses.</p>
+There is no agreement on how API versioning should work (i.e., how a client can
+indicate which version of the API it wants to use [48]). For RESTful APIs, common
+approaches are to use a version number in the URL or in the HTTP Accept header.</div><div data-id="234" class="ft_column __w-443"></div></div><div data-id="235" class="ft_column __w-444"><h2 data-id="236" id="message-passing-dataflow" class="__rl-445 __w-446 __pt-447 __mb-448 __c-449">Message-Passing Dataflow</h2><comment data-id="237"></comment><div data-id="238" class="__rl-450 __w-451 __c-452"><p><strong>Asynchronous message-passing systems</strong> are somewhere between RPC and databases.
+They are similar to RPC in that a client’s request (usually called a <strong>message</strong>)
+is delivered to another process with low latency. They are similar to databases in
+that the message is not sent via a direct network connection, but goes via an
+intermediary called a <strong>message broker</strong> (also called a message queue or
+message-oriented middleware), which stores the message temporarily.</p>
+<p>Using a message broker has several advantages compared to direct RPC:</p>
+<ul>
+<li>It can act as a buffer if the recipient is unavailable or overloaded, and thus
+improve system reliability.</li>
+<li>It can automatically redeliver messages to a process that has crashed, and thus
+prevent messages from being lost.</li>
+<li>It avoids the sender needing to know the IP address and port number of the
+recipient (which is particularly useful in a cloud deployment where virtual
+machines often come and go).</li>
+<li>It allows one message to be sent to several recipients.</li>
+<li>It logically decouples the sender from the recipient (the sender just publishes
+messages and doesn’t care who consumes them).</li>
+</ul>
+However, a difference compared to RPC is that message-passing communication is
+usually one-way: a sender normally doesn’t expect to receive a reply to its messages.
+This communication pattern is <strong>asynchronous</strong>.</div><div data-id="239" class="ft_column __w-453"></div></div><div data-id="240" class="ft_column __w-454"><h3 data-id="241" id="message-brokers" class="__rl-455 __w-456 __pt-457 __mb-458 __c-459">Message brokers</h3><comment data-id="242"></comment><div data-id="243" class="__rl-460 __w-461 __c-462"><p>In the past, the landscape of message brokers was dominated by commercial enterprise
+software from companies such as TIBCO, IBM WebSphere, and webMethods. More recently,
+open source implementations such as RabbitMQ, ActiveMQ, HornetQ, NATS, and Apache
+Kafka have become popular.</p>
+<p>Message brokers are used as follows: one process sends a message to a named
+<strong>queue</strong> or <strong>topic</strong>, and the broker ensures that the message is delivered to
+one or more <strong>consumers</strong> of or <strong>subscribers</strong> to that queue or topic. There can
+be many producers and many consumers on the same topic.</p>
+A topic provides only one-way dataflow. However, a consumer may itself publish
+messages to another topic, or to a reply queue that is consumed by the sender of
+the original message (allowing a request/response dataflow, similar to RPC).</div><div data-id="244" class="ft_column __w-463"></div></div><div data-id="245" class="ft_column __w-464"><h3 data-id="246" id="distributed-actor-frameworks" class="__rl-465 __w-466 __pt-467 __mb-468 __c-469">Distributed actor frameworks</h3><comment data-id="247"></comment><div data-id="248" class="__rl-470 __w-471 __c-472"><p>The <strong>actor model</strong> is a programming model for concurrency in a single process. Rather
+than dealing directly with threads (and the associated problems of race conditions,
+locking, and deadlock), logic is encapsulated in actors. Each actor typically represents
+one client or entity, it may have some local state (which is not shared with any other
+actor), and it communicates with other actors by sending and receiving asynchronous
+messages. Message delivery is not guaranteed: in certain error scenarios, messages
+will be lost. Since each actor processes only one message at a time, it doesn’t
+need to worry about threads, and each actor can be scheduled independently by the
+framework.</p>
+<p>In <strong>distributed actor frameworks</strong>, this programming model is used to scale an
+application across multiple nodes. The same message-passing mechanism is used, no matter
+whether the sender and recipient are on the same node or different nodes. If they are
+on different nodes, the message is transparently encoded into a byte sequence, sent
+over the network, and decoded on the other side.</p>
+<p>Location transparency works better in the actor model than in RPC, because the actor
+model already assumes that messages may be lost, even within a single process.
+Although latency over the network is likely higher than within the same process,
+there is less of a fundamental mismatch between local and remote communication
+when using the actor model.</p>
+Three popular distributed actor frameworks handle message encoding as follows:
+<ul>
+<li>Akka uses Java’s built-in serialization by default, which does not provide forward
+or backward compatibility. However, you can replace it with something like Protocol
+Buffers, and thus gain the ability to do rolling upgrades.</li>
+<li>Orleans by default uses a custom data encoding format that does not support
+rolling upgrade deployments; to deploy a new version of your application, you
+need to set up a new cluster, move traffic from the old cluster to the new one, and
+shut down the old one. Like with Akka, custom serialization plug-ins can be used.</li>
+<li>In Erlang OTP it is surprisingly hard to make changes to record schemas (despite
+the system having many features designed for high availability); rolling upgrades
+are possible but need to be planned carefully. An experimental new maps datatype
+(a JSON-like structure, introduced in Erlang R17 in 2014) may make this easier in the future.</li>
+</ul></div><div data-id="249" class="ft_column __w-473"></div></div></div></div></div><comment data-id="250"></comment><comment data-id="251"></comment></div><div data-id="252" class="ft_column __w-474"></div><comment data-id="253"></comment></div><div data-id="254" class="ft_row __pos-475 __p-476 __bw-477 __br-478 __bc-479 __b-480 __r-481 __z-482 __bgc-483"><comment data-id="255"></comment><div data-id="256" class="ft_row __cur-484"><img data-id="257" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-485 __w-486 __h-487"></img></div><comment data-id="258"></comment><comment data-id="259"></comment></div><comment data-id="260"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1071,21 +1225,147 @@ across versions of the service API.</div><div data-id="214" class="ft_column __w
 	body.dark  .__c-402:visited { color: #B8B8B8 !important; }
 	.__w-403 { width: 100%; }
 	.__w-404 { width: 100%; }
-	.__pos-405 { position: fixed; }
-	.__p-406 { padding: 10px; }
-	.__bw-407 { border-width: 1px; }
-	.__br-408 { border-radius: 4px; }
-	.__bc-409 { border-color: #D2D2D2; }
-	body.dark .__bc-409 { border-color: #434547; }
-	.__b-410 { bottom: 25px; }
-	.__r-411 { right: 25px; }
-	.__z-412 { z-index: 99999999999999; }
-	.__bgc-413 { background-color: #FFFFFF; }
-	body.dark .__bgc-413 { background-color: #000000; }
-	.__cur-414 { cursor: pointer; }
-	.__as-415 { align-self: center; }
-	.__w-416 { width: 19px; }
-	.__h-417 { height: 19px; }
+	.__rl-405 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-405 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-406 { width: 100%; }
+	.__pt-407 { padding-top: 0.17em; }
+	.__mb-408 { margin-bottom: 0.5rem; }
+	.__c-409 { color: #333333 !important; }
+	body.dark .__c-409 { color: #FFFFFF !important; }
+	.__c-409:visited { color: #333333 !important; }
+	body.dark  .__c-409:visited { color: #FFFFFF !important; }
+	.__rl-410 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-410 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-411 { width: 100%; }
+	.__c-412 { color: #7C7C7C !important; }
+	body.dark .__c-412 { color: #B8B8B8 !important; }
+	.__c-412:visited { color: #7C7C7C !important; }
+	body.dark  .__c-412:visited { color: #B8B8B8 !important; }
+	.__w-413 { width: 100%; }
+	.__w-414 { width: 100%; }
+	.__rl-415 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-415 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-416 { width: 100%; }
+	.__pt-417 { padding-top: 0.17em; }
+	.__mb-418 { margin-bottom: 0.5rem; }
+	.__c-419 { color: #333333 !important; }
+	body.dark .__c-419 { color: #FFFFFF !important; }
+	.__c-419:visited { color: #333333 !important; }
+	body.dark  .__c-419:visited { color: #FFFFFF !important; }
+	.__rl-420 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-420 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-421 { width: 100%; }
+	.__c-422 { color: #7C7C7C !important; }
+	body.dark .__c-422 { color: #B8B8B8 !important; }
+	.__c-422:visited { color: #7C7C7C !important; }
+	body.dark  .__c-422:visited { color: #B8B8B8 !important; }
+	.__w-423 { width: 100%; }
+	.__w-424 { width: 100%; }
+	.__rl-425 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-425 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-426 { width: 100%; }
+	.__pt-427 { padding-top: 0.17em; }
+	.__mb-428 { margin-bottom: 0.5rem; }
+	.__c-429 { color: #333333 !important; }
+	body.dark .__c-429 { color: #FFFFFF !important; }
+	.__c-429:visited { color: #333333 !important; }
+	body.dark  .__c-429:visited { color: #FFFFFF !important; }
+	.__rl-430 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-430 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-431 { width: 100%; }
+	.__c-432 { color: #7C7C7C !important; }
+	body.dark .__c-432 { color: #B8B8B8 !important; }
+	.__c-432:visited { color: #7C7C7C !important; }
+	body.dark  .__c-432:visited { color: #B8B8B8 !important; }
+	.__w-433 { width: 100%; }
+	.__w-434 { width: 100%; }
+	.__rl-435 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-435 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-436 { width: 100%; }
+	.__pt-437 { padding-top: 0.17em; }
+	.__mb-438 { margin-bottom: 0.5rem; }
+	.__c-439 { color: #333333 !important; }
+	body.dark .__c-439 { color: #FFFFFF !important; }
+	.__c-439:visited { color: #333333 !important; }
+	body.dark  .__c-439:visited { color: #FFFFFF !important; }
+	.__rl-440 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-440 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-441 { width: 100%; }
+	.__c-442 { color: #7C7C7C !important; }
+	body.dark .__c-442 { color: #B8B8B8 !important; }
+	.__c-442:visited { color: #7C7C7C !important; }
+	body.dark  .__c-442:visited { color: #B8B8B8 !important; }
+	.__w-443 { width: 100%; }
+	.__w-444 { width: 100%; }
+	.__rl-445 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-445 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-446 { width: 100%; }
+	.__pt-447 { padding-top: 0.3em; }
+	.__mb-448 { margin-bottom: 0.5rem; }
+	.__c-449 { color: #333333 !important; }
+	body.dark .__c-449 { color: #FFFFFF !important; }
+	.__c-449:visited { color: #333333 !important; }
+	body.dark  .__c-449:visited { color: #FFFFFF !important; }
+	.__rl-450 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-450 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-451 { width: 100%; }
+	.__c-452 { color: #7C7C7C !important; }
+	body.dark .__c-452 { color: #B8B8B8 !important; }
+	.__c-452:visited { color: #7C7C7C !important; }
+	body.dark  .__c-452:visited { color: #B8B8B8 !important; }
+	.__w-453 { width: 100%; }
+	.__w-454 { width: 100%; }
+	.__rl-455 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-455 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-456 { width: 100%; }
+	.__pt-457 { padding-top: 0.17em; }
+	.__mb-458 { margin-bottom: 0.5rem; }
+	.__c-459 { color: #333333 !important; }
+	body.dark .__c-459 { color: #FFFFFF !important; }
+	.__c-459:visited { color: #333333 !important; }
+	body.dark  .__c-459:visited { color: #FFFFFF !important; }
+	.__rl-460 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-460 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-461 { width: 100%; }
+	.__c-462 { color: #7C7C7C !important; }
+	body.dark .__c-462 { color: #B8B8B8 !important; }
+	.__c-462:visited { color: #7C7C7C !important; }
+	body.dark  .__c-462:visited { color: #B8B8B8 !important; }
+	.__w-463 { width: 100%; }
+	.__w-464 { width: 100%; }
+	.__rl-465 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-465 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-466 { width: 100%; }
+	.__pt-467 { padding-top: 0.17em; }
+	.__mb-468 { margin-bottom: 0.5rem; }
+	.__c-469 { color: #333333 !important; }
+	body.dark .__c-469 { color: #FFFFFF !important; }
+	.__c-469:visited { color: #333333 !important; }
+	body.dark  .__c-469:visited { color: #FFFFFF !important; }
+	.__rl-470 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-470 {  font-family: fifthtry-github-io-manrope-font-Manrope; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-471 { width: 100%; }
+	.__c-472 { color: #7C7C7C !important; }
+	body.dark .__c-472 { color: #B8B8B8 !important; }
+	.__c-472:visited { color: #7C7C7C !important; }
+	body.dark  .__c-472:visited { color: #B8B8B8 !important; }
+	.__w-473 { width: 100%; }
+	.__w-474 { width: 100%; }
+	.__pos-475 { position: fixed; }
+	.__p-476 { padding: 10px; }
+	.__bw-477 { border-width: 1px; }
+	.__br-478 { border-radius: 4px; }
+	.__bc-479 { border-color: #D2D2D2; }
+	body.dark .__bc-479 { border-color: #434547; }
+	.__b-480 { bottom: 25px; }
+	.__r-481 { right: 25px; }
+	.__z-482 { z-index: 99999999999999; }
+	.__bgc-483 { background-color: #FFFFFF; }
+	body.dark .__bgc-483 { background-color: #000000; }
+	.__cur-484 { cursor: pointer; }
+	.__as-485 { align-self: center; }
+	.__w-486 { width: 19px; }
+	.__h-487 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3159,6 +3439,48 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
         let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
           title: "Dataflow Through Services: REST and RPC",
           body: "The **servers** expose an API over the network, and the **clients** can connect to\nthe servers to make requests to that API. The API exposed by the server is known\nas a **service**.\n\nThe web works this way: clients (web browsers) make requests to web servers,\nmaking GET requests to download HTML, CSS, JavaScript, images, etc., and making POST\nrequests to submit data to the server. The API consists of a standardized set of\nprotocols and data formats (HTTP, URLs, SSL/TLS, HTML, etc.).\n\nWeb browsers are not the only type of client. For example, a native app running on a\nmobile device or a desktop computer can also make network requests to a server, and\na client-side JavaScript application running inside a web browser can use\nXMLHttpRequest to become an HTTP client (this technique is known as Ajax).\n\nIn this case, the server’s response is typically not HTML for displaying to a human,\nbut rather data in an encoding that is convenient for further processing by the\nclientside application code (such as JSON). Although HTTP may be used as the transport\nprotocol, the API implemented on top is application-specific, and the client and\nserver need to agree on the details of that API.\n\nMoreover, a server can itself be a client to another service (for example, a typical web\napp server acts as client to a database). This approach is often used to decompose a\nlarge application into smaller services by area of functionality, such that one service\nmakes a request to another when it requires some functionality or data from that\nother service. This way of building applications has traditionally been called a\n**service oriented architecture** (SOA), more recently refined and rebranded as **microservices\narchitecture**.\n\nWe should expect old and new versions of servers and clients to be running at the\nsame time, and so the data encoding used by servers and clients must be compatible\nacross versions of the service API."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Web services",
+          body: "When HTTP is used as the underlying protocol for talking to the service, it is called a\nweb service. This is perhaps a slight misnomer, because web services are not only used\non the web, but in several different contexts. For example:\n\n- A client application running on a user’s device (e.g., a native app on a mobile\n  device, or JavaScript web app using Ajax) making requests to a service over\n  HTTP. These requests typically go over the public internet.\n\n- One service making requests to another service owned by the same organization,\n  often located within the same datacenter, as part of a service-oriented/microser‐\n  vices architecture. (Software that supports this kind of use case is sometimes\n  called middleware.)\n\n- One service making requests to a service owned by a different organization, usu‐\n  ally via the internet. This is used for data exchange between different organiza‐\n  tions’ backend systems. This category includes public APIs provided by online\n  services, such as credit card processing systems, or OAuth for shared access to\n  user data.\n\nThere are two popular approaches to web services: REST and SOAP.\n\nREST is not a protocol, but rather a design philosophy that builds upon the principles\nof HTTP. It emphasizes simple data formats, using URLs for identifying resources\nand using HTTP features for cache control, authentication, and content type negotiation.\n\nBy contrast, SOAP is an XML-based protocol for making network API requests.vii\nAlthough it is most commonly used over HTTP, it aims to be independent from\nHTTP and avoids using most HTTP features. Instead, it comes with a sprawling and\ncomplex multitude of related standards (the web service framework, known as WS-*)\nthat add various features.\n\nThe API of a SOAP web service is described using an XML-based language called the\nWeb Services Description Language, or WSDL. WSDL enables code generation so\nthat a client can access a remote service using local classes and method calls.\nThis is useful in statically typed programming languages, but less so in dynamically\ntyped ones.\n\nAs WSDL is not designed to be human-readable, and as SOAP messages are often too\ncomplex to construct manually, users of SOAP rely heavily on tool support, code\ngeneration, and IDEs.\n\nRESTful APIs tend to favor simpler approaches, typically involving less code genera‐\ntion and automated tooling. A definition format such as OpenAPI, also known as\n**Swagger**, can be used to describe RESTful APIs and produce documentation."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "The problems with remote procedure calls (RPCs)",
+          body: "The **remote procedure call** (RPC) model tries to make a request to a remote\nnetwork service look the same as calling a function or method in your programming\nlanguage, within the same process (this abstraction is called **location transparency**).\n\nThe approach is fundamentally flawed. A network request is very different from a\nlocal function call:\n\n- A local function call is predictable and either succeeds or fails, depending only on\n  parameters that are under your control. A network request is unpredictable: the\n  request or response may be lost due to a network problem, or the remote\n  machine may be slow or unavailable, and such problems are entirely outside of\n  your control.\n\n- A local function call either returns a result, or throws an exception, or never\n  returns. A network request has another possible outcome: it may return without\n  a result, due to a timeout. In that case, you simply don’t know what happened.\n\n- If you retry a failed network request, it could happen that the requests are\n  actually getting through, and only the responses are getting lost. In that case,\n  retrying will cause the action to be performed multiple times.\n\n- Every time you call a local function, it normally takes about the same time to exe‐\n  cute. A network request is much slower than a function call, and its latency is\n  also wildly variable.\n\n- When you call a local function, you can efficiently pass it references (pointers) to\n  objects in local memory. When you make a network request, all those parameters\n  need to be encoded into a sequence of bytes that can be sent over the network.\n\n- The client and the service may be implemented in different programming\n  languages, so the RPC framework must translate datatypes from one language into\n  another."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Current directions for RPC",
+          body: "This new generation of RPC frameworks is more explicit about the fact that a remote\nrequest is different from a local function call. For example, Finagle and Rest.li use\n**futures** (promises) to encapsulate asynchronous actions that may fail. Futures also\nsimplify situations where you need to make requests to multiple services in parallel,\nand combine their results. gRPC supports **streams**, where a call consists of not\njust one request and one response, but a series of requests and responses over time.\n\nSome of these frameworks also provide **service discovery** —that is, allowing a client to\nfind out at which IP address and port number it can find a particular service.\n\nCustom RPC protocols with a binary encoding format can achieve better performance\nthan something generic like JSON over REST. However, a RESTful API has other\nsignificant advantages: it is good for experimentation and debugging (you can\nsimply make requests to it using a web browser or the command-line tool curl,\nwithout any code generation or software installation), it is supported by all\nmainstream programming languages and platforms, and there is a vast ecosystem of tools\navailable (servers, caches, load balancers, proxies, firewalls, monitoring, debugging\ntools, testing tools, etc.)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Data encoding and evolution for RPC",
+          body: "It is reasonable to assume that all the servers will be updated first, and all\nthe clients second. Thus, you only need backward compatibility on requests, and\nforward compatibility on responses.\n\nThere is no agreement on how API versioning should work (i.e., how a client can\nindicate which version of the API it wants to use [48]). For RESTful APIs, common\napproaches are to use a version number in the URL or in the HTTP Accept header."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Message-Passing Dataflow",
+          body: "**Asynchronous message-passing systems** are somewhere between RPC and databases.\nThey are similar to RPC in that a client’s request (usually called a **message**)\nis delivered to another process with low latency. They are similar to databases in\nthat the message is not sent via a direct network connection, but goes via an\nintermediary called a **message broker** (also called a message queue or\nmessage-oriented middleware), which stores the message temporarily.\n\nUsing a message broker has several advantages compared to direct RPC:\n\n- It can act as a buffer if the recipient is unavailable or overloaded, and thus\nimprove system reliability.\n- It can automatically redeliver messages to a process that has crashed, and thus\nprevent messages from being lost.\n- It avoids the sender needing to know the IP address and port number of the\nrecipient (which is particularly useful in a cloud deployment where virtual\nmachines often come and go).\n- It allows one message to be sent to several recipients.\n- It logically decouples the sender from the recipient (the sender just publishes\nmessages and doesn’t care who consumes them).\n\nHowever, a difference compared to RPC is that message-passing communication is\nusually one-way: a sender normally doesn’t expect to receive a reply to its messages.\nThis communication pattern is **asynchronous**."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Message brokers",
+          body: "In the past, the landscape of message brokers was dominated by commercial enterprise\nsoftware from companies such as TIBCO, IBM WebSphere, and webMethods. More recently,\nopen source implementations such as RabbitMQ, ActiveMQ, HornetQ, NATS, and Apache\nKafka have become popular.\n\nMessage brokers are used as follows: one process sends a message to a named\n**queue** or **topic**, and the broker ensures that the message is delivered to\none or more **consumers** of or **subscribers** to that queue or topic. There can\nbe many producers and many consumers on the same topic.\n\nA topic provides only one-way dataflow. However, a consumer may itself publish\nmessages to another topic, or to a reply queue that is consumed by the sender of\nthe original message (allowing a request/response dataflow, similar to RPC)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Distributed actor frameworks",
+          body: "The **actor model** is a programming model for concurrency in a single process. Rather\nthan dealing directly with threads (and the associated problems of race conditions,\nlocking, and deadlock), logic is encapsulated in actors. Each actor typically represents\none client or entity, it may have some local state (which is not shared with any other\nactor), and it communicates with other actors by sending and receiving asynchronous\nmessages. Message delivery is not guaranteed: in certain error scenarios, messages\nwill be lost. Since each actor processes only one message at a time, it doesn’t\nneed to worry about threads, and each actor can be scheduled independently by the\nframework.\n\nIn **distributed actor frameworks**, this programming model is used to scale an\napplication across multiple nodes. The same message-passing mechanism is used, no matter\nwhether the sender and recipient are on the same node or different nodes. If they are\non different nodes, the message is transparently encoded into a byte sequence, sent\nover the network, and decoded on the other side.\n\nLocation transparency works better in the actor model than in RPC, because the actor\nmodel already assumes that messages may be lost, even within a single process.\nAlthough latency over the network is likely higher than within the same process,\nthere is less of a fundamental mismatch between local and remote communication\nwhen using the actor model.\n\nThree popular distributed actor frameworks handle message encoding as follows:\n\n- Akka uses Java’s built-in serialization by default, which does not provide forward\n  or backward compatibility. However, you can replace it with something like Protocol\n  Buffers, and thus gain the ability to do rolling upgrades.\n- Orleans by default uses a custom data encoding format that does not support\n  rolling upgrade deployments; to deploy a new version of your application, you\n  need to set up a new cluster, move traffic from the old cluster to the new one, and\n  shut down the old one. Like with Akka, custom serialization plug-ins can be used.\n- In Erlang OTP it is surprisingly hard to make changes to record schemas (despite\n  the system having many features designed for high availability); rolling upgrades\n  are possible but need to be planned carefully. An experimental new maps datatype\n  (a JSON-like structure, introduced in Erlang R17 in 2014) may make this easier in the future."
         });
       }
       ]),

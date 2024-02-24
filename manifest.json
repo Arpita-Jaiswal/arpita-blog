@@ -62,8 +62,8 @@
     },
     "ddd/data-intensive-application/4-encoding-and-evolution.ftd": {
       "name": "ddd/data-intensive-application/4-encoding-and-evolution.ftd",
-      "checksum": "337D2AEC685D8258946A8983598CE4587E97DEEBEBDFEA905632EC3C8DFEF42C",
-      "size": 12425
+      "checksum": "CF1D43EBA4A421BECC323DFA4091B4408B48553E7FD5961B8CCEB6133AC79AA2",
+      "size": 23301
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -291,6 +291,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/4ffa1e73fe5949bcc293c4ba396e583358268d6e.zip",
-  "checksum": "78E420084B4E5F1666047B8D2CCACC0A0B2BF299633AA827A9D2E16F11FBB7DB"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/819c23ce92254672d738f6eb6cc4e84b84769ed9.zip",
+  "checksum": "1B5CFE588854BA958A205065F9E89AADB06651F37B1D422ED71FFE6880761FC0"
 }
