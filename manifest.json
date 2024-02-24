@@ -7,8 +7,8 @@
     },
     "FASTN.ftd": {
       "name": "FASTN.ftd",
-      "checksum": "A38CD44B53919963913DDBF4B1818112B3434D5D513237FCF3275CCCBCF827AE",
-      "size": 2373
+      "checksum": "9D8E539139F947B9A1B29176B470E2A702E68F71D5976FCBA38FA7753EC9658C",
+      "size": 2426
     },
     "FASTN/ds.ftd": {
       "name": "FASTN/ds.ftd",
@@ -291,6 +291,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/819c23ce92254672d738f6eb6cc4e84b84769ed9.zip",
-  "checksum": "1B5CFE588854BA958A205065F9E89AADB06651F37B1D422ED71FFE6880761FC0"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/8af7ce020698a7e1fc05ad3398fc85ceb612c917.zip",
+  "checksum": "5A46A0E017416B4D9077BC21945406FFC205565E26B43FCE258C77A5EBE55665"
 }
