@@ -46,13 +46,14 @@ nav-title: My Day to Day Learnings and Discoveries
 - Learning:
   - Preflight Request: learn/preflight-request/
 - Designing data intensive application: /ddd/data-intensive-application/
-  - Reliable Scalable and Maintainable Application: /ddd/dia-1/
+  - Part I. Foundations of Data Systems:
+  - -  Reliable Scalable and Maintainable Application: /ddd/dia-1/
     document: ddd/data-intensive-application/1-reliable-scalable-maintainable.ftd
-  - Data Models and Query Languages: /ddd/dia-2/
+  - -  Data Models and Query Languages: /ddd/dia-2/
     document: ddd/data-intensive-application/2-data-models-query-languages.ftd
-  - Storage and Retrieval: /ddd/dia-3/
+  - -  Storage and Retrieval: /ddd/dia-3/
     document: ddd/data-intensive-application/3-storage-retrieval.ftd
-  - Encoding and Evolution: /ddd/dia-4/
+  - -  Encoding and Evolution: /ddd/dia-4/
     document: ddd/data-intensive-application/4-encoding-and-evolution.ftd
 
 ## FifthTry: /fifthtry/
