@@ -1,0 +1,284 @@
+-- ds.page: Encoding and Evolution
+
+**Note**: The content is taken from [`Designing Data Intensive Application by
+Martin Kleppmann`](https://public.nikhil.io/Designing%20Data%20Intensive%20Applications.pdf)
+
+**Backward compatibility**: Newer code can read data that was written by older code.
+
+**Forward compatibility**: Older code can read data that was written by newer code.
+
+-- ds.h1: Formats for Encoding Data
+
+Programs usually work with data in (at least) two different representations:
+
+- In memory, data is kept in objects, structs, lists, arrays, hash tables, trees, and so
+  on.
+- When you want to write data to a file or send it over the network, you have to
+  encode it as some kind of self-contained sequence of bytes (for example, a JSON
+  document). A pointer wouldn’t make sense to any other process.
+
+Thus, we need some kind of translation between the two representations. The
+translation from the in-memory representation to a byte sequence is called *encoding*
+(also known as serialization or marshalling), and the reverse is called *decoding* (parsing,
+deserialization, unmarshalling)
+
+-- ds.h2: Language-Specific Formats
+
+They have a number of deep problems:
+
+- The encoding is often tied to a particular programming language, and reading
+  the data in another language is very difficult.
+- In order to restore data in the same object types, the decoding process needs to
+  be able to instantiate arbitrary classes. This is frequently a source of security
+  problems: if an attacker can get your application to decode an arbitrary byte
+  sequence, they can instantiate arbitrary classes, which in turn often allows them
+  to do terrible things such as remotely executing arbitrary code.
+- Often neglect the inconvenient problems of forward and backward compatibility.
+- Efficiency (CPU time taken to encode or decode, and the size of the encoded
+  structure) is also often an afterthought.
+
+-- ds.h2: JSON, XML, and Binary Variants
+
+Moving to standardized encodings that can be written and read by many program‐
+ming languages, JSON and XML are the obvious contenders.
+
+They also have some subtle problems:
+
+- There is a lot of ambiguity around the encoding of numbers. In XML and CSV,
+  you cannot distinguish between a number and a string that happens to consist of
+  digits. JSON distinguishes strings and numbers, but it doesn’t distinguish
+  integers and floating-point numbers, and it doesn’t specify a precision.
+- JSON and XML have good support for Unicode character strings, but they don’t
+  support binary strings
+- CSV does not have any schema, so it is up to the application to define the
+  meaning of each row and column. If an application change adds a new row or
+  column, you have to handle that change manually.
+
+Despite these flaws, JSON, XML, and CSV are good enough for many purposes.
+
+-- ds.h2: Binary encoding
+
+JSON is less verbose than XML, but both still use a lot of space compared to binary
+formats.
+
+MessagePack is a binary encoding for JSON. For following JSON,
+
+-- ds.code:
+lang: json
+
+{
+ "userName": "Martin",
+ "favoriteNumber": 1337,
+ "interests": ["daydreaming", "hacking"]
+}
+
+-- ds.markdown:
+
+- The first byte, 0x83, indicates that what follows is an object (top four bits = 0x80)
+  with three fields (bottom four bits = 0x03).
+- The second byte, 0xa8, indicates that what follows is a string (top four bits =
+  0xa0) that is eight bytes long (bottom four bits = 0x08).
+- The next eight bytes are the field name userName in ASCII.
+- The next seven bytes encode the six-letter string value Martin with a prefix 0xa6,
+  and so on.
+
+The binary encoding is 66 bytes long, which is only a little less than the 81 bytes taken
+by the textual JSON encoding (with whitespace removed).
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.4-1.png
+
+-- ds.h2: Thrift and Protocol Buffers
+
+Apache Thrift and Protocol Buffers (protobuf) are binary encoding libraries that
+are based on the same principle. Protocol Buffers was originally developed at
+Google, Thrift was originally developed at Facebook, and both were made open
+source in 2007–08.
+
+Thrift has two different binary encoding formats, called **BinaryProtocol** and
+**CompactProtocol**, respectively. Encoding above JSON in BinaryProtocol format
+takes 59 bytes.
+
+The Thrift CompactProtocol packs the same information into only 34 bytes.
+
+Protocol Buffers fits the same record in 33 bytes.
+
+For more details, check the pdf link shared at the start of this chapter.
+
+-- ds.h2: Avro
+
+Apache Avro is another binary encoding format that is interestingly different
+from Protocol Buffers and Thrift. It was started in 2009 as a subproject of
+Hadoop, as a result of Thrift not being a good fit for Hadoop’s use cases.
+
+Avro also uses a schema to specify the structure of the data being encoded. It has two
+schema languages: one (Avro IDL) intended for human editing, and one (based on
+JSON) that is more easily machine-readable.
+
+-- ds.code: Our example schema, written in Avro IDL, might look like this:
+lang: rs
+
+record Person {
+ string userName;
+ union { null, long } favoriteNumber = null;
+ array<string> interests;
+}
+
+-- ds.code: The equivalent JSON representation of that schema is as follows:
+lang: json
+
+{
+ "type": "record",
+ "name": "Person",
+ "fields": [
+ {"name": "userName", "type": "string"},
+ {"name": "favoriteNumber", "type": ["null", "long"], "default": null},
+ {"name": "interests", "type": {"type": "array", "items": "string"}}
+ ]
+}
+
+-- ds.markdown:
+
+First of all, notice that there are no tag numbers in the schema. The Avro binary
+encoding is just 32 bytes long—the most compact of all the encodings we have seen.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.4-2.png
+
+-- ds.markdown:
+
+To parse the binary data, you go through the fields in the order that they appear in
+the schema and use the schema to tell you the datatype of each field. This means that
+the binary data can only be decoded correctly if the code reading the data is using the
+exact same schema as the code that wrote the data.
+
+So, how does Avro support schema evolution?
+
+-- ds.h3: The writer’s schema and the reader’s schema
+
+With Avro, when an application wants to encode some data (to write it to a file or
+database, to send it over the network, etc.), it encodes the data using whatever version
+of the schema it knows about—for example, that schema may be compiled into the
+application. This is known as the **writer’s schema**.
+
+When an application wants to decode some data (read it from a file or database,
+receive it from the network, etc.), it is expecting the data to be in some schema, which
+is known as the **reader’s schema**. That is the schema the application code is relying on
+—code may have been generated from that schema during the application’s build
+process.
+
+The key idea with Avro is that the writer’s schema and the reader’s schema don’t have
+to be the same—they only need to be compatible. When data is decoded (read), the
+Avro library resolves the differences by looking at the writer’s schema and the
+reader’s schema side by side and translating the data from the writer’s schema into
+the reader’s schema.
+
+For example, it’s no problem if the writer’s schema and the reader’s schema have
+their fields in a different order, because the schema resolution matches up the fields
+by field name. If the code reading the data encounters a field that appears in the
+writer’s schema but not in the reader’s schema, it is ignored. If the code reading the
+data expects some field, but the writer’s schema does not contain a field of that name,
+it is filled in with a default value declared in the reader’s schema.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.4-3.png
+
+-- ds.h3: Schema evolution rules
+
+With Avro, **forward compatibility** means that you can have a new version of the
+schema as writer and an old version of the schema as reader. Conversely, **backward
+compatibility** means that you can have a new version of the schema as reader and an
+old version as writer.
+
+To maintain compatibility, you may only add or remove a field that has a default
+value. (The field favoriteNumber in our Avro schema has a default value of null.)
+For example, say you add a field with a default value, so this new field exists in the
+new schema but not the old one. When a reader using the new schema reads a record
+written with the old schema, the default value is filled in for the missing field.
+
+If you were to add a field that has no default value, new readers wouldn’t be able to
+read data written by old writers, so you would break backward compatibility. If you
+were to remove a field that has no default value, old readers wouldn’t be able to read
+data written by new writers, so you would break forward compatibility
+
+
+
+
+
+
+
+
+-- ds.h1: Modes of Dataflow
+
+Some of the most common ways how data flows between processes:
+
+• Via databases (“Dataflow Through Databases”)
+• Via service calls (“Dataflow Through Services: REST and RPC”)
+• Via asynchronous message passing (“Message-Passing Dataflow”)
+
+
+-- ds.h2: Dataflow Through Databases
+
+In a database, the process that writes to the database encodes the data, and the
+process that reads from the database decodes it. There may just be a single process
+accessing the database, in which case the reader is simply a later version of the same
+process—in that case you can think of storing something in the database as sending a
+message to your future self.
+
+Backward compatibility is clearly necessary here; otherwise your future self won’t be
+able to decode what you previously wrote.
+
+In an environment where the application is changing, it is likely that some
+processes accessing the database will be running newer code and some will be
+running older code.
+
+This means that a value in the database may be written by a **newer** version of the
+code, and subsequently read by an **older** version of the code that is still running.
+Thus, forward compatibility is also often required for databases.
+
+If you decode a database value into model objects in the application, and later
+re-encode those model objects, the unknown field might be lost in that translation
+process. Solving this is not a hard problem; you just need to be aware of it.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.4-4.png
+
+
+-- ds.h2: Dataflow Through Services: REST and RPC
+
+The **servers** expose an API over the network, and the **clients** can connect to
+the servers to make requests to that API. The API exposed by the server is known
+as a **service**.
+
+The web works this way: clients (web browsers) make requests to web servers,
+making GET requests to download HTML, CSS, JavaScript, images, etc., and making POST
+requests to submit data to the server. The API consists of a standardized set of
+protocols and data formats (HTTP, URLs, SSL/TLS, HTML, etc.).
+
+Web browsers are not the only type of client. For example, a native app running on a
+mobile device or a desktop computer can also make network requests to a server, and
+a client-side JavaScript application running inside a web browser can use
+XMLHttpRequest to become an HTTP client (this technique is known as Ajax).
+
+In this case, the server’s response is typically not HTML for displaying to a human,
+but rather data in an encoding that is convenient for further processing by the
+clientside application code (such as JSON). Although HTTP may be used as the transport
+protocol, the API implemented on top is application-specific, and the client and
+server need to agree on the details of that API.
+
+Moreover, a server can itself be a client to another service (for example, a typical web
+app server acts as client to a database). This approach is often used to decompose a
+large application into smaller services by area of functionality, such that one service
+makes a request to another when it requires some functionality or data from that
+other service. This way of building applications has traditionally been called a
+**service oriented architecture** (SOA), more recently refined and rebranded as **microservices
+architecture**.
+
+We should expect old and new versions of servers and clients to be running at the
+same time, and so the data encoding used by servers and clients must be compatible
+across versions of the service API.
+
+
+
+
+-- end: ds.page
