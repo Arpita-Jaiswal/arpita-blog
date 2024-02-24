@@ -1,4 +1,4 @@
--- import: fastn-community.github.io/dark-flame-cs
+-- import: arjaupashak.com/FASTN/colors
 -- import: fifthtry.github.io/fastn-typography as typo
 
 -- import: fastn-community.github.io/doc-site
@@ -20,7 +20,7 @@ boolean github-icon: true
 optional string github-url: https://github.com/arpita-jaiswal/blog
 boolean full-width: false
 ftd.type-data types: $typo.types
-ftd.color-scheme colors: $dark-flame-cs.main
+ftd.color-scheme colors: $colors.main
 integer logo-width: 80
 integer logo-height: 93
 boolean show-footer: false
