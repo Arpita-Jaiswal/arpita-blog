@@ -55,6 +55,9 @@ nav-title: My Day to Day Learnings and Discoveries
     document: ddd/data-intensive-application/3-storage-retrieval.ftd
   - -  Encoding and Evolution: /ddd/dia-4/
     document: ddd/data-intensive-application/4-encoding-and-evolution.ftd
+  - Part II. Distributed Data:
+  - - Replication: /ddd/dia-5/
+    document: ddd/data-intensive-application/5-replication.ftd
 
 ## FifthTry: /fifthtry/
 
