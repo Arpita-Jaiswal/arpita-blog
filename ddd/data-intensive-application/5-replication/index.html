@@ -408,10 +408,140 @@ can recover quite easily: from its log, it knows the last transaction that was
 processed before the fault occurred. Thus, the follower can connect to the
 leader and request all the data changes that occurred during the time when the
 follower was disconnected. When it has applied these changes, it has caught up
-to the leader and can continue receiving a stream of data changes as before.</div><div data-id="87" class="ft_column __w-124"></div></div><div data-id="88" class="ft_column __w-125"><h3 data-id="89" id="leader-failure-failover" class="__rl-126 __w-127 __pt-128 __mb-129 __c-130">Leader failure: Failover</h3><comment data-id="90"></comment><div data-id="91" class="__rl-131 __w-132 __c-133">Handling a failure of the leader is trickier: one of the followers needs to be
+to the leader and can continue receiving a stream of data changes as before.</div><div data-id="87" class="ft_column __w-124"></div></div><div data-id="88" class="ft_column __w-125"><h3 data-id="89" id="leader-failure-failover" class="__rl-126 __w-127 __pt-128 __mb-129 __c-130">Leader failure: Failover</h3><comment data-id="90"></comment><div data-id="91" class="__rl-131 __w-132 __c-133"><p>Handling a failure of the leader is trickier: one of the followers needs to be
 promoted to be the new leader, clients need to be reconfigured to send their
 writes to the new leader, and the other followers need to start consuming data
-changes from the new leader. This process is called <strong>failover</strong>.</div><div data-id="92" class="ft_column __w-134"></div></div></div></div></div><comment data-id="93"></comment><comment data-id="94"></comment></div><div data-id="95" class="ft_column __w-135"></div><comment data-id="96"></comment></div><div data-id="97" class="ft_row __pos-136 __p-137 __bw-138 __br-139 __bc-140 __b-141 __r-142 __z-143 __bgc-144"><comment data-id="98"></comment><div data-id="99" class="ft_row __cur-145"><img data-id="100" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-146 __w-147 __h-148"></img></div><comment data-id="101"></comment><comment data-id="102"></comment></div><comment data-id="103"></comment></div></div></div></body><style id="styles">
+changes from the new leader. This process is called <strong>failover</strong>.</p>
+<ul>
+<li><strong>Determining that the leader has failed</strong>. There are many things that could
+potentially go wrong: crashes, power outages, network issues, and more.
+Typically done through timeouts as there&#39;s no foolproof method. If a node
+doesn&#39;t respond within a set time, it&#39;s assumed dead.</li>
+<li><strong>Choosing a new leader</strong>. This could be done through an election process, or
+a new leader could be appointed by a previously elected controller node. The
+best candidate for leadership is usually the replica with the most up-to-date
+data changes from the old leader.</li>
+<li><strong>Reconfiguring the system to use the new leader</strong>. Clients now need to send
+their write requests to the new leader. If the old leader comes back, it might
+still believe that it is the leader. The system needs to ensure that the old
+leader becomes a follower and recognizes the new leader.</li>
+</ul>
+Failover is fraught with things that can go wrong:
+<ul>
+<li>If asynchronous replication is used, the new leader may not have received all
+the writes, If the former leader rejoins the cluster after a new leader has
+been chosen, what should happen to those writes? The new leader may have
+received conflicting writes in the meantime. The most common solution is for
+the old leader’s unreplicated writes to simply be discarded, which may violate
+clients’ durability expectations.</li>
+<li>Discarding writes is especially dangerous if other storage systems outside of
+the database need to be coordinated with the database contents. For example,
+in one incident at GitHub, an out-of-date MySQL follower was promoted to
+leader. The database used an autoincrementing counter to assign primary keys
+to new rows, but because the new leader’s counter lagged behind the old
+leader’s, it reused some primary keys that were previously assigned by the old
+leader. These primary keys were also used in a Redis store,so the reuse of
+primary keys resul‐ ted in inconsistency between MySQL and Redis, which caused
+some private data to be disclosed to the wrong users.</li>
+<li>In certain fault scenarios, it could happen that two nodes both believe that
+they are the leader. This situation is called split brain, and it is
+dangerous: if both leaders accept writes, and there is no process for
+resolving conflicts, data is likely to be lost or corrupted. As a safety
+catch, some systems have a mechanism to shut down one node if two leaders are
+detected.</li>
+<li>What is the right timeout before the leader is declared dead? A longer timeout
+means a longer time to recovery in the case where the leader fails. However,
+if the timeout is too short, there could be unnecessary failovers. For
+example, a temporary load spike could cause a node’s response time to increase
+above the timeout, or a network glitch could cause delayed packets. If the
+system is already struggling with high load or network problems, an
+unnecessary failover is likely to make the situation worse, not better.</li>
+</ul></div><div data-id="92" class="ft_column __w-134"></div></div><div data-id="93" class="ft_column __w-135"><h2 data-id="94" id="implementation-of-replication-logs" class="__rl-136 __w-137 __pt-138 __mb-139 __c-140">Implementation of Replication Logs</h2><comment data-id="95"></comment><div data-id="96" class="ft_column __w-141"></div></div><div data-id="97" class="ft_column __w-142"><h3 data-id="98" id="statement-based-replication" class="__rl-143 __w-144 __pt-145 __mb-146 __c-147">Statement-based replication</h3><comment data-id="99"></comment><div data-id="100" class="__rl-148 __w-149 __c-150"><p>In the simplest case, the leader logs every write request (statement) that it
+executes and sends that statement log to its followers. For a relational
+database, this means that every INSERT, UPDATE, or DELETE statement is forwarded
+to followers, and each follower parses and executes that SQL statement as if it
+had been received from a client. Although this may sound reasonable, there are
+various ways in which this approach to replication can break down:</p>
+<ul>
+<li>Nondeterministic functions like NOW() or RAND() may produce different results
+on replicas.</li>
+<li>Operations dependent on autoincrementing columns or existing data (e.g.,
+UPDATE ... WHERE &lt;some condition&gt;) must execute in the same order on all
+replicas to maintain consistency, which can be challenging with concurrent
+transactions.</li>
+<li>Statements with side effects (e.g., triggers, stored procedures) may produce
+different different side effects occurring on each replica unless they are
+entirely deterministic.</li>
+</ul>
+<p>It is possible to work around those issues—for example, the leader can replace
+any nondeterministic function calls with a fixed return value when the statement
+is logged so that the followers all get the same value. However, because there
+are so many edge cases, other replication methods are now generally preferred.</p>
+Statement-based replication was used in MySQL before version 5.1. It is still
+sometimes used today, as it is quite compact, but by default MySQL now switches
+to row-based replication (discussed shortly) if there is any nondeterminism in a
+statement. VoltDB uses statement-based replication, and makes it safe by
+requiring transactions to be deterministic.</div><div data-id="101" class="ft_column __w-151"></div></div><div data-id="102" class="ft_column __w-152"><h3 data-id="103" id="write-ahead-log-wal-shipping" class="__rl-153 __w-154 __pt-155 __mb-156 __c-157">Write-ahead log (WAL) shipping</h3><comment data-id="104"></comment><div data-id="105" class="__rl-158 __w-159 __c-160"><ul>
+<li>In the case of a log-structured storage engine (“SSTables and LSM-Trees”),
+this log is the main place for storage. Log segments are compacted and
+garbage-collected in the background.</li>
+<li>In the case of a &quot;B-tree&quot;, which overwrites individual disk blocks, every
+modification is first written to a write-ahead log so that the index can be
+restored to a consistent state after a crash.</li>
+</ul>
+<p>In either case, the log is an append-only sequence of bytes containing all
+writes to the database. We can use the exact same log to build a replica on
+another node.</p>
+This method of replication is used in PostgreSQL and Oracle, among others.
+Despite its advantages, WAL shipping has drawbacks. It tightly couples
+replication with the storage engine, making it challenging to run different
+database software versions on the leader and followers. This limitation can
+impact operational tasks like zero-downtime upgrades, which are feasible only if
+the replication protocol supports version mismatches between leader and
+followers. However, WAL shipping often requires downtime for such upgrades due
+to its strict version matching requirements.</div><div data-id="106" class="ft_column __w-161"></div></div><div data-id="107" class="ft_column __w-162"><h3 data-id="108" id="logical-row-based-log-replication" class="__rl-163 __w-164 __pt-165 __mb-166 __c-167">Logical (row-based) log replication</h3><comment data-id="109"></comment><div data-id="110" class="__rl-168 __w-169 __c-170"><p>An alternative approach involves using different log formats for replication and
+storage engines, allowing the replication log to be decoupled from storage
+engine internals. Known as a logical log, this format differs from the physical
+data representation of the storage engine.</p>
+<p>In a relational database, a logical log typically consists of records describing
+writes to database tables at the row level:</p>
+<ul>
+<li>For inserted rows, the log contains the new values of all columns.</li>
+<li>For deleted rows, it includes adequate information to uniquely identify the
+deleted row, often the primary key or, if unavailable, the old values of all
+columns.</li>
+<li>For updated rows, it includes information to uniquely identify the row and the
+new values of changed columns.</li>
+</ul>
+<p>Transactions modifying multiple rows generate corresponding log records,
+followed by a commit record. MySQL&#39;s binlog, configured for row-based
+replication, adopts this approach.</p>
+A logical log format is also easier for external applications to parse. This
+aspect is useful if you want to send the contents of a database to an external
+system, such as a data warehouse for offline analysis, or for building custom
+indexes and caches. This technique is called <strong>change data capture</strong>.</div><div data-id="111" class="ft_column __w-171"></div></div><div data-id="112" class="ft_column __w-172"><h3 data-id="113" id="trigger-based-replication" class="__rl-173 __w-174 __pt-175 __mb-176 __c-177">Trigger-based replication</h3><comment data-id="114"></comment><div data-id="115" class="__rl-178 __w-179 __c-180"><p>The replication approaches described so far are implemented by the database
+system, without involving any application code. You may need to move replication
+up to the application layer. For example, if you want to only replicate a subset
+of the data, or want to replicate from one kind of database to another, or if
+you need conflict resolution logic.</p>
+<p>Some tools, such as Oracle GoldenGate, can make data changes available to an
+application by reading the database log. An alternative is to use features that
+are available in many relational databases: <strong>triggers</strong> and <strong>stored
+procedures</strong>.</p>
+<p>A <strong>trigger</strong> lets you register custom application code that is automatically
+executed when a data change (write transaction) occurs in a database system. The
+trigger has the opportunity to log this change into a separate table, from which
+it can be read by an external process. That external process can then apply any
+necessary application logic and replicate the data change to another system.
+Databus for Oracle and Bucardo for Postgres work like this, for example.</p>
+Trigger-based replication typically has greater overheads than other replication
+methods, and is more prone to bugs and limitations than the database’s built-in
+replication. However, it can nevertheless be useful due to its flexibility.</div><div data-id="116" class="ft_column __w-181"></div></div><div data-id="117" class="ft_column __w-182"><h1 data-id="118" id="problems-with-replication-lag" class="__rl-183 __w-184 __pt-185 __mb-186 __bbw-187 __bc-188 __c-189">Problems with Replication Lag</h1><comment data-id="119"></comment><div data-id="120" class="__rl-190 __w-191 __c-192"><p>If an application reads from an asynchronous follower, it may see out‐ dated
+information if the follower has fallen behind. This inconsistency is just a
+temporary state— for that reason, this effect is known as eventual consistency.</p>
+In this section we will highlight three examples of problems that are likely to
+occur when there is replication lag and outline some approaches to solving them.</div><div data-id="121" class="ft_column __w-193"></div></div><div data-id="122" class="ft_column __w-194"><h2 data-id="123" id="reading-your-own-writes" class="__rl-195 __w-196 __pt-197 __mb-198 __c-199">Reading Your Own Writes</h2><comment data-id="124"></comment><div data-id="125" class="__rl-200 __w-201 __c-202">With asynchronous replication, there is a problem, if the user views the data
+shortly after making a write, the new data may not yet have reached the replica.</div><div data-id="126" class="ft_column __w-203"></div></div><div data-id="127" class="ft_column __w-204 __h-205 __jc-206 __ali-207"><img data-id="128" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png" class="__w-208 __h-209 __mxw-210"></img><comment data-id="129"></comment><comment data-id="130"></comment></div></div></div></div><comment data-id="131"></comment><comment data-id="132"></comment></div><div data-id="133" class="ft_column __w-211"></div><comment data-id="134"></comment></div><div data-id="135" class="ft_row __pos-212 __p-213 __bw-214 __br-215 __bc-216 __b-217 __r-218 __z-219 __bgc-220"><comment data-id="136"></comment><div data-id="137" class="ft_row __cur-221"><img data-id="138" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-222 __w-223 __h-224"></img></div><comment data-id="139"></comment><comment data-id="140"></comment></div><comment data-id="141"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -613,21 +743,150 @@ changes from the new leader. This process is called <strong>failover</strong>.</
 	body.dark  .__c-133:visited { color: #B8B8B8 !important; }
 	.__w-134 { width: 100%; }
 	.__w-135 { width: 100%; }
-	.__pos-136 { position: fixed; }
-	.__p-137 { padding: 10px; }
-	.__bw-138 { border-width: 1px; }
-	.__br-139 { border-radius: 4px; }
-	.__bc-140 { border-color: #D2D2D2; }
-	body.dark .__bc-140 { border-color: #434547; }
-	.__b-141 { bottom: 25px; }
-	.__r-142 { right: 25px; }
-	.__z-143 { z-index: 99999999999999; }
-	.__bgc-144 { background-color: #FFFFFF; }
-	body.dark .__bgc-144 { background-color: #130224; }
-	.__cur-145 { cursor: pointer; }
-	.__as-146 { align-self: center; }
-	.__w-147 { width: 19px; }
-	.__h-148 { height: 19px; }
+	.__rl-136 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-136 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-137 { width: 100%; }
+	.__pt-138 { padding-top: 0.3em; }
+	.__mb-139 { margin-bottom: 0.5rem; }
+	.__c-140 { color: #333333 !important; }
+	body.dark .__c-140 { color: #FFFFFF !important; }
+	.__c-140:visited { color: #333333 !important; }
+	body.dark  .__c-140:visited { color: #FFFFFF !important; }
+	.__w-141 { width: 100%; }
+	.__w-142 { width: 100%; }
+	.__rl-143 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-143 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-144 { width: 100%; }
+	.__pt-145 { padding-top: 0.17em; }
+	.__mb-146 { margin-bottom: 0.5rem; }
+	.__c-147 { color: #333333 !important; }
+	body.dark .__c-147 { color: #FFFFFF !important; }
+	.__c-147:visited { color: #333333 !important; }
+	body.dark  .__c-147:visited { color: #FFFFFF !important; }
+	.__rl-148 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-148 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-149 { width: 100%; }
+	.__c-150 { color: #7C7C7C !important; }
+	body.dark .__c-150 { color: #B8B8B8 !important; }
+	.__c-150:visited { color: #7C7C7C !important; }
+	body.dark  .__c-150:visited { color: #B8B8B8 !important; }
+	.__w-151 { width: 100%; }
+	.__w-152 { width: 100%; }
+	.__rl-153 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-153 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-154 { width: 100%; }
+	.__pt-155 { padding-top: 0.17em; }
+	.__mb-156 { margin-bottom: 0.5rem; }
+	.__c-157 { color: #333333 !important; }
+	body.dark .__c-157 { color: #FFFFFF !important; }
+	.__c-157:visited { color: #333333 !important; }
+	body.dark  .__c-157:visited { color: #FFFFFF !important; }
+	.__rl-158 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-158 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-159 { width: 100%; }
+	.__c-160 { color: #7C7C7C !important; }
+	body.dark .__c-160 { color: #B8B8B8 !important; }
+	.__c-160:visited { color: #7C7C7C !important; }
+	body.dark  .__c-160:visited { color: #B8B8B8 !important; }
+	.__w-161 { width: 100%; }
+	.__w-162 { width: 100%; }
+	.__rl-163 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-163 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-164 { width: 100%; }
+	.__pt-165 { padding-top: 0.17em; }
+	.__mb-166 { margin-bottom: 0.5rem; }
+	.__c-167 { color: #333333 !important; }
+	body.dark .__c-167 { color: #FFFFFF !important; }
+	.__c-167:visited { color: #333333 !important; }
+	body.dark  .__c-167:visited { color: #FFFFFF !important; }
+	.__rl-168 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-168 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-169 { width: 100%; }
+	.__c-170 { color: #7C7C7C !important; }
+	body.dark .__c-170 { color: #B8B8B8 !important; }
+	.__c-170:visited { color: #7C7C7C !important; }
+	body.dark  .__c-170:visited { color: #B8B8B8 !important; }
+	.__w-171 { width: 100%; }
+	.__w-172 { width: 100%; }
+	.__rl-173 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-173 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-174 { width: 100%; }
+	.__pt-175 { padding-top: 0.17em; }
+	.__mb-176 { margin-bottom: 0.5rem; }
+	.__c-177 { color: #333333 !important; }
+	body.dark .__c-177 { color: #FFFFFF !important; }
+	.__c-177:visited { color: #333333 !important; }
+	body.dark  .__c-177:visited { color: #FFFFFF !important; }
+	.__rl-178 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-178 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-179 { width: 100%; }
+	.__c-180 { color: #7C7C7C !important; }
+	body.dark .__c-180 { color: #B8B8B8 !important; }
+	.__c-180:visited { color: #7C7C7C !important; }
+	body.dark  .__c-180:visited { color: #B8B8B8 !important; }
+	.__w-181 { width: 100%; }
+	.__w-182 { width: 100%; }
+	.__rl-183 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 40px; font-weight: 700; line-height: 60px; }
+	body.mobile .__rl-183 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 36px; font-weight: 700; line-height: 54px; }
+	.__w-184 { width: 100%; }
+	.__pt-185 { padding-top: 0.5em; }
+	.__mb-186 { margin-bottom: 0.5rem; }
+	.__bbw-187 { border-bottom-width: 1px; }
+	.__bc-188 { border-color: #D2D2D2; }
+	body.dark .__bc-188 { border-color: #434547; }
+	.__c-189 { color: #333333 !important; }
+	body.dark .__c-189 { color: #FFFFFF !important; }
+	.__c-189:visited { color: #333333 !important; }
+	body.dark  .__c-189:visited { color: #FFFFFF !important; }
+	.__rl-190 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-190 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-191 { width: 100%; }
+	.__c-192 { color: #7C7C7C !important; }
+	body.dark .__c-192 { color: #B8B8B8 !important; }
+	.__c-192:visited { color: #7C7C7C !important; }
+	body.dark  .__c-192:visited { color: #B8B8B8 !important; }
+	.__w-193 { width: 100%; }
+	.__w-194 { width: 100%; }
+	.__rl-195 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-195 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-196 { width: 100%; }
+	.__pt-197 { padding-top: 0.3em; }
+	.__mb-198 { margin-bottom: 0.5rem; }
+	.__c-199 { color: #333333 !important; }
+	body.dark .__c-199 { color: #FFFFFF !important; }
+	.__c-199:visited { color: #333333 !important; }
+	body.dark  .__c-199:visited { color: #FFFFFF !important; }
+	.__rl-200 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-200 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-201 { width: 100%; }
+	.__c-202 { color: #7C7C7C !important; }
+	body.dark .__c-202 { color: #B8B8B8 !important; }
+	.__c-202:visited { color: #7C7C7C !important; }
+	body.dark  .__c-202:visited { color: #B8B8B8 !important; }
+	.__w-203 { width: 100%; }
+	.__w-204 { width: 100%; }
+	.__h-205 { height: null; }
+	.__jc-206 { justify-content: center; }
+	.__ali-207 { align-items: center; }
+	.__w-208 { width: auto; }
+	.__h-209 { height: auto; }
+	.__mxw-210 { max-width: 100%; }
+	.__w-211 { width: 100%; }
+	.__pos-212 { position: fixed; }
+	.__p-213 { padding: 10px; }
+	.__bw-214 { border-width: 1px; }
+	.__br-215 { border-radius: 4px; }
+	.__bc-216 { border-color: #D2D2D2; }
+	body.dark .__bc-216 { border-color: #434547; }
+	.__b-217 { bottom: 25px; }
+	.__r-218 { right: 25px; }
+	.__z-219 { z-index: 99999999999999; }
+	.__bgc-220 { background-color: #FFFFFF; }
+	body.dark .__bgc-220 { background-color: #130224; }
+	.__cur-221 { cursor: pointer; }
+	.__as-222 { align-self: center; }
+	.__w-223 { width: 19px; }
+	.__h-224 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -2634,7 +2893,53 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
           title: "Leader failure: Failover",
-          body: "Handling a failure of the leader is trickier: one of the followers needs to be\npromoted to be the new leader, clients need to be reconfigured to send their\nwrites to the new leader, and the other followers need to start consuming data\nchanges from the new leader. This process is called **failover**."
+          body: "Handling a failure of the leader is trickier: one of the followers needs to be\npromoted to be the new leader, clients need to be reconfigured to send their\nwrites to the new leader, and the other followers need to start consuming data\nchanges from the new leader. This process is called **failover**.\n\n- **Determining that the leader has failed**. There are many things that could\n  potentially go wrong: crashes, power outages, network issues, and more.\n  Typically done through timeouts as there's no foolproof method. If a node\n  doesn't respond within a set time, it's assumed dead.\n- **Choosing a new leader**. This could be done through an election process, or\n  a new leader could be appointed by a previously elected controller node. The\n  best candidate for leadership is usually the replica with the most up-to-date\n  data changes from the old leader.\n- **Reconfiguring the system to use the new leader**. Clients now need to send\n  their write requests to the new leader. If the old leader comes back, it might\n  still believe that it is the leader. The system needs to ensure that the old\n  leader becomes a follower and recognizes the new leader.\n\nFailover is fraught with things that can go wrong:\n\n- If asynchronous replication is used, the new leader may not have received all\n  the writes, If the former leader rejoins the cluster after a new leader has\n  been chosen, what should happen to those writes? The new leader may have\n  received conflicting writes in the meantime. The most common solution is for\n  the old leader’s unreplicated writes to simply be discarded, which may violate\n  clients’ durability expectations.\n- Discarding writes is especially dangerous if other storage systems outside of\n  the database need to be coordinated with the database contents. For example,\n  in one incident at GitHub, an out-of-date MySQL follower was promoted to\n  leader. The database used an autoincrementing counter to assign primary keys\n  to new rows, but because the new leader’s counter lagged behind the old\n  leader’s, it reused some primary keys that were previously assigned by the old\n  leader. These primary keys were also used in a Redis store,so the reuse of\n  primary keys resul‐ ted in inconsistency between MySQL and Redis, which caused\n  some private data to be disclosed to the wrong users.\n- In certain fault scenarios, it could happen that two nodes both believe that\n  they are the leader. This situation is called split brain, and it is\n  dangerous: if both leaders accept writes, and there is no process for\n  resolving conflicts, data is likely to be lost or corrupted. As a safety\n  catch, some systems have a mechanism to shut down one node if two leaders are\n  detected.\n- What is the right timeout before the leader is declared dead? A longer timeout\n  means a longer time to recovery in the case where the leader fails. However,\n  if the timeout is too short, there could be unnecessary failovers. For\n  example, a temporary load spike could cause a node’s response time to increase\n  above the timeout, or a network glitch could cause delayed packets. If the\n  system is already struggling with high load or network problems, an\n  unnecessary failover is likely to make the situation worse, not better."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Implementation of Replication Logs"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Statement-based replication",
+          body: "In the simplest case, the leader logs every write request (statement) that it\nexecutes and sends that statement log to its followers. For a relational\ndatabase, this means that every INSERT, UPDATE, or DELETE statement is forwarded\nto followers, and each follower parses and executes that SQL statement as if it\nhad been received from a client. Although this may sound reasonable, there are\nvarious ways in which this approach to replication can break down:\n\n- Nondeterministic functions like NOW() or RAND() may produce different results\n  on replicas.\n- Operations dependent on autoincrementing columns or existing data (e.g.,\n  UPDATE ... WHERE <some condition>) must execute in the same order on all\n  replicas to maintain consistency, which can be challenging with concurrent\n  transactions.\n- Statements with side effects (e.g., triggers, stored procedures) may produce\n  different different side effects occurring on each replica unless they are\n  entirely deterministic.\n\nIt is possible to work around those issues—for example, the leader can replace\nany nondeterministic function calls with a fixed return value when the statement\nis logged so that the followers all get the same value. However, because there\nare so many edge cases, other replication methods are now generally preferred.\n\nStatement-based replication was used in MySQL before version 5.1. It is still\nsometimes used today, as it is quite compact, but by default MySQL now switches\nto row-based replication (discussed shortly) if there is any nondeterminism in a\nstatement. VoltDB uses statement-based replication, and makes it safe by\nrequiring transactions to be deterministic."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Write-ahead log (WAL) shipping",
+          body: "- In the case of a log-structured storage engine (“SSTables and LSM-Trees”),\n  this log is the main place for storage. Log segments are compacted and\n  garbage-collected in the background.\n- In the case of a \"B-tree\", which overwrites individual disk blocks, every\n  modification is first written to a write-ahead log so that the index can be\n  restored to a consistent state after a crash.\n\nIn either case, the log is an append-only sequence of bytes containing all\nwrites to the database. We can use the exact same log to build a replica on\nanother node.\n\nThis method of replication is used in PostgreSQL and Oracle, among others.\nDespite its advantages, WAL shipping has drawbacks. It tightly couples\nreplication with the storage engine, making it challenging to run different\ndatabase software versions on the leader and followers. This limitation can\nimpact operational tasks like zero-downtime upgrades, which are feasible only if\nthe replication protocol supports version mismatches between leader and\nfollowers. However, WAL shipping often requires downtime for such upgrades due\nto its strict version matching requirements."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Logical (row-based) log replication",
+          body: "An alternative approach involves using different log formats for replication and\nstorage engines, allowing the replication log to be decoupled from storage\nengine internals. Known as a logical log, this format differs from the physical\ndata representation of the storage engine.\n\nIn a relational database, a logical log typically consists of records describing\nwrites to database tables at the row level:\n\n- For inserted rows, the log contains the new values of all columns.\n- For deleted rows, it includes adequate information to uniquely identify the\n  deleted row, often the primary key or, if unavailable, the old values of all\n  columns.\n- For updated rows, it includes information to uniquely identify the row and the\n  new values of changed columns.\n\nTransactions modifying multiple rows generate corresponding log records,\nfollowed by a commit record. MySQL's binlog, configured for row-based\nreplication, adopts this approach.\n\nA logical log format is also easier for external applications to parse. This\naspect is useful if you want to send the contents of a database to an external\nsystem, such as a data warehouse for offline analysis, or for building custom\nindexes and caches. This technique is called **change data capture**."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Trigger-based replication",
+          body: "The replication approaches described so far are implemented by the database\nsystem, without involving any application code. You may need to move replication\nup to the application layer. For example, if you want to only replicate a subset\nof the data, or want to replicate from one kind of database to another, or if\nyou need conflict resolution logic.\n\nSome tools, such as Oracle GoldenGate, can make data changes available to an\napplication by reading the database log. An alternative is to use features that\nare available in many relational databases: **triggers** and **stored\nprocedures**.\n\nA **trigger** lets you register custom application code that is automatically\nexecuted when a data change (write transaction) occurs in a database system. The\ntrigger has the opportunity to log this change into a separate table, from which\nit can be read by an external process. That external process can then apply any\nnecessary application logic and replicate the data change to another system.\nDatabus for Oracle and Bucardo for Postgres work like this, for example.\n\nTrigger-based replication typically has greater overheads than other replication\nmethods, and is more prone to bugs and limitations than the database’s built-in\nreplication. However, it can nevertheless be useful due to its flexibility."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h1(root, inherited, {
+          title: "Problems with Replication Lag",
+          body: "If an application reads from an asynchronous follower, it may see out‐ dated\ninformation if the follower has fallen behind. This inconsistency is just a\ntemporary state— for that reason, this effect is known as eventual consistency.\n\nIn this section we will highlight three examples of problems that are likely to\noccur when there is replication lag and outline some approaches to solving them."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Reading Your Own Writes",
+          body: "With asynchronous replication, there is a problem, if the user views the data\nshortly after making a write, the new data may not yet have reached the replica."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_3_png")
         });
       }
       ]),
@@ -9886,6 +10191,13 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_3_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-3-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_2_png", function () {
   let record = fastn.recordInstance({
   });

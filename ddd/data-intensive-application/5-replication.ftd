@@ -124,5 +124,173 @@ promoted to be the new leader, clients need to be reconfigured to send their
 writes to the new leader, and the other followers need to start consuming data
 changes from the new leader. This process is called **failover**.
 
+- **Determining that the leader has failed**. There are many things that could
+  potentially go wrong: crashes, power outages, network issues, and more.
+  Typically done through timeouts as there's no foolproof method. If a node
+  doesn't respond within a set time, it's assumed dead.
+- **Choosing a new leader**. This could be done through an election process, or
+  a new leader could be appointed by a previously elected controller node. The
+  best candidate for leadership is usually the replica with the most up-to-date
+  data changes from the old leader.
+- **Reconfiguring the system to use the new leader**. Clients now need to send
+  their write requests to the new leader. If the old leader comes back, it might
+  still believe that it is the leader. The system needs to ensure that the old
+  leader becomes a follower and recognizes the new leader.
+
+Failover is fraught with things that can go wrong:
+
+- If asynchronous replication is used, the new leader may not have received all
+  the writes, If the former leader rejoins the cluster after a new leader has
+  been chosen, what should happen to those writes? The new leader may have
+  received conflicting writes in the meantime. The most common solution is for
+  the old leader’s unreplicated writes to simply be discarded, which may violate
+  clients’ durability expectations.
+- Discarding writes is especially dangerous if other storage systems outside of
+  the database need to be coordinated with the database contents. For example,
+  in one incident at GitHub, an out-of-date MySQL follower was promoted to
+  leader. The database used an autoincrementing counter to assign primary keys
+  to new rows, but because the new leader’s counter lagged behind the old
+  leader’s, it reused some primary keys that were previously assigned by the old
+  leader. These primary keys were also used in a Redis store,so the reuse of
+  primary keys resul‐ ted in inconsistency between MySQL and Redis, which caused
+  some private data to be disclosed to the wrong users.
+- In certain fault scenarios, it could happen that two nodes both believe that
+  they are the leader. This situation is called split brain, and it is
+  dangerous: if both leaders accept writes, and there is no process for
+  resolving conflicts, data is likely to be lost or corrupted. As a safety
+  catch, some systems have a mechanism to shut down one node if two leaders are
+  detected.
+- What is the right timeout before the leader is declared dead? A longer timeout
+  means a longer time to recovery in the case where the leader fails. However,
+  if the timeout is too short, there could be unnecessary failovers. For
+  example, a temporary load spike could cause a node’s response time to increase
+  above the timeout, or a network glitch could cause delayed packets. If the
+  system is already struggling with high load or network problems, an
+  unnecessary failover is likely to make the situation worse, not better.
+
+
+
+
+-- ds.h2: Implementation of Replication Logs
+
+-- ds.h3: Statement-based replication
+
+In the simplest case, the leader logs every write request (statement) that it
+executes and sends that statement log to its followers. For a relational
+database, this means that every INSERT, UPDATE, or DELETE statement is forwarded
+to followers, and each follower parses and executes that SQL statement as if it
+had been received from a client. Although this may sound reasonable, there are
+various ways in which this approach to replication can break down:
+
+- Nondeterministic functions like NOW() or RAND() may produce different results
+  on replicas.
+- Operations dependent on autoincrementing columns or existing data (e.g.,
+  UPDATE ... WHERE <some condition>) must execute in the same order on all
+  replicas to maintain consistency, which can be challenging with concurrent
+  transactions.
+- Statements with side effects (e.g., triggers, stored procedures) may produce
+  different different side effects occurring on each replica unless they are
+  entirely deterministic.
+
+It is possible to work around those issues—for example, the leader can replace
+any nondeterministic function calls with a fixed return value when the statement
+is logged so that the followers all get the same value. However, because there
+are so many edge cases, other replication methods are now generally preferred.
+
+Statement-based replication was used in MySQL before version 5.1. It is still
+sometimes used today, as it is quite compact, but by default MySQL now switches
+to row-based replication (discussed shortly) if there is any nondeterminism in a
+statement. VoltDB uses statement-based replication, and makes it safe by
+requiring transactions to be deterministic.
+
+-- ds.h3: Write-ahead log (WAL) shipping
+
+- In the case of a log-structured storage engine (“SSTables and LSM-Trees”),
+  this log is the main place for storage. Log segments are compacted and
+  garbage-collected in the background.
+- In the case of a "B-tree", which overwrites individual disk blocks, every
+  modification is first written to a write-ahead log so that the index can be
+  restored to a consistent state after a crash.
+
+In either case, the log is an append-only sequence of bytes containing all
+writes to the database. We can use the exact same log to build a replica on
+another node.
+
+This method of replication is used in PostgreSQL and Oracle, among others.
+Despite its advantages, WAL shipping has drawbacks. It tightly couples
+replication with the storage engine, making it challenging to run different
+database software versions on the leader and followers. This limitation can
+impact operational tasks like zero-downtime upgrades, which are feasible only if
+the replication protocol supports version mismatches between leader and
+followers. However, WAL shipping often requires downtime for such upgrades due
+to its strict version matching requirements.
+
+-- ds.h3: Logical (row-based) log replication
+
+An alternative approach involves using different log formats for replication and
+storage engines, allowing the replication log to be decoupled from storage
+engine internals. Known as a logical log, this format differs from the physical
+data representation of the storage engine.
+
+In a relational database, a logical log typically consists of records describing
+writes to database tables at the row level:
+
+- For inserted rows, the log contains the new values of all columns.
+- For deleted rows, it includes adequate information to uniquely identify the
+  deleted row, often the primary key or, if unavailable, the old values of all
+  columns.
+- For updated rows, it includes information to uniquely identify the row and the
+  new values of changed columns.
+
+Transactions modifying multiple rows generate corresponding log records,
+followed by a commit record. MySQL's binlog, configured for row-based
+replication, adopts this approach.
+
+A logical log format is also easier for external applications to parse. This
+aspect is useful if you want to send the contents of a database to an external
+system, such as a data warehouse for offline analysis, or for building custom
+indexes and caches. This technique is called **change data capture**.
+
+-- ds.h3: Trigger-based replication
+
+The replication approaches described so far are implemented by the database
+system, without involving any application code. You may need to move replication
+up to the application layer. For example, if you want to only replicate a subset
+of the data, or want to replicate from one kind of database to another, or if
+you need conflict resolution logic.
+
+Some tools, such as Oracle GoldenGate, can make data changes available to an
+application by reading the database log. An alternative is to use features that
+are available in many relational databases: **triggers** and **stored
+procedures**.
+
+A **trigger** lets you register custom application code that is automatically
+executed when a data change (write transaction) occurs in a database system. The
+trigger has the opportunity to log this change into a separate table, from which
+it can be read by an external process. That external process can then apply any
+necessary application logic and replicate the data change to another system.
+Databus for Oracle and Bucardo for Postgres work like this, for example.
+
+Trigger-based replication typically has greater overheads than other replication
+methods, and is more prone to bugs and limitations than the database’s built-in
+replication. However, it can nevertheless be useful due to its flexibility.
+
+
+-- ds.h1: Problems with Replication Lag
+
+If an application reads from an asynchronous follower, it may see out‐ dated
+information if the follower has fallen behind. This inconsistency is just a
+temporary state— for that reason, this effect is known as eventual consistency.
+
+In this section we will highlight three examples of problems that are likely to
+occur when there is replication lag and outline some approaches to solving them.
+
+-- ds.h2: Reading Your Own Writes
+
+With asynchronous replication, there is a problem, if the user views the data
+shortly after making a write, the new data may not yet have reached the replica.
+
+-- ds.image:
+src: $assets.files.ddd.data-intensive-application.images.5-3.png
 
 -- end: ds.page

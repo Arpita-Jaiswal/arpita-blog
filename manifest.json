@@ -77,8 +77,8 @@
     },
     "ddd/data-intensive-application/5-replication.ftd": {
       "name": "ddd/data-intensive-application/5-replication.ftd",
-      "checksum": "3976A6C06C6AA462EE66C053262DAE4847215E75E7AA9C845DEAF7FB2723E070",
-      "size": 6530
+      "checksum": "AA6A26A040CDCFE3B4C1CC9C00B66329D00395BD1DB451C4BD0C0A0BA0FD2024",
+      "size": 15762
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -189,6 +189,16 @@
       "name": "ddd/data-intensive-application/images/5-2.png",
       "checksum": "0DCF0A9DDBB8B670C3B4D38B1FD438018CD4EF761922B1E97AF520327A425BDA",
       "size": 61702
+    },
+    "ddd/data-intensive-application/images/5-3-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-3-dark.png",
+      "checksum": "E762134FEC51810224CB94AA556E16E7400971D96513F54BFA57B5FBC0EAAD9A",
+      "size": 115231
+    },
+    "ddd/data-intensive-application/images/5-3.png": {
+      "name": "ddd/data-intensive-application/images/5-3.png",
+      "checksum": "958AEFC7CB2884A7CC47118BB296B2AFD0FFB062D5F5CF6FCC6B94F173E70D80",
+      "size": 86668
     },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
@@ -326,6 +336,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/7c877f6401ab21a457e33b74f9c6059815954365.zip",
-  "checksum": "E22E892C32D825F59A47D09D8A3931D11165A17CA92B2DA63A74817B7B688BA3"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/590868d1b50c3de745d797a65bd6999af967b3b4.zip",
+  "checksum": "B460C8FA4F749BC6A84737F03AEAB2FFCCD2AF6D290D98D950141C46650EE597"
 }
