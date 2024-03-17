@@ -15,7 +15,7 @@
     
                 <script src="markdown-24E09EFC0C2B9A11DEA9AC71888EB3A1E85864FA7D9C95A3EB5075A0E0F49A5F.js"></script>
                 <script src="prism-8FE3A42AD547E2DBBC9FE16BA059F8F1870D613AD0C5B0B013D6205B72A62BAF.js"></script>
-                <script src="default-9987017245102B708B9BEC5DEE998BBF40BEAAD8E43363EA774F86B38F61E19B.js"></script>
+                <script src="default-0F6AF85A4EA8964BF6DED19B1BE056220F5E516F8A09B90FC4B8A422EA1CE398.js"></script>
                 <link rel="stylesheet" href="prism-73F718B9234C00C5C14AB6A11BF239A103F0B0F93B69CD55CB5C6530501182EB.css">
                 <script src="-/arjaupashak.com/search.js"></script>
             
@@ -541,7 +541,64 @@ information if the follower has fallen behind. This inconsistency is just a
 temporary state— for that reason, this effect is known as eventual consistency.</p>
 In this section we will highlight three examples of problems that are likely to
 occur when there is replication lag and outline some approaches to solving them.</div><div data-id="121" class="ft_column __w-193"></div></div><div data-id="122" class="ft_column __w-194"><h2 data-id="123" id="reading-your-own-writes" class="__rl-195 __w-196 __pt-197 __mb-198 __c-199">Reading Your Own Writes</h2><comment data-id="124"></comment><div data-id="125" class="__rl-200 __w-201 __c-202">With asynchronous replication, there is a problem, if the user views the data
-shortly after making a write, the new data may not yet have reached the replica.</div><div data-id="126" class="ft_column __w-203"></div></div><div data-id="127" class="ft_column __w-204 __h-205 __jc-206 __ali-207"><img data-id="128" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png" class="__w-208 __h-209 __mxw-210"></img><comment data-id="129"></comment><comment data-id="130"></comment></div></div></div></div><comment data-id="131"></comment><comment data-id="132"></comment></div><div data-id="133" class="ft_column __w-211"></div><comment data-id="134"></comment></div><div data-id="135" class="ft_row __pos-212 __p-213 __bw-214 __br-215 __bc-216 __b-217 __r-218 __z-219 __bgc-220"><comment data-id="136"></comment><div data-id="137" class="ft_row __cur-221"><img data-id="138" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-222 __w-223 __h-224"></img></div><comment data-id="139"></comment><comment data-id="140"></comment></div><comment data-id="141"></comment></div></div></div></body><style id="styles">
+shortly after making a write, the new data may not yet have reached the replica.</div><div data-id="126" class="ft_column __w-203"></div></div><div data-id="127" class="ft_column __w-204 __h-205 __jc-206 __ali-207"><img data-id="128" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png" class="__w-208 __h-209 __mxw-210"></img><comment data-id="129"></comment><comment data-id="130"></comment></div><div data-id="131" class="ft_column __w-211"><h3 data-id="132" id="implementation-of-read-after-write-consistency-in-leader-based-replication" class="__rl-212 __w-213 __pt-214 __mb-215 __c-216">Implementation of Read-After-Write Consistency in Leader-Based Replication:</h3><comment data-id="133"></comment><div data-id="134" class="__rl-217 __w-218 __c-219"><ul>
+<li>Reading from Leader or Follower:<ul>
+<li>Read from the leader if the user might have modified the data; otherwise, read from a follower.</li>
+<li>Example: User profile information editable only by the owner; hence, always read the user&#39;s own profile from the
+leader and others&#39; profiles from a follower.</li>
+</ul>
+</li>
+<li>Dynamic Criteria for Reading:<ul>
+<li>If most application data is editable by users, the previous approach is ineffective as most reads would need to come
+from the leader.</li>
+<li>Alternative criteria for deciding whether to read from the leader can be implemented. For example, you could track
+the time of the last update and, for one minute after the last update, make all reads from the leader. You could
+also monitor the replication lag on followers and prevent queries on any follower that is more than one minute
+behind the leader.</li>
+</ul>
+</li>
+<li>Utilizing Client Timestamps:
+Clients can remember the timestamp of their most recent write. The system ensures that replicas serving reads for a
+user reflect updates at least until that timestamp. If a replica is not up-to-date, reads can be directed to another
+replica or delayed until the lagging replica catches up. Timestamp can be a logical one (e.g., log sequence number) or
+the actual system clock (requires clock synchronization).</li>
+<li>If your replicas are distributed across multiple datacenters (for geographical proximity to users or for availability),
+there is additional complexity. Any request that needs to be served by the leader must be routed to the datacenter that
+contains the leader.</li>
+</ul></div><div data-id="135" class="ft_column __w-220"></div></div><div data-id="136" class="ft_column __w-221"><h3 data-id="137" id="cross-device-read-after-write-consistency" class="__rl-222 __w-223 __pt-224 __mb-225 __c-226">Cross-Device Read-After-Write Consistency</h3><comment data-id="138"></comment><div data-id="139" class="__rl-227 __w-228 __c-229">Users accessing the service from multiple devices (e.g., desktop web browser and mobile app). Objective is to ensure
+consistency across devices, so that information entered on one device is immediately visible on others.
+There are some additional issues to consider:
+<ul>
+<li>Approaches relying on remembering user&#39;s last update timestamp become complex as each device&#39;s code doesn&#39;t have
+visibility into updates from other devices. Centralizing metadata becomes necessary to track updates across devices.</li>
+<li>If your replicas are distributed across different datacenters, there is no guarantee that connections from different
+devices will be routed to the same datacenter. (For example, if the user’s desktop computer uses the home broadband
+connection and their mobile device uses the cellular data network, the devices’ network routes may be completely
+different.) If your approach requires reading from the leader, you may first need to route requests from all of a
+user’s devices to the same datacenter.</li>
+</ul></div><div data-id="140" class="ft_column __w-230"></div></div><div data-id="141" class="ft_column __w-231"><h2 data-id="142" id="monotonic-reads" class="__rl-232 __w-233 __pt-234 __mb-235 __c-236">Monotonic Reads</h2><comment data-id="143"></comment><div data-id="144" class="__rl-237 __w-238 __c-239"><p>Our second example of an anomaly that can occur when reading from asynchronous followers is that it’s possible for a
+user to see things moving backward in time.</p>
+This can happen if a user makes several reads from different replicas. For example, Figure below shows user 2345 making
+the same query twice, first to a follower with little lag, then to a follower with greater lag.</div><div data-id="145" class="ft_column __w-240"></div></div><div data-id="146" class="ft_column __w-241 __h-242 __jc-243 __ali-244"><img data-id="147" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-4.png" class="__w-245 __h-246 __mxw-247"></img><comment data-id="148"></comment><div data-id="149" class="__rl-248 __pl-249 __pr-250 __pt-251 __pb-252 __bblr-253 __bbrr-254 __c-255 __bgc-256 __ta-257">A user first reads from a fresh replica, then from a stale replica. Time appears to go backward. To prevent this anomaly, we need monotonic reads.</div><comment data-id="150"></comment></div><div data-id="151" class="__rl-258 __w-259 __c-260">Monotonic reads ensure that users do not observe time going backward when making sequential reads. It guarantees that
+subsequent reads by a user will not return older data after previously reading newer data. It has lesser guarantee than
+strong consistency but stronger than eventual consistency.
+<ul>
+<li><strong>Implementation</strong>: Users consistently read from the same replica based on user ID hash.</li>
+<li><strong>Replica Selection</strong>: User ID hash determines replica.</li>
+<li><strong>Handling Failures</strong>: Reroute user queries to another replica if the chosen one fails.</li>
+</ul></div><div data-id="152" class="ft_column __w-261"><h2 data-id="153" id="consistent-prefix-reads" class="__rl-262 __w-263 __pt-264 __mb-265 __c-266">Consistent Prefix Reads</h2><comment data-id="154"></comment><div data-id="155" class="__rl-267 __w-268 __c-269"><p>Our third example of replication lag anomalies concerns violation of causality. Imag‐ ine the following short dialog
+between Mr. Poons and Mrs. Cake:</p>
+<ul>
+<li><em>Mr. Poons:</em> How far into the future can you see, Mrs. Cake?</li>
+<li><em>Mrs. Cake:</em> About ten seconds usually, Mr. Poons.</li>
+</ul>
+Now, imagine a third person is listening to this conversation through followers. The things said by Mrs. Cake go through
+a follower with little lag, but the things said by Mr. Poons have a longer replication lag. This observer would hear the
+following:
+<ul>
+<li><em>Mrs. Cake:</em> About ten seconds usually, Mr. Poons.</li>
+<li><em>Mr. Poons:</em> How far into the future can you see, Mrs. Cake?</li>
+</ul></div><div data-id="156" class="ft_column __w-270"></div></div></div></div></div><comment data-id="157"></comment><comment data-id="158"></comment></div><div data-id="159" class="ft_column __w-271"></div><comment data-id="160"></comment></div><div data-id="161" class="ft_row __pos-272 __p-273 __bw-274 __br-275 __bc-276 __b-277 __r-278 __z-279 __bgc-280"><comment data-id="162"></comment><div data-id="163" class="ft_row __cur-281"><img data-id="164" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-282 __w-283 __h-284"></img></div><comment data-id="165"></comment><comment data-id="166"></comment></div><comment data-id="167"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -872,21 +929,122 @@ shortly after making a write, the new data may not yet have reached the replica.
 	.__h-209 { height: auto; }
 	.__mxw-210 { max-width: 100%; }
 	.__w-211 { width: 100%; }
-	.__pos-212 { position: fixed; }
-	.__p-213 { padding: 10px; }
-	.__bw-214 { border-width: 1px; }
-	.__br-215 { border-radius: 4px; }
-	.__bc-216 { border-color: #D2D2D2; }
-	body.dark .__bc-216 { border-color: #434547; }
-	.__b-217 { bottom: 25px; }
-	.__r-218 { right: 25px; }
-	.__z-219 { z-index: 99999999999999; }
-	.__bgc-220 { background-color: #FFFFFF; }
-	body.dark .__bgc-220 { background-color: #130224; }
-	.__cur-221 { cursor: pointer; }
-	.__as-222 { align-self: center; }
-	.__w-223 { width: 19px; }
-	.__h-224 { height: 19px; }
+	.__rl-212 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-212 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-213 { width: 100%; }
+	.__pt-214 { padding-top: 0.17em; }
+	.__mb-215 { margin-bottom: 0.5rem; }
+	.__c-216 { color: #333333 !important; }
+	body.dark .__c-216 { color: #FFFFFF !important; }
+	.__c-216:visited { color: #333333 !important; }
+	body.dark  .__c-216:visited { color: #FFFFFF !important; }
+	.__rl-217 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-217 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-218 { width: 100%; }
+	.__c-219 { color: #7C7C7C !important; }
+	body.dark .__c-219 { color: #B8B8B8 !important; }
+	.__c-219:visited { color: #7C7C7C !important; }
+	body.dark  .__c-219:visited { color: #B8B8B8 !important; }
+	.__w-220 { width: 100%; }
+	.__w-221 { width: 100%; }
+	.__rl-222 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-222 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-223 { width: 100%; }
+	.__pt-224 { padding-top: 0.17em; }
+	.__mb-225 { margin-bottom: 0.5rem; }
+	.__c-226 { color: #333333 !important; }
+	body.dark .__c-226 { color: #FFFFFF !important; }
+	.__c-226:visited { color: #333333 !important; }
+	body.dark  .__c-226:visited { color: #FFFFFF !important; }
+	.__rl-227 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-227 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-228 { width: 100%; }
+	.__c-229 { color: #7C7C7C !important; }
+	body.dark .__c-229 { color: #B8B8B8 !important; }
+	.__c-229:visited { color: #7C7C7C !important; }
+	body.dark  .__c-229:visited { color: #B8B8B8 !important; }
+	.__w-230 { width: 100%; }
+	.__w-231 { width: 100%; }
+	.__rl-232 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-232 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-233 { width: 100%; }
+	.__pt-234 { padding-top: 0.3em; }
+	.__mb-235 { margin-bottom: 0.5rem; }
+	.__c-236 { color: #333333 !important; }
+	body.dark .__c-236 { color: #FFFFFF !important; }
+	.__c-236:visited { color: #333333 !important; }
+	body.dark  .__c-236:visited { color: #FFFFFF !important; }
+	.__rl-237 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-237 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-238 { width: 100%; }
+	.__c-239 { color: #7C7C7C !important; }
+	body.dark .__c-239 { color: #B8B8B8 !important; }
+	.__c-239:visited { color: #7C7C7C !important; }
+	body.dark  .__c-239:visited { color: #B8B8B8 !important; }
+	.__w-240 { width: 100%; }
+	.__w-241 { width: 100%; }
+	.__h-242 { height: null; }
+	.__jc-243 { justify-content: center; }
+	.__ali-244 { align-items: center; }
+	.__w-245 { width: auto; }
+	.__h-246 { height: auto; }
+	.__mxw-247 { max-width: 100%; }
+	.__rl-248 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-248 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-249 { padding-left: 20px; }
+	.__pr-250 { padding-right: 20px; }
+	.__pt-251 { padding-top: 8px; }
+	.__pb-252 { padding-bottom: 8px; }
+	.__bblr-253 { border-bottom-left-radius: 5px; }
+	.__bbrr-254 { border-bottom-right-radius: 5px; }
+	.__c-255 { color: #7C7C7C !important; }
+	body.dark .__c-255 { color: #B8B8B8 !important; }
+	.__c-255:visited { color: #7C7C7C !important; }
+	body.dark  .__c-255:visited { color: #B8B8B8 !important; }
+	.__bgc-256 { background-color: #F8F8F8; }
+	body.dark .__bgc-256 { background-color: #260B40; }
+	.__ta-257 { text-align: center; }
+	.__rl-258 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-258 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-259 { width: 100%; }
+	.__c-260 { color: #7C7C7C !important; }
+	body.dark .__c-260 { color: #B8B8B8 !important; }
+	.__c-260:visited { color: #7C7C7C !important; }
+	body.dark  .__c-260:visited { color: #B8B8B8 !important; }
+	.__w-261 { width: 100%; }
+	.__rl-262 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-262 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-263 { width: 100%; }
+	.__pt-264 { padding-top: 0.3em; }
+	.__mb-265 { margin-bottom: 0.5rem; }
+	.__c-266 { color: #333333 !important; }
+	body.dark .__c-266 { color: #FFFFFF !important; }
+	.__c-266:visited { color: #333333 !important; }
+	body.dark  .__c-266:visited { color: #FFFFFF !important; }
+	.__rl-267 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-267 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-268 { width: 100%; }
+	.__c-269 { color: #7C7C7C !important; }
+	body.dark .__c-269 { color: #B8B8B8 !important; }
+	.__c-269:visited { color: #7C7C7C !important; }
+	body.dark  .__c-269:visited { color: #B8B8B8 !important; }
+	.__w-270 { width: 100%; }
+	.__w-271 { width: 100%; }
+	.__pos-272 { position: fixed; }
+	.__p-273 { padding: 10px; }
+	.__bw-274 { border-width: 1px; }
+	.__br-275 { border-radius: 4px; }
+	.__bc-276 { border-color: #D2D2D2; }
+	body.dark .__bc-276 { border-color: #434547; }
+	.__b-277 { bottom: 25px; }
+	.__r-278 { right: 25px; }
+	.__z-279 { z-index: 99999999999999; }
+	.__bgc-280 { background-color: #FFFFFF; }
+	body.dark .__bgc-280 { background-color: #130224; }
+	.__cur-281 { cursor: pointer; }
+	.__as-282 { align-self: center; }
+	.__w-283 { width: 19px; }
+	.__h-284 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -2940,6 +3098,41 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
           src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_3_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Implementation of Read-After-Write Consistency in Leader-Based Replication:",
+          body: "- Reading from Leader or Follower:\n  - Read from the leader if the user might have modified the data; otherwise, read from a follower.\n  - Example: User profile information editable only by the owner; hence, always read the user's own profile from the\n    leader and others' profiles from a follower.\n- Dynamic Criteria for Reading:\n  - If most application data is editable by users, the previous approach is ineffective as most reads would need to come\n    from the leader.\n  - Alternative criteria for deciding whether to read from the leader can be implemented. For example, you could track\n    the time of the last update and, for one minute after the last update, make all reads from the leader. You could\n    also monitor the replication lag on followers and prevent queries on any follower that is more than one minute\n    behind the leader.\n- Utilizing Client Timestamps:\n  Clients can remember the timestamp of their most recent write. The system ensures that replicas serving reads for a\n  user reflect updates at least until that timestamp. If a replica is not up-to-date, reads can be directed to another\n  replica or delayed until the lagging replica catches up. Timestamp can be a logical one (e.g., log sequence number) or\n  the actual system clock (requires clock synchronization).\n- If your replicas are distributed across multiple datacenters (for geographical proximity to users or for availability),\n  there is additional complexity. Any request that needs to be served by the leader must be routed to the datacenter that\n  contains the leader."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Cross-Device Read-After-Write Consistency",
+          body: "Users accessing the service from multiple devices (e.g., desktop web browser and mobile app). Objective is to ensure\nconsistency across devices, so that information entered on one device is immediately visible on others.\nThere are some additional issues to consider:\n\n- Approaches relying on remembering user's last update timestamp become complex as each device's code doesn't have\n  visibility into updates from other devices. Centralizing metadata becomes necessary to track updates across devices.\n- If your replicas are distributed across different datacenters, there is no guarantee that connections from different\n  devices will be routed to the same datacenter. (For example, if the user’s desktop computer uses the home broadband\n  connection and their mobile device uses the cellular data network, the devices’ network routes may be completely\n  different.) If your approach requires reading from the leader, you may first need to route requests from all of a\n  user’s devices to the same datacenter."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Monotonic Reads",
+          body: "Our second example of an anomaly that can occur when reading from asynchronous followers is that it’s possible for a\nuser to see things moving backward in time.\n\nThis can happen if a user makes several reads from different replicas. For example, Figure below shows user 2345 making\nthe same query twice, first to a follower with little lag, then to a follower with greater lag."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "A user first reads from a fresh replica, then from a stale replica. Time appears to go backward. To prevent this anomaly, we need monotonic reads.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_4_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Monotonic reads ensure that users do not observe time going backward when making sequential reads. It guarantees that\nsubsequent reads by a user will not return older data after previously reading newer data. It has lesser guarantee than\nstrong consistency but stronger than eventual consistency.\n\n- **Implementation**: Users consistently read from the same replica based on user ID hash.\n- **Replica Selection**: User ID hash determines replica.\n- **Handling Failures**: Reroute user queries to another replica if the chosen one fails."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Consistent Prefix Reads",
+          body: "Our third example of replication lag anomalies concerns violation of causality. Imag‐ ine the following short dialog\nbetween Mr. Poons and Mrs. Cake:\n- *Mr. Poons:* How far into the future can you see, Mrs. Cake?\n- *Mrs. Cake:* About ten seconds usually, Mr. Poons.\n\nNow, imagine a third person is listening to this conversation through followers. The things said by Mrs. Cake go through\na follower with little lag, but the things said by Mr. Poons have a longer replication lag. This observer would hear the\nfollowing:\n- *Mrs. Cake:* About ten seconds usually, Mr. Poons.\n- *Mr. Poons:* How far into the future can you see, Mrs. Cake?"
         });
       }
       ]),
@@ -10191,6 +10384,13 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_4_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_3_png", function () {
   let record = fastn.recordInstance({
   });

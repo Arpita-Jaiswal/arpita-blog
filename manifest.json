@@ -32,8 +32,8 @@
     },
     "README.md": {
       "name": "README.md",
-      "checksum": "40574FCF8CB90D4A67D90BC4ACD4E1C81663640450FC3FF0D32E011DDFCC3DE0",
-      "size": 98
+      "checksum": "F3FF5E0A341489C830CE76802E3A191477FDE41377B17618BD6F7BB0C6D3A711",
+      "size": 67
     },
     "c1/deps.ftd": {
       "name": "c1/deps.ftd",
@@ -77,8 +77,8 @@
     },
     "ddd/data-intensive-application/5-replication.ftd": {
       "name": "ddd/data-intensive-application/5-replication.ftd",
-      "checksum": "AA6A26A040CDCFE3B4C1CC9C00B66329D00395BD1DB451C4BD0C0A0BA0FD2024",
-      "size": 15762
+      "checksum": "CBF4325B12F2AB6DDFD919598B005A22877EDAD9388F3FEE5AEA86942281960F",
+      "size": 20349
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -199,6 +199,16 @@
       "name": "ddd/data-intensive-application/images/5-3.png",
       "checksum": "958AEFC7CB2884A7CC47118BB296B2AFD0FFB062D5F5CF6FCC6B94F173E70D80",
       "size": 86668
+    },
+    "ddd/data-intensive-application/images/5-4-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-4-dark.png",
+      "checksum": "4A58F25AE3CEE121830CB62A2ECCD04C45F71611016F3E1B6ABD6D4C64AF320B",
+      "size": 133144
+    },
+    "ddd/data-intensive-application/images/5-4.png": {
+      "name": "ddd/data-intensive-application/images/5-4.png",
+      "checksum": "805A0E33E116A37B8D7AB4D67C6753E1B5B386FC98DBF031BD28B7A94FDFADD2",
+      "size": 101192
     },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
@@ -336,6 +346,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/590868d1b50c3de745d797a65bd6999af967b3b4.zip",
-  "checksum": "B460C8FA4F749BC6A84737F03AEAB2FFCCD2AF6D290D98D950141C46650EE597"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/3db4e91e76bc44ea836e529b59787b3769120d80.zip",
+  "checksum": "B3B2A1D662665F97F5D7670D17678C6625FE9DC8EF26DE9E8252A2C866356F8B"
 }

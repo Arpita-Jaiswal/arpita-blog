@@ -293,4 +293,74 @@ shortly after making a write, the new data may not yet have reached the replica.
 -- ds.image:
 src: $assets.files.ddd.data-intensive-application.images.5-3.png
 
+-- ds.h3: Implementation of Read-After-Write Consistency in Leader-Based Replication:
+
+- Reading from Leader or Follower:
+  - Read from the leader if the user might have modified the data; otherwise, read from a follower.
+  - Example: User profile information editable only by the owner; hence, always read the user's own profile from the
+    leader and others' profiles from a follower.
+- Dynamic Criteria for Reading:
+  - If most application data is editable by users, the previous approach is ineffective as most reads would need to come
+    from the leader.
+  - Alternative criteria for deciding whether to read from the leader can be implemented. For example, you could track
+    the time of the last update and, for one minute after the last update, make all reads from the leader. You could
+    also monitor the replication lag on followers and prevent queries on any follower that is more than one minute
+    behind the leader.
+- Utilizing Client Timestamps:
+  Clients can remember the timestamp of their most recent write. The system ensures that replicas serving reads for a
+  user reflect updates at least until that timestamp. If a replica is not up-to-date, reads can be directed to another
+  replica or delayed until the lagging replica catches up. Timestamp can be a logical one (e.g., log sequence number) or
+  the actual system clock (requires clock synchronization).
+- If your replicas are distributed across multiple datacenters (for geographical proximity to users or for availability),
+  there is additional complexity. Any request that needs to be served by the leader must be routed to the datacenter that
+  contains the leader.
+
+-- ds.h3: Cross-Device Read-After-Write Consistency
+
+Users accessing the service from multiple devices (e.g., desktop web browser and mobile app). Objective is to ensure
+consistency across devices, so that information entered on one device is immediately visible on others.
+There are some additional issues to consider:
+
+- Approaches relying on remembering user's last update timestamp become complex as each device's code doesn't have
+  visibility into updates from other devices. Centralizing metadata becomes necessary to track updates across devices.
+- If your replicas are distributed across different datacenters, there is no guarantee that connections from different
+  devices will be routed to the same datacenter. (For example, if the user’s desktop computer uses the home broadband
+  connection and their mobile device uses the cellular data network, the devices’ network routes may be completely
+  different.) If your approach requires reading from the leader, you may first need to route requests from all of a
+  user’s devices to the same datacenter.
+
+-- ds.h2: Monotonic Reads
+
+Our second example of an anomaly that can occur when reading from asynchronous followers is that it’s possible for a
+user to see things moving backward in time.
+
+This can happen if a user makes several reads from different replicas. For example, Figure below shows user 2345 making
+the same query twice, first to a follower with little lag, then to a follower with greater lag.
+
+-- ds.image: A user first reads from a fresh replica, then from a stale replica. Time appears to go backward. To prevent this anomaly, we need monotonic reads.
+src: $assets.files.ddd.data-intensive-application.images.5-4.png
+
+-- ds.markdown:
+
+Monotonic reads ensure that users do not observe time going backward when making sequential reads. It guarantees that
+subsequent reads by a user will not return older data after previously reading newer data. It has lesser guarantee than
+strong consistency but stronger than eventual consistency.
+
+- **Implementation**: Users consistently read from the same replica based on user ID hash.
+- **Replica Selection**: User ID hash determines replica.
+- **Handling Failures**: Reroute user queries to another replica if the chosen one fails.
+
+-- ds.h2: Consistent Prefix Reads
+
+Our third example of replication lag anomalies concerns violation of causality. Imag‐ ine the following short dialog
+between Mr. Poons and Mrs. Cake:
+- *Mr. Poons:* How far into the future can you see, Mrs. Cake?
+- *Mrs. Cake:* About ten seconds usually, Mr. Poons.
+
+Now, imagine a third person is listening to this conversation through followers. The things said by Mrs. Cake go through
+a follower with little lag, but the things said by Mr. Poons have a longer replication lag. This observer would hear the
+following:
+- *Mrs. Cake:* About ten seconds usually, Mr. Poons.
+- *Mr. Poons:* How far into the future can you see, Mrs. Cake?
+
 -- end: ds.page
