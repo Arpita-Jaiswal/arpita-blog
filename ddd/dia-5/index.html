@@ -642,7 +642,7 @@ datacenters.</div><div data-id="208" class="ft_column __w-377"></div></div><div 
 </li>
 </ul>
 </li>
-<li><strong>Tolerance of Network Problems:</strong>
+<li><p><strong>Tolerance of Network Problems:</strong></p>
 <ul>
 <li><em>Single-Leader Configuration:</em><ul>
 <li>Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.</li>
@@ -655,7 +655,60 @@ datacenters.</div><div data-id="208" class="ft_column __w-377"></div></div><div 
 </li>
 </ul>
 </li>
-</ul></div><div data-id="218" class="ft_column __w-404"></div></div></div></div></div><comment data-id="219"></comment><comment data-id="220"></comment></div><div data-id="221" class="ft_column __w-405"></div><comment data-id="222"></comment></div><div data-id="223" class="ft_row __pos-406 __p-407 __bw-408 __br-409 __bc-410 __b-411 __r-412 __z-413 __bgc-414"><comment data-id="224"></comment><div data-id="225" class="ft_row __cur-415"><img data-id="226" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-416 __w-417 __h-418"></img></div><comment data-id="227"></comment><comment data-id="228"></comment></div><comment data-id="229"></comment></div></div></div></body><style id="styles">
+</ul>
+<p>Some databases support multi-leader configurations by default, but it is also often implemented with external tools,
+such as Tungsten Replicator for MySQL, BDR for PostgreSQL, and GoldenGate for Oracle.</p>
+<p>Multi-leader replication has a big downside: the same data may be concurrently modified in two different datacenters,
+and those write conflicts must be resolved.</p>
+Auto-incrementing keys, triggers, and integrity constraints can be problematic. For this reason, multi-leader replication
+is often considered dangerous territory that should be avoided if possible.</div><div data-id="218" class="ft_column __w-404"></div></div><div data-id="219" class="ft_column __w-405"><h3 data-id="220" id="clients-with-offline-operation" class="__rl-406 __w-407 __pt-408 __mb-409 __c-410">Clients with offline operation</h3><comment data-id="221"></comment><div data-id="222" class="__rl-411 __w-412 __c-413"><p>Multi-leader replication is appropriate if you have an application that needs to continue to work while it is
+disconnected from the internet.</p>
+<p>For example Calendar apps across devices require constant access for reading and writing meetings. Functionality should
+remain available regardless of internet connectivity. Offline changes need synchronization with a server and other
+devices upon reconnection.</p>
+Each device operates as a local database acting as a leader, accepting write requests. Asynchronous multi-leader
+replication (sync) occurs between replicas on all devices. Replication lag can be significant, spanning hours or even
+days based on internet availability. Architecturally similar to multi-leader replication between datacenters, but with
+each device acting as a &quot;datacenter&quot; with unreliable network connections. Implementing effective multi-leader replication
+is challenging, as evidenced by historical issues with calendar sync. Tools like CouchDB are designed to facilitate this
+type of multi-leader configuration.</div><div data-id="223" class="ft_column __w-414"></div></div><div data-id="224" class="ft_column __w-415"><h3 data-id="225" id="collaborative-editing" class="__rl-416 __w-417 __pt-418 __mb-419 __c-420">Collaborative editing</h3><comment data-id="226"></comment><div data-id="227" class="__rl-421 __w-422 __c-423"><p>Real-time collaborative editing applications allow several people to edit a document simultaneously.</p>
+<p>If you want to guarantee that there will be no editing conflicts, the application must obtain a lock on the document
+before a user can edit it. If another user wants to edit the same document, they first have to wait until the first user
+has committed their changes and released the lock. This collaboration model is equivalent to single-leader replication
+with transactions on the leader.</p>
+However, for faster collaboration, you may want to make the unit of change very small (e.g., a single keystroke) and
+avoid locking. This approach allows multiple users to edit simultaneously, but it also brings all the challenges of
+multi-leader replication, including requiring conflict resolution.</div><div data-id="228" class="ft_column __w-424"></div></div><div data-id="229" class="ft_column __w-425"><h2 data-id="230" id="handling-write-conflicts" class="__rl-426 __w-427 __pt-428 __mb-429 __c-430">Handling Write Conflicts</h2><comment data-id="231"></comment><div data-id="232" class="__rl-431 __w-432 __c-433">User 1 changes the title of the page from A to B, and user 2 changes the title from A to C at the same time. Each user’s
+change is successfully applied to their local leader. However, when the changes are asynchronously replicated, a conflict
+is detected.</div><div data-id="233" class="ft_column __w-434"></div></div><div data-id="234" class="ft_column __w-435 __h-436 __jc-437 __ali-438"><img data-id="235" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-7.png" class="__w-439 __h-440 __mxw-441"></img><comment data-id="236"></comment><div data-id="237" class="__rl-442 __pl-443 __pr-444 __pt-445 __pb-446 __bblr-447 __bbrr-448 __c-449 __bgc-450 __ta-451">A write conflict caused by two leaders concurrently updating the same record.</div><comment data-id="238"></comment></div><div data-id="239" class="ft_column __w-452"><h3 data-id="240" id="synchronous-versus-asynchronous-conflict-detection" class="__rl-453 __w-454 __pt-455 __mb-456 __c-457">Synchronous versus asynchronous conflict detection</h3><comment data-id="241"></comment><div data-id="242" class="__rl-458 __w-459 __c-460"><p>In a single-leader database, the second writer will either block and wait for the first write to complete, or abort the
+second write transaction, forcing the user to retry the write. On the other hand, in a multi-leader setup, both writes
+are successful, and the conflict is only detected asynchronously at some later point in time. At that time, it may be
+too late to ask the user to resolve the conflict.</p>
+In principle, you could make the conflict detection synchronous—i.e., wait for the write to be replicated to all replicas
+before telling the user that the write was success‐ ful. However, by doing so, you would lose the main advantage of
+multi-leader replication: allowing each replica to accept writes independently. If you want synchronous conflict
+detection, you might as well just use single-leader replication.</div><div data-id="243" class="ft_column __w-461"></div></div><div data-id="244" class="ft_column __w-462"><h3 data-id="245" id="conflict-avoidance" class="__rl-463 __w-464 __pt-465 __mb-466 __c-467">Conflict avoidance</h3><comment data-id="246"></comment><div data-id="247" class="__rl-468 __w-469 __c-470"><p>If the application can ensure that all writes for a particular record go through the same leader, then conflicts cannot
+occur.</p>
+<p>In an application where users can edit their data, routing requests from each user to the same datacenter ensures
+consistency. By using the leader in that datacenter for reading and writing, different users may have different &quot;home&quot;
+datacenters, possibly based on geographic proximity. However, from any one user&#39;s perspective, the configuration
+resembles single-leader replication.</p>
+Changing the designated leader for a record may be necessary due to datacenter failures or user relocation. In such
+cases, conflict avoidance may fail, leading to concurrent writes on different leaders.</div><div data-id="248" class="ft_column __w-471"></div></div><div data-id="249" class="ft_column __w-472"><h3 data-id="250" id="converging-toward-a-consistent-state" class="__rl-473 __w-474 __pt-475 __mb-476 __c-477">Converging toward a consistent state</h3><comment data-id="251"></comment><div data-id="252" class="__rl-478 __w-479 __c-480"><p>In a multi-leader configuration, there is no defined ordering of writes, so it’s not clear what the final value should
+be. In Figure above, at leader 1 the title is first updated to B and then to C; at leader 2 it is first updated to C
+and then to B. Neither order is “more correct” than the other.</p>
+There are various ways of achieving <em>convergent conflict resolution</em>:
+<ul>
+<li>Assigning a unique ID to each write (e.g., timestamp, random number, UUID, or key-value hash), selecting the write with
+the highest ID as the winner, and discarding other writes is a common approach known as last write wins (LWW). However,
+this method is susceptible to data loss.</li>
+<li>Give each replica a unique ID, and let writes that originated at a higher-numbered replica always take precedence over
+writes that originated at a lower- numbered replica. This approach also implies data loss.</li>
+<li>Somehow merge the values together—e.g., order them alphabetically and then concatenate them (in Figure above, the merged
+title might be something like “B/C”).</li>
+<li>Record the conflict in an explicit data structure that preserves all information, and write application code that
+resolves the conflict at some later time (perhaps by prompting the user).</li>
+</ul></div><div data-id="253" class="ft_column __w-481"></div></div><div data-id="254" class="ft_column __w-482"><h3 data-id="255" id="custom-conflict-resolution-logic" class="__rl-483 __w-484 __pt-485 __mb-486 __c-487">Custom conflict resolution logic</h3><comment data-id="256"></comment><div data-id="257" class="ft_column __w-488"></div></div></div></div></div><comment data-id="258"></comment><comment data-id="259"></comment></div><div data-id="260" class="ft_column __w-489"></div><comment data-id="261"></comment></div><div data-id="262" class="ft_row __pos-490 __p-491 __bw-492 __br-493 __bc-494 __b-495 __r-496 __z-497 __bgc-498"><comment data-id="263"></comment><div data-id="264" class="ft_row __cur-499"><img data-id="265" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-500 __w-501 __h-502"></img></div><comment data-id="266"></comment><comment data-id="267"></comment></div><comment data-id="268"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1294,21 +1347,162 @@ datacenters.</div><div data-id="208" class="ft_column __w-377"></div></div><div 
 	body.dark  .__c-403:visited { color: #B8B8B8 !important; }
 	.__w-404 { width: 100%; }
 	.__w-405 { width: 100%; }
-	.__pos-406 { position: fixed; }
-	.__p-407 { padding: 10px; }
-	.__bw-408 { border-width: 1px; }
-	.__br-409 { border-radius: 4px; }
-	.__bc-410 { border-color: #D2D2D2; }
-	body.dark .__bc-410 { border-color: #434547; }
-	.__b-411 { bottom: 25px; }
-	.__r-412 { right: 25px; }
-	.__z-413 { z-index: 99999999999999; }
-	.__bgc-414 { background-color: #FFFFFF; }
-	body.dark .__bgc-414 { background-color: #130224; }
-	.__cur-415 { cursor: pointer; }
-	.__as-416 { align-self: center; }
-	.__w-417 { width: 19px; }
-	.__h-418 { height: 19px; }
+	.__rl-406 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-406 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-407 { width: 100%; }
+	.__pt-408 { padding-top: 0.17em; }
+	.__mb-409 { margin-bottom: 0.5rem; }
+	.__c-410 { color: #333333 !important; }
+	body.dark .__c-410 { color: #FFFFFF !important; }
+	.__c-410:visited { color: #333333 !important; }
+	body.dark  .__c-410:visited { color: #FFFFFF !important; }
+	.__rl-411 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-411 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-412 { width: 100%; }
+	.__c-413 { color: #7C7C7C !important; }
+	body.dark .__c-413 { color: #B8B8B8 !important; }
+	.__c-413:visited { color: #7C7C7C !important; }
+	body.dark  .__c-413:visited { color: #B8B8B8 !important; }
+	.__w-414 { width: 100%; }
+	.__w-415 { width: 100%; }
+	.__rl-416 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-416 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-417 { width: 100%; }
+	.__pt-418 { padding-top: 0.17em; }
+	.__mb-419 { margin-bottom: 0.5rem; }
+	.__c-420 { color: #333333 !important; }
+	body.dark .__c-420 { color: #FFFFFF !important; }
+	.__c-420:visited { color: #333333 !important; }
+	body.dark  .__c-420:visited { color: #FFFFFF !important; }
+	.__rl-421 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-421 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-422 { width: 100%; }
+	.__c-423 { color: #7C7C7C !important; }
+	body.dark .__c-423 { color: #B8B8B8 !important; }
+	.__c-423:visited { color: #7C7C7C !important; }
+	body.dark  .__c-423:visited { color: #B8B8B8 !important; }
+	.__w-424 { width: 100%; }
+	.__w-425 { width: 100%; }
+	.__rl-426 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-426 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-427 { width: 100%; }
+	.__pt-428 { padding-top: 0.3em; }
+	.__mb-429 { margin-bottom: 0.5rem; }
+	.__c-430 { color: #333333 !important; }
+	body.dark .__c-430 { color: #FFFFFF !important; }
+	.__c-430:visited { color: #333333 !important; }
+	body.dark  .__c-430:visited { color: #FFFFFF !important; }
+	.__rl-431 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-431 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-432 { width: 100%; }
+	.__c-433 { color: #7C7C7C !important; }
+	body.dark .__c-433 { color: #B8B8B8 !important; }
+	.__c-433:visited { color: #7C7C7C !important; }
+	body.dark  .__c-433:visited { color: #B8B8B8 !important; }
+	.__w-434 { width: 100%; }
+	.__w-435 { width: 100%; }
+	.__h-436 { height: null; }
+	.__jc-437 { justify-content: center; }
+	.__ali-438 { align-items: center; }
+	.__w-439 { width: auto; }
+	.__h-440 { height: auto; }
+	.__mxw-441 { max-width: 100%; }
+	.__rl-442 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-442 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-443 { padding-left: 20px; }
+	.__pr-444 { padding-right: 20px; }
+	.__pt-445 { padding-top: 8px; }
+	.__pb-446 { padding-bottom: 8px; }
+	.__bblr-447 { border-bottom-left-radius: 5px; }
+	.__bbrr-448 { border-bottom-right-radius: 5px; }
+	.__c-449 { color: #7C7C7C !important; }
+	body.dark .__c-449 { color: #B8B8B8 !important; }
+	.__c-449:visited { color: #7C7C7C !important; }
+	body.dark  .__c-449:visited { color: #B8B8B8 !important; }
+	.__bgc-450 { background-color: #F8F8F8; }
+	body.dark .__bgc-450 { background-color: #260B40; }
+	.__ta-451 { text-align: center; }
+	.__w-452 { width: 100%; }
+	.__rl-453 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-453 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-454 { width: 100%; }
+	.__pt-455 { padding-top: 0.17em; }
+	.__mb-456 { margin-bottom: 0.5rem; }
+	.__c-457 { color: #333333 !important; }
+	body.dark .__c-457 { color: #FFFFFF !important; }
+	.__c-457:visited { color: #333333 !important; }
+	body.dark  .__c-457:visited { color: #FFFFFF !important; }
+	.__rl-458 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-458 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-459 { width: 100%; }
+	.__c-460 { color: #7C7C7C !important; }
+	body.dark .__c-460 { color: #B8B8B8 !important; }
+	.__c-460:visited { color: #7C7C7C !important; }
+	body.dark  .__c-460:visited { color: #B8B8B8 !important; }
+	.__w-461 { width: 100%; }
+	.__w-462 { width: 100%; }
+	.__rl-463 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-463 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-464 { width: 100%; }
+	.__pt-465 { padding-top: 0.17em; }
+	.__mb-466 { margin-bottom: 0.5rem; }
+	.__c-467 { color: #333333 !important; }
+	body.dark .__c-467 { color: #FFFFFF !important; }
+	.__c-467:visited { color: #333333 !important; }
+	body.dark  .__c-467:visited { color: #FFFFFF !important; }
+	.__rl-468 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-468 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-469 { width: 100%; }
+	.__c-470 { color: #7C7C7C !important; }
+	body.dark .__c-470 { color: #B8B8B8 !important; }
+	.__c-470:visited { color: #7C7C7C !important; }
+	body.dark  .__c-470:visited { color: #B8B8B8 !important; }
+	.__w-471 { width: 100%; }
+	.__w-472 { width: 100%; }
+	.__rl-473 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-473 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-474 { width: 100%; }
+	.__pt-475 { padding-top: 0.17em; }
+	.__mb-476 { margin-bottom: 0.5rem; }
+	.__c-477 { color: #333333 !important; }
+	body.dark .__c-477 { color: #FFFFFF !important; }
+	.__c-477:visited { color: #333333 !important; }
+	body.dark  .__c-477:visited { color: #FFFFFF !important; }
+	.__rl-478 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-478 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-479 { width: 100%; }
+	.__c-480 { color: #7C7C7C !important; }
+	body.dark .__c-480 { color: #B8B8B8 !important; }
+	.__c-480:visited { color: #7C7C7C !important; }
+	body.dark  .__c-480:visited { color: #B8B8B8 !important; }
+	.__w-481 { width: 100%; }
+	.__w-482 { width: 100%; }
+	.__rl-483 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-483 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-484 { width: 100%; }
+	.__pt-485 { padding-top: 0.17em; }
+	.__mb-486 { margin-bottom: 0.5rem; }
+	.__c-487 { color: #333333 !important; }
+	body.dark .__c-487 { color: #FFFFFF !important; }
+	.__c-487:visited { color: #333333 !important; }
+	body.dark  .__c-487:visited { color: #FFFFFF !important; }
+	.__w-488 { width: 100%; }
+	.__w-489 { width: 100%; }
+	.__pos-490 { position: fixed; }
+	.__p-491 { padding: 10px; }
+	.__bw-492 { border-width: 1px; }
+	.__br-493 { border-radius: 4px; }
+	.__bc-494 { border-color: #D2D2D2; }
+	body.dark .__bc-494 { border-color: #434547; }
+	.__b-495 { bottom: 25px; }
+	.__r-496 { right: 25px; }
+	.__z-497 { z-index: 99999999999999; }
+	.__bgc-498 { background-color: #FFFFFF; }
+	body.dark .__bgc-498 { background-color: #130224; }
+	.__cur-499 { cursor: pointer; }
+	.__as-500 { align-self: center; }
+	.__w-501 { width: 19px; }
+	.__h-502 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3441,7 +3635,54 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
           title: "Comparison: Single-Leader vs. Multi-Leader Configurations in Multi-Datacenter Deployment",
-          body: "- **Performance:**\n  - *Single-Leader Configuration:*\n    - Every write must traverse the internet to the datacenter hosting the leader.\n    - Significant latency may be added to writes.\n  - *Multi-Leader Configuration:*\n    - Writes can be processed locally within each datacenter.\n    - Replication to other datacenters occurs asynchronously.\n    - Inter-datacenter network delay is hidden from users, potentially improving perceived performance.\n\n- **Tolerance of Datacenter Outages:**\n  - *Single-Leader Configuration:*\n    - Failover may promote a follower in another datacenter to be the leader if the datacenter with the leader fails.\n  - *Multi-Leader Configuration:*\n    - Each datacenter can operate independently.\n    - Replication catches up when the failed datacenter is restored online.\n\n- **Tolerance of Network Problems:**\n  - *Single-Leader Configuration:*\n    - Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.\n  - *Multi-Leader Configuration:*\n    - Asynchronous replication allows better tolerance to network issues.\n    - Temporary network interruptions do not prevent write processing."
+          body: "- **Performance:**\n  - *Single-Leader Configuration:*\n    - Every write must traverse the internet to the datacenter hosting the leader.\n    - Significant latency may be added to writes.\n  - *Multi-Leader Configuration:*\n    - Writes can be processed locally within each datacenter.\n    - Replication to other datacenters occurs asynchronously.\n    - Inter-datacenter network delay is hidden from users, potentially improving perceived performance.\n\n- **Tolerance of Datacenter Outages:**\n  - *Single-Leader Configuration:*\n    - Failover may promote a follower in another datacenter to be the leader if the datacenter with the leader fails.\n  - *Multi-Leader Configuration:*\n    - Each datacenter can operate independently.\n    - Replication catches up when the failed datacenter is restored online.\n\n- **Tolerance of Network Problems:**\n  - *Single-Leader Configuration:*\n    - Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.\n  - *Multi-Leader Configuration:*\n    - Asynchronous replication allows better tolerance to network issues.\n    - Temporary network interruptions do not prevent write processing.\n\nSome databases support multi-leader configurations by default, but it is also often implemented with external tools,\nsuch as Tungsten Replicator for MySQL, BDR for PostgreSQL, and GoldenGate for Oracle.\n\nMulti-leader replication has a big downside: the same data may be concurrently modified in two different datacenters,\nand those write conflicts must be resolved.\n\nAuto-incrementing keys, triggers, and integrity constraints can be problematic. For this reason, multi-leader replication\nis often considered dangerous territory that should be avoided if possible."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Clients with offline operation",
+          body: "Multi-leader replication is appropriate if you have an application that needs to continue to work while it is\ndisconnected from the internet.\n\nFor example Calendar apps across devices require constant access for reading and writing meetings. Functionality should\nremain available regardless of internet connectivity. Offline changes need synchronization with a server and other\ndevices upon reconnection.\n\nEach device operates as a local database acting as a leader, accepting write requests. Asynchronous multi-leader\nreplication (sync) occurs between replicas on all devices. Replication lag can be significant, spanning hours or even\ndays based on internet availability. Architecturally similar to multi-leader replication between datacenters, but with\neach device acting as a \"datacenter\" with unreliable network connections. Implementing effective multi-leader replication\nis challenging, as evidenced by historical issues with calendar sync. Tools like CouchDB are designed to facilitate this\ntype of multi-leader configuration."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Collaborative editing",
+          body: "Real-time collaborative editing applications allow several people to edit a document simultaneously.\n\nIf you want to guarantee that there will be no editing conflicts, the application must obtain a lock on the document\nbefore a user can edit it. If another user wants to edit the same document, they first have to wait until the first user\nhas committed their changes and released the lock. This collaboration model is equivalent to single-leader replication\nwith transactions on the leader.\n\nHowever, for faster collaboration, you may want to make the unit of change very small (e.g., a single keystroke) and\navoid locking. This approach allows multiple users to edit simultaneously, but it also brings all the challenges of\nmulti-leader replication, including requiring conflict resolution."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Handling Write Conflicts",
+          body: "User 1 changes the title of the page from A to B, and user 2 changes the title from A to C at the same time. Each user’s\nchange is successfully applied to their local leader. However, when the changes are asynchronously replicated, a conflict\nis detected."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "A write conflict caused by two leaders concurrently updating the same record.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_7_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Synchronous versus asynchronous conflict detection",
+          body: "In a single-leader database, the second writer will either block and wait for the first write to complete, or abort the\nsecond write transaction, forcing the user to retry the write. On the other hand, in a multi-leader setup, both writes\nare successful, and the conflict is only detected asynchronously at some later point in time. At that time, it may be\ntoo late to ask the user to resolve the conflict.\n\nIn principle, you could make the conflict detection synchronous—i.e., wait for the write to be replicated to all replicas\nbefore telling the user that the write was success‐ ful. However, by doing so, you would lose the main advantage of\nmulti-leader replication: allowing each replica to accept writes independently. If you want synchronous conflict\ndetection, you might as well just use single-leader replication."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Conflict avoidance",
+          body: "If the application can ensure that all writes for a particular record go through the same leader, then conflicts cannot\noccur.\n\nIn an application where users can edit their data, routing requests from each user to the same datacenter ensures\nconsistency. By using the leader in that datacenter for reading and writing, different users may have different \"home\"\ndatacenters, possibly based on geographic proximity. However, from any one user's perspective, the configuration\nresembles single-leader replication.\n\nChanging the designated leader for a record may be necessary due to datacenter failures or user relocation. In such\ncases, conflict avoidance may fail, leading to concurrent writes on different leaders."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Converging toward a consistent state",
+          body: "In a multi-leader configuration, there is no defined ordering of writes, so it’s not clear what the final value should\nbe. In Figure above, at leader 1 the title is first updated to B and then to C; at leader 2 it is first updated to C\nand then to B. Neither order is “more correct” than the other.\n\nThere are various ways of achieving *convergent conflict resolution*:\n\n- Assigning a unique ID to each write (e.g., timestamp, random number, UUID, or key-value hash), selecting the write with\n  the highest ID as the winner, and discarding other writes is a common approach known as last write wins (LWW). However,\n  this method is susceptible to data loss.\n- Give each replica a unique ID, and let writes that originated at a higher-numbered replica always take precedence over\n  writes that originated at a lower- numbered replica. This approach also implies data loss.\n- Somehow merge the values together—e.g., order them alphabetically and then concatenate them (in Figure above, the merged\n  title might be something like “B/C”).\n- Record the conflict in an explicit data structure that preserves all information, and write application code that\n  resolves the conflict at some later time (perhaps by prompting the user)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Custom conflict resolution logic"
         });
       }
       ]),
@@ -11399,6 +11640,13 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_7_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-7.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-7-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_6_png", function () {
   let record = fastn.recordInstance({
   });
