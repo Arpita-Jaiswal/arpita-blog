@@ -526,6 +526,41 @@ There are various ways of achieving *convergent conflict resolution*:
 
 -- ds.h3: Custom conflict resolution logic
 
+Most multi-leader replication tools allow to write conflict resolution logic using application code. That code may be
+executed on write or on read:
+
+- *On write:* Conflict handler is triggered as soon as the database system detects a conflict in the log of replicated
+  changes. Example: Bucardo enables writing a Perl snippet for conflict resolution. Typically runs in a background
+  process and must execute quickly, without user interaction.
+- *On read:* Conflicting writes are stored when a conflict is detected. Upon reading the data next, multiple versions of
+  the data are returned to the application. The application can then prompt the user or automatically resolve the
+  conflict, updating the database accordingly. Example: CouchDB employs this approach.
+
+Conflict resolution operates at the level of individual rows or documents, not entire transactions. Thus, each write
+within a transaction is considered separately for conflict resolution.
+
+
+-- ds.h3: Automatic Conflict Resolution
+
+Conflict resolution rules can become complex, and custom code may introduce errors. For instance, Amazon's conflict
+resolution handler led to unexpected outcomes like items reappearing in shopping carts after removal.
+
+Research on automatic conflict resolution includes:
+
+- *Conflict-free replicated datatypes (CRDTs):* Data structures (for sets, maps, ordered lists, counters, etc. ) for
+  concurrent editing, automatically resolving conflicts. Uses two way merge.
+- *Mergeable persistent data structures:* Track history like Git and use three-way merge functions.
+- *Operational transformation:* Algorithm behind collaborative editing apps like Etherpad and Google Docs, designed for
+  concurrent editing of ordered lists.
+
+While database implementations of these algorithms are emerging, they offer potential for simplifying multi-leader data
+synchronization in applications.
+
+
+
+
+
+
 
 
 -- end: ds.page
