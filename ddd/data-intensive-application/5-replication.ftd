@@ -428,4 +428,104 @@ src: $assets.files.ddd.data-intensive-application.images.5-6.png
     - Asynchronous replication allows better tolerance to network issues.
     - Temporary network interruptions do not prevent write processing.
 
+Some databases support multi-leader configurations by default, but it is also often implemented with external tools,
+such as Tungsten Replicator for MySQL, BDR for PostgreSQL, and GoldenGate for Oracle.
+
+Multi-leader replication has a big downside: the same data may be concurrently modified in two different datacenters,
+and those write conflicts must be resolved.
+
+Auto-incrementing keys, triggers, and integrity constraints can be problematic. For this reason, multi-leader replication
+is often considered dangerous territory that should be avoided if possible.
+
+
+
+-- ds.h3: Clients with offline operation
+
+Multi-leader replication is appropriate if you have an application that needs to continue to work while it is
+disconnected from the internet.
+
+For example Calendar apps across devices require constant access for reading and writing meetings. Functionality should
+remain available regardless of internet connectivity. Offline changes need synchronization with a server and other
+devices upon reconnection.
+
+Each device operates as a local database acting as a leader, accepting write requests. Asynchronous multi-leader
+replication (sync) occurs between replicas on all devices. Replication lag can be significant, spanning hours or even
+days based on internet availability. Architecturally similar to multi-leader replication between datacenters, but with
+each device acting as a "datacenter" with unreliable network connections. Implementing effective multi-leader replication
+is challenging, as evidenced by historical issues with calendar sync. Tools like CouchDB are designed to facilitate this
+type of multi-leader configuration.
+
+
+-- ds.h3: Collaborative editing
+
+Real-time collaborative editing applications allow several people to edit a document simultaneously.
+
+If you want to guarantee that there will be no editing conflicts, the application must obtain a lock on the document
+before a user can edit it. If another user wants to edit the same document, they first have to wait until the first user
+has committed their changes and released the lock. This collaboration model is equivalent to single-leader replication
+with transactions on the leader.
+
+However, for faster collaboration, you may want to make the unit of change very small (e.g., a single keystroke) and
+avoid locking. This approach allows multiple users to edit simultaneously, but it also brings all the challenges of
+multi-leader replication, including requiring conflict resolution.
+
+
+-- ds.h2: Handling Write Conflicts
+
+User 1 changes the title of the page from A to B, and user 2 changes the title from A to C at the same time. Each user’s
+change is successfully applied to their local leader. However, when the changes are asynchronously replicated, a conflict
+is detected.
+
+
+-- ds.image: A write conflict caused by two leaders concurrently updating the same record.
+src: $assets.files.ddd.data-intensive-application.images.5-7.png
+
+
+-- ds.h3: Synchronous versus asynchronous conflict detection
+
+In a single-leader database, the second writer will either block and wait for the first write to complete, or abort the
+second write transaction, forcing the user to retry the write. On the other hand, in a multi-leader setup, both writes
+are successful, and the conflict is only detected asynchronously at some later point in time. At that time, it may be
+too late to ask the user to resolve the conflict.
+
+In principle, you could make the conflict detection synchronous—i.e., wait for the write to be replicated to all replicas
+before telling the user that the write was success‐ ful. However, by doing so, you would lose the main advantage of
+multi-leader replication: allowing each replica to accept writes independently. If you want synchronous conflict
+detection, you might as well just use single-leader replication.
+
+-- ds.h3: Conflict avoidance
+
+If the application can ensure that all writes for a particular record go through the same leader, then conflicts cannot
+occur.
+
+In an application where users can edit their data, routing requests from each user to the same datacenter ensures
+consistency. By using the leader in that datacenter for reading and writing, different users may have different "home"
+datacenters, possibly based on geographic proximity. However, from any one user's perspective, the configuration
+resembles single-leader replication.
+
+Changing the designated leader for a record may be necessary due to datacenter failures or user relocation. In such
+cases, conflict avoidance may fail, leading to concurrent writes on different leaders.
+
+-- ds.h3: Converging toward a consistent state
+
+In a multi-leader configuration, there is no defined ordering of writes, so it’s not clear what the final value should
+be. In Figure above, at leader 1 the title is first updated to B and then to C; at leader 2 it is first updated to C
+and then to B. Neither order is “more correct” than the other.
+
+There are various ways of achieving *convergent conflict resolution*:
+
+- Assigning a unique ID to each write (e.g., timestamp, random number, UUID, or key-value hash), selecting the write with
+  the highest ID as the winner, and discarding other writes is a common approach known as last write wins (LWW). However,
+  this method is susceptible to data loss.
+- Give each replica a unique ID, and let writes that originated at a higher-numbered replica always take precedence over
+  writes that originated at a lower- numbered replica. This approach also implies data loss.
+- Somehow merge the values together—e.g., order them alphabetically and then concatenate them (in Figure above, the merged
+  title might be something like “B/C”).
+- Record the conflict in an explicit data structure that preserves all information, and write application code that
+  resolves the conflict at some later time (perhaps by prompting the user).
+
+-- ds.h3: Custom conflict resolution logic
+
+
+
 -- end: ds.page
