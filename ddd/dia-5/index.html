@@ -600,7 +600,62 @@ following:
 <ul>
 <li><em>Mrs. Cake:</em> About ten seconds usually, Mr. Poons.</li>
 <li><em>Mr. Poons:</em> How far into the future can you see, Mrs. Cake?</li>
-</ul></div><div data-id="184" class="ft_column __w-321"></div></div></div></div></div><comment data-id="185"></comment><comment data-id="186"></comment></div><div data-id="187" class="ft_column __w-322"></div><comment data-id="188"></comment></div><div data-id="189" class="ft_row __pos-323 __p-324 __bw-325 __br-326 __bc-327 __b-328 __r-329 __z-330 __bgc-331"><comment data-id="190"></comment><div data-id="191" class="ft_row __cur-332"><img data-id="192" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-333 __w-334 __h-335"></img></div><comment data-id="193"></comment><comment data-id="194"></comment></div><comment data-id="195"></comment></div></div></div></body><style id="styles">
+</ul></div><div data-id="184" class="ft_column __w-321"></div></div><div data-id="185" class="ft_column __w-322 __h-323 __jc-324 __ali-325"><img data-id="186" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png" class="__w-326 __h-327 __mxw-328"></img><comment data-id="187"></comment><div data-id="188" class="__rl-329 __pl-330 __pr-331 __pt-332 __pb-333 __bblr-334 __bbrr-335 __c-336 __bgc-337 __ta-338">If some partitions are replicated slower than others, an observer may see the answer before they see the question.</div><comment data-id="189"></comment></div><div data-id="190" class="__rl-339 __w-340 __c-341"><p>This is a particular problem in partitioned (sharded) databases. In many distributed databases, different partitions
+operate independently, so there is no global ordering of writes.</p>
+One solution is to make sure that any writes that are causally related to each other are written to the same partition—
+but in some applications that cannot be done efficiently. There are also algorithms that explicitly keep track of causal
+dependencies.</div><div data-id="191" class="ft_column __w-342"><h2 data-id="192" id="solutions-for-replication-lag" class="__rl-343 __w-344 __pt-345 __mb-346 __c-347">Solutions for Replication Lag</h2><comment data-id="193"></comment><div data-id="194" class="__rl-348 __w-349 __c-350"><p>As discussed earlier, there are ways in which an application can provide a stronger guarantee than the underlying
+database— for example, by performing certain kinds of reads on the leader. However, dealing with these issues in
+application code is complex and easy to get wrong.</p>
+<p>It would be better if application developers could just trust their databases to “do the right thing.” This is why
+<em>transactions</em> exist.</p>
+Single-node transactions have existed for a long time. However, in the move to distributed (replicated and partitioned)
+databases, many systems have abandoned them, claiming that transactions are too expensive in terms of performance and
+availability, and asserting that eventual consistency is inevitable in a scalable system.</div><div data-id="195" class="ft_column __w-351"></div></div><div data-id="196" class="ft_column __w-352"><h1 data-id="197" id="multi-leader-replication" class="__rl-353 __w-354 __pt-355 __mb-356 __bbw-357 __bc-358 __c-359">Multi-Leader Replication</h1><comment data-id="198"></comment><div data-id="199" class="ft_column __w-360"></div></div><div data-id="200" class="ft_column __w-361"><h2 data-id="201" id="use-cases-for-multi-leader-replication" class="__rl-362 __w-363 __pt-364 __mb-365 __c-366">Use Cases for Multi-Leader Replication</h2><comment data-id="202"></comment><div data-id="203" class="ft_column __w-367"></div></div><div data-id="204" class="ft_column __w-368"><h3 data-id="205" id="multi-datacenter-operation" class="__rl-369 __w-370 __pt-371 __mb-372 __c-373">Multi-datacenter operation</h3><comment data-id="206"></comment><div data-id="207" class="__rl-374 __w-375 __c-376">In a multi-leader configuration, you can have a leader in each datacenter. Within each datacenter, regular leader–follower
+replication is used; between datacenters, each datacenter’s leader replicates its changes to the leaders in other
+datacenters.</div><div data-id="208" class="ft_column __w-377"></div></div><div data-id="209" class="ft_column __w-378 __h-379 __jc-380 __ali-381"><img data-id="210" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-6.png" class="__w-382 __h-383 __mxw-384"></img><comment data-id="211"></comment><div data-id="212" class="__rl-385 __pl-386 __pr-387 __pt-388 __pb-389 __bblr-390 __bbrr-391 __c-392 __bgc-393 __ta-394">Multi-leader replication across multiple datacenters.</div><comment data-id="213"></comment></div><div data-id="214" class="ft_column __w-395"><h3 data-id="215" id="comparison-single-leader-vs-multi-leader-configurations-in-multi-datacenter-deployment" class="__rl-396 __w-397 __pt-398 __mb-399 __c-400">Comparison: Single-Leader vs. Multi-Leader Configurations in Multi-Datacenter Deployment</h3><comment data-id="216"></comment><div data-id="217" class="__rl-401 __w-402 __c-403"><ul>
+<li><p><strong>Performance:</strong></p>
+<ul>
+<li><em>Single-Leader Configuration:</em><ul>
+<li>Every write must traverse the internet to the datacenter hosting the leader.</li>
+<li>Significant latency may be added to writes.</li>
+</ul>
+</li>
+<li><em>Multi-Leader Configuration:</em><ul>
+<li>Writes can be processed locally within each datacenter.</li>
+<li>Replication to other datacenters occurs asynchronously.</li>
+<li>Inter-datacenter network delay is hidden from users, potentially improving perceived performance.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Tolerance of Datacenter Outages:</strong></p>
+<ul>
+<li><em>Single-Leader Configuration:</em><ul>
+<li>Failover may promote a follower in another datacenter to be the leader if the datacenter with the leader fails.</li>
+</ul>
+</li>
+<li><em>Multi-Leader Configuration:</em><ul>
+<li>Each datacenter can operate independently.</li>
+<li>Replication catches up when the failed datacenter is restored online.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Tolerance of Network Problems:</strong>
+<ul>
+<li><em>Single-Leader Configuration:</em><ul>
+<li>Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.</li>
+</ul>
+</li>
+<li><em>Multi-Leader Configuration:</em><ul>
+<li>Asynchronous replication allows better tolerance to network issues.</li>
+<li>Temporary network interruptions do not prevent write processing.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div><div data-id="218" class="ft_column __w-404"></div></div></div></div></div><comment data-id="219"></comment><comment data-id="220"></comment></div><div data-id="221" class="ft_column __w-405"></div><comment data-id="222"></comment></div><div data-id="223" class="ft_row __pos-406 __p-407 __bw-408 __br-409 __bc-410 __b-411 __r-412 __z-413 __bgc-414"><comment data-id="224"></comment><div data-id="225" class="ft_row __cur-415"><img data-id="226" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-416 __w-417 __h-418"></img></div><comment data-id="227"></comment><comment data-id="228"></comment></div><comment data-id="229"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1109,21 +1164,151 @@ following:
 	body.dark  .__c-320:visited { color: #B8B8B8 !important; }
 	.__w-321 { width: 100%; }
 	.__w-322 { width: 100%; }
-	.__pos-323 { position: fixed; }
-	.__p-324 { padding: 10px; }
-	.__bw-325 { border-width: 1px; }
-	.__br-326 { border-radius: 4px; }
-	.__bc-327 { border-color: #D2D2D2; }
-	body.dark .__bc-327 { border-color: #434547; }
-	.__b-328 { bottom: 25px; }
-	.__r-329 { right: 25px; }
-	.__z-330 { z-index: 99999999999999; }
-	.__bgc-331 { background-color: #FFFFFF; }
-	body.dark .__bgc-331 { background-color: #130224; }
-	.__cur-332 { cursor: pointer; }
-	.__as-333 { align-self: center; }
-	.__w-334 { width: 19px; }
-	.__h-335 { height: 19px; }
+	.__h-323 { height: null; }
+	.__jc-324 { justify-content: center; }
+	.__ali-325 { align-items: center; }
+	.__w-326 { width: auto; }
+	.__h-327 { height: auto; }
+	.__mxw-328 { max-width: 100%; }
+	.__rl-329 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-329 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-330 { padding-left: 20px; }
+	.__pr-331 { padding-right: 20px; }
+	.__pt-332 { padding-top: 8px; }
+	.__pb-333 { padding-bottom: 8px; }
+	.__bblr-334 { border-bottom-left-radius: 5px; }
+	.__bbrr-335 { border-bottom-right-radius: 5px; }
+	.__c-336 { color: #7C7C7C !important; }
+	body.dark .__c-336 { color: #B8B8B8 !important; }
+	.__c-336:visited { color: #7C7C7C !important; }
+	body.dark  .__c-336:visited { color: #B8B8B8 !important; }
+	.__bgc-337 { background-color: #F8F8F8; }
+	body.dark .__bgc-337 { background-color: #260B40; }
+	.__ta-338 { text-align: center; }
+	.__rl-339 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-339 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-340 { width: 100%; }
+	.__c-341 { color: #7C7C7C !important; }
+	body.dark .__c-341 { color: #B8B8B8 !important; }
+	.__c-341:visited { color: #7C7C7C !important; }
+	body.dark  .__c-341:visited { color: #B8B8B8 !important; }
+	.__w-342 { width: 100%; }
+	.__rl-343 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-343 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-344 { width: 100%; }
+	.__pt-345 { padding-top: 0.3em; }
+	.__mb-346 { margin-bottom: 0.5rem; }
+	.__c-347 { color: #333333 !important; }
+	body.dark .__c-347 { color: #FFFFFF !important; }
+	.__c-347:visited { color: #333333 !important; }
+	body.dark  .__c-347:visited { color: #FFFFFF !important; }
+	.__rl-348 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-348 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-349 { width: 100%; }
+	.__c-350 { color: #7C7C7C !important; }
+	body.dark .__c-350 { color: #B8B8B8 !important; }
+	.__c-350:visited { color: #7C7C7C !important; }
+	body.dark  .__c-350:visited { color: #B8B8B8 !important; }
+	.__w-351 { width: 100%; }
+	.__w-352 { width: 100%; }
+	.__rl-353 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 40px; font-weight: 700; line-height: 60px; }
+	body.mobile .__rl-353 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 36px; font-weight: 700; line-height: 54px; }
+	.__w-354 { width: 100%; }
+	.__pt-355 { padding-top: 0.5em; }
+	.__mb-356 { margin-bottom: 0.5rem; }
+	.__bbw-357 { border-bottom-width: 1px; }
+	.__bc-358 { border-color: #D2D2D2; }
+	body.dark .__bc-358 { border-color: #434547; }
+	.__c-359 { color: #333333 !important; }
+	body.dark .__c-359 { color: #FFFFFF !important; }
+	.__c-359:visited { color: #333333 !important; }
+	body.dark  .__c-359:visited { color: #FFFFFF !important; }
+	.__w-360 { width: 100%; }
+	.__w-361 { width: 100%; }
+	.__rl-362 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-362 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-363 { width: 100%; }
+	.__pt-364 { padding-top: 0.3em; }
+	.__mb-365 { margin-bottom: 0.5rem; }
+	.__c-366 { color: #333333 !important; }
+	body.dark .__c-366 { color: #FFFFFF !important; }
+	.__c-366:visited { color: #333333 !important; }
+	body.dark  .__c-366:visited { color: #FFFFFF !important; }
+	.__w-367 { width: 100%; }
+	.__w-368 { width: 100%; }
+	.__rl-369 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-369 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-370 { width: 100%; }
+	.__pt-371 { padding-top: 0.17em; }
+	.__mb-372 { margin-bottom: 0.5rem; }
+	.__c-373 { color: #333333 !important; }
+	body.dark .__c-373 { color: #FFFFFF !important; }
+	.__c-373:visited { color: #333333 !important; }
+	body.dark  .__c-373:visited { color: #FFFFFF !important; }
+	.__rl-374 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-374 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-375 { width: 100%; }
+	.__c-376 { color: #7C7C7C !important; }
+	body.dark .__c-376 { color: #B8B8B8 !important; }
+	.__c-376:visited { color: #7C7C7C !important; }
+	body.dark  .__c-376:visited { color: #B8B8B8 !important; }
+	.__w-377 { width: 100%; }
+	.__w-378 { width: 100%; }
+	.__h-379 { height: null; }
+	.__jc-380 { justify-content: center; }
+	.__ali-381 { align-items: center; }
+	.__w-382 { width: auto; }
+	.__h-383 { height: auto; }
+	.__mxw-384 { max-width: 100%; }
+	.__rl-385 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-385 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-386 { padding-left: 20px; }
+	.__pr-387 { padding-right: 20px; }
+	.__pt-388 { padding-top: 8px; }
+	.__pb-389 { padding-bottom: 8px; }
+	.__bblr-390 { border-bottom-left-radius: 5px; }
+	.__bbrr-391 { border-bottom-right-radius: 5px; }
+	.__c-392 { color: #7C7C7C !important; }
+	body.dark .__c-392 { color: #B8B8B8 !important; }
+	.__c-392:visited { color: #7C7C7C !important; }
+	body.dark  .__c-392:visited { color: #B8B8B8 !important; }
+	.__bgc-393 { background-color: #F8F8F8; }
+	body.dark .__bgc-393 { background-color: #260B40; }
+	.__ta-394 { text-align: center; }
+	.__w-395 { width: 100%; }
+	.__rl-396 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-396 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-397 { width: 100%; }
+	.__pt-398 { padding-top: 0.17em; }
+	.__mb-399 { margin-bottom: 0.5rem; }
+	.__c-400 { color: #333333 !important; }
+	body.dark .__c-400 { color: #FFFFFF !important; }
+	.__c-400:visited { color: #333333 !important; }
+	body.dark  .__c-400:visited { color: #FFFFFF !important; }
+	.__rl-401 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-401 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-402 { width: 100%; }
+	.__c-403 { color: #7C7C7C !important; }
+	body.dark .__c-403 { color: #B8B8B8 !important; }
+	.__c-403:visited { color: #7C7C7C !important; }
+	body.dark  .__c-403:visited { color: #B8B8B8 !important; }
+	.__w-404 { width: 100%; }
+	.__w-405 { width: 100%; }
+	.__pos-406 { position: fixed; }
+	.__p-407 { padding: 10px; }
+	.__bw-408 { border-width: 1px; }
+	.__br-409 { border-radius: 4px; }
+	.__bc-410 { border-color: #D2D2D2; }
+	body.dark .__bc-410 { border-color: #434547; }
+	.__b-411 { bottom: 25px; }
+	.__r-412 { right: 25px; }
+	.__z-413 { z-index: 99999999999999; }
+	.__bgc-414 { background-color: #FFFFFF; }
+	body.dark .__bgc-414 { background-color: #130224; }
+	.__cur-415 { cursor: pointer; }
+	.__as-416 { align-self: center; }
+	.__w-417 { width: 19px; }
+	.__h-418 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3212,6 +3397,51 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
         let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
           title: "Consistent Prefix Reads",
           body: "Our third example of replication lag anomalies concerns violation of causality. Imag‐ ine the following short dialog\nbetween Mr. Poons and Mrs. Cake:\n- *Mr. Poons:* How far into the future can you see, Mrs. Cake?\n- *Mrs. Cake:* About ten seconds usually, Mr. Poons.\n\nNow, imagine a third person is listening to this conversation through followers. The things said by Mrs. Cake go through\na follower with little lag, but the things said by Mr. Poons have a longer replication lag. This observer would hear the\nfollowing:\n- *Mrs. Cake:* About ten seconds usually, Mr. Poons.\n- *Mr. Poons:* How far into the future can you see, Mrs. Cake?"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "If some partitions are replicated slower than others, an observer may see the answer before they see the question.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_3_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "This is a particular problem in partitioned (sharded) databases. In many distributed databases, different partitions\noperate independently, so there is no global ordering of writes.\n\nOne solution is to make sure that any writes that are causally related to each other are written to the same partition—\nbut in some applications that cannot be done efficiently. There are also algorithms that explicitly keep track of causal\ndependencies."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Solutions for Replication Lag",
+          body: "As discussed earlier, there are ways in which an application can provide a stronger guarantee than the underlying\ndatabase— for example, by performing certain kinds of reads on the leader. However, dealing with these issues in\napplication code is complex and easy to get wrong.\n\nIt would be better if application developers could just trust their databases to “do the right thing.” This is why\n*transactions* exist.\n\nSingle-node transactions have existed for a long time. However, in the move to distributed (replicated and partitioned)\ndatabases, many systems have abandoned them, claiming that transactions are too expensive in terms of performance and\navailability, and asserting that eventual consistency is inevitable in a scalable system."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h1(root, inherited, {
+          title: "Multi-Leader Replication"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Use Cases for Multi-Leader Replication"
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Multi-datacenter operation",
+          body: "In a multi-leader configuration, you can have a leader in each datacenter. Within each datacenter, regular leader–follower\nreplication is used; between datacenters, each datacenter’s leader replicates its changes to the leaders in other\ndatacenters."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "Multi-leader replication across multiple datacenters.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_6_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Comparison: Single-Leader vs. Multi-Leader Configurations in Multi-Datacenter Deployment",
+          body: "- **Performance:**\n  - *Single-Leader Configuration:*\n    - Every write must traverse the internet to the datacenter hosting the leader.\n    - Significant latency may be added to writes.\n  - *Multi-Leader Configuration:*\n    - Writes can be processed locally within each datacenter.\n    - Replication to other datacenters occurs asynchronously.\n    - Inter-datacenter network delay is hidden from users, potentially improving perceived performance.\n\n- **Tolerance of Datacenter Outages:**\n  - *Single-Leader Configuration:*\n    - Failover may promote a follower in another datacenter to be the leader if the datacenter with the leader fails.\n  - *Multi-Leader Configuration:*\n    - Each datacenter can operate independently.\n    - Replication catches up when the failed datacenter is restored online.\n\n- **Tolerance of Network Problems:**\n  - *Single-Leader Configuration:*\n    - Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.\n  - *Multi-Leader Configuration:*\n    - Asynchronous replication allows better tolerance to network issues.\n    - Temporary network interruptions do not prevent write processing."
         });
       }
       ]),
@@ -11169,11 +11399,11 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
-fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_4_png", function () {
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_6_png", function () {
   let record = fastn.recordInstance({
   });
-  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4.png");
-  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4-dark.png");
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-6.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-6-dark.png");
   return record;
 }());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_3_png", function () {
@@ -11181,6 +11411,13 @@ fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_i
   });
   record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-3.png");
   record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-3-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_4_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-4-dark.png");
   return record;
 }());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_2_png", function () {

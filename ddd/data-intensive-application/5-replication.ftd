@@ -363,4 +363,69 @@ following:
 - *Mrs. Cake:* About ten seconds usually, Mr. Poons.
 - *Mr. Poons:* How far into the future can you see, Mrs. Cake?
 
+-- ds.image: If some partitions are replicated slower than others, an observer may see the answer before they see the question.
+src: $assets.files.ddd.data-intensive-application.images.5-3.png
+
+-- ds.markdown:
+
+This is a particular problem in partitioned (sharded) databases. In many distributed databases, different partitions
+operate independently, so there is no global ordering of writes.
+
+One solution is to make sure that any writes that are causally related to each other are written to the same partition—
+but in some applications that cannot be done efficiently. There are also algorithms that explicitly keep track of causal
+dependencies.
+
+-- ds.h2: Solutions for Replication Lag
+
+As discussed earlier, there are ways in which an application can provide a stronger guarantee than the underlying
+database— for example, by performing certain kinds of reads on the leader. However, dealing with these issues in
+application code is complex and easy to get wrong.
+
+It would be better if application developers could just trust their databases to “do the right thing.” This is why
+*transactions* exist.
+
+Single-node transactions have existed for a long time. However, in the move to distributed (replicated and partitioned)
+databases, many systems have abandoned them, claiming that transactions are too expensive in terms of performance and
+availability, and asserting that eventual consistency is inevitable in a scalable system.
+
+
+
+-- ds.h1: Multi-Leader Replication
+
+-- ds.h2: Use Cases for Multi-Leader Replication
+
+-- ds.h3: Multi-datacenter operation
+
+In a multi-leader configuration, you can have a leader in each datacenter. Within each datacenter, regular leader–follower
+replication is used; between datacenters, each datacenter’s leader replicates its changes to the leaders in other
+datacenters.
+
+-- ds.image: Multi-leader replication across multiple datacenters.
+src: $assets.files.ddd.data-intensive-application.images.5-6.png
+
+-- ds.h3: Comparison: Single-Leader vs. Multi-Leader Configurations in Multi-Datacenter Deployment
+
+- **Performance:**
+  - *Single-Leader Configuration:*
+    - Every write must traverse the internet to the datacenter hosting the leader.
+    - Significant latency may be added to writes.
+  - *Multi-Leader Configuration:*
+    - Writes can be processed locally within each datacenter.
+    - Replication to other datacenters occurs asynchronously.
+    - Inter-datacenter network delay is hidden from users, potentially improving perceived performance.
+
+- **Tolerance of Datacenter Outages:**
+  - *Single-Leader Configuration:*
+    - Failover may promote a follower in another datacenter to be the leader if the datacenter with the leader fails.
+  - *Multi-Leader Configuration:*
+    - Each datacenter can operate independently.
+    - Replication catches up when the failed datacenter is restored online.
+
+- **Tolerance of Network Problems:**
+  - *Single-Leader Configuration:*
+    - Highly sensitive to inter-datacenter link problems as writes are made synchronously over this link.
+  - *Multi-Leader Configuration:*
+    - Asynchronous replication allows better tolerance to network issues.
+    - Temporary network interruptions do not prevent write processing.
+
 -- end: ds.page
