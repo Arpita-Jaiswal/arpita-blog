@@ -706,7 +706,29 @@ writes that originated at a lower- numbered replica. This approach also implies 
 title might be something like “B/C”).</li>
 <li>Record the conflict in an explicit data structure that preserves all information, and write application code that
 resolves the conflict at some later time (perhaps by prompting the user).</li>
-</ul></div><div data-id="225" class="ft_column __w-430"></div></div><div data-id="226" class="ft_column __w-431"><h3 data-id="227" id="custom-conflict-resolution-logic" class="__rl-432 __w-433 __pt-434 __mb-435 __c-436">Custom conflict resolution logic</h3><comment data-id="228"></comment><div data-id="229" class="ft_column __w-437"></div></div></div></div></div><comment data-id="230"></comment><comment data-id="231"></comment></div><div data-id="232" class="ft_column __w-438"></div><comment data-id="233"></comment></div><div data-id="234" class="ft_row __pos-439 __p-440 __bw-441 __br-442 __bc-443 __b-444 __r-445 __z-446 __bgc-447"><comment data-id="235"></comment><div data-id="236" class="ft_row __cur-448"><img data-id="237" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-449 __w-450 __h-451"></img></div><comment data-id="238"></comment><comment data-id="239"></comment></div><comment data-id="240"></comment></div></div></div></body><style id="styles">
+</ul></div><div data-id="225" class="ft_column __w-430"></div></div><div data-id="226" class="ft_column __w-431"><h3 data-id="227" id="custom-conflict-resolution-logic" class="__rl-432 __w-433 __pt-434 __mb-435 __c-436">Custom conflict resolution logic</h3><comment data-id="228"></comment><div data-id="229" class="__rl-437 __w-438 __c-439"><p>Most multi-leader replication tools allow to write conflict resolution logic using application code. That code may be
+executed on write or on read:</p>
+<ul>
+<li><em>On write:</em> Conflict handler is triggered as soon as the database system detects a conflict in the log of replicated
+changes. Example: Bucardo enables writing a Perl snippet for conflict resolution. Typically runs in a background
+process and must execute quickly, without user interaction.</li>
+<li><em>On read:</em> Conflicting writes are stored when a conflict is detected. Upon reading the data next, multiple versions of
+the data are returned to the application. The application can then prompt the user or automatically resolve the
+conflict, updating the database accordingly. Example: CouchDB employs this approach.</li>
+</ul>
+Conflict resolution operates at the level of individual rows or documents, not entire transactions. Thus, each write
+within a transaction is considered separately for conflict resolution.</div><div data-id="230" class="ft_column __w-440"></div></div><div data-id="231" class="ft_column __w-441"><h3 data-id="232" id="automatic-conflict-resolution" class="__rl-442 __w-443 __pt-444 __mb-445 __c-446">Automatic Conflict Resolution</h3><comment data-id="233"></comment><div data-id="234" class="__rl-447 __w-448 __c-449"><p>Conflict resolution rules can become complex, and custom code may introduce errors. For instance, Amazon&#39;s conflict
+resolution handler led to unexpected outcomes like items reappearing in shopping carts after removal.</p>
+<p>Research on automatic conflict resolution includes:</p>
+<ul>
+<li><em>Conflict-free replicated datatypes (CRDTs):</em> Data structures (for sets, maps, ordered lists, counters, etc. ) for
+concurrent editing, automatically resolving conflicts. Uses two way merge.</li>
+<li><em>Mergeable persistent data structures:</em> Track history like Git and use three-way merge functions.</li>
+<li><em>Operational transformation:</em> Algorithm behind collaborative editing apps like Etherpad and Google Docs, designed for
+concurrent editing of ordered lists.</li>
+</ul>
+While database implementations of these algorithms are emerging, they offer potential for simplifying multi-leader data
+synchronization in applications.</div><div data-id="235" class="ft_column __w-450"></div></div></div></div></div><comment data-id="236"></comment><comment data-id="237"></comment></div><div data-id="238" class="ft_column __w-451"></div><comment data-id="239"></comment></div><div data-id="240" class="ft_row __pos-452 __p-453 __bw-454 __br-455 __bc-456 __b-457 __r-458 __z-459 __bgc-460"><comment data-id="241"></comment><div data-id="242" class="ft_row __cur-461"><img data-id="243" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-462 __w-463 __h-464"></img></div><comment data-id="244"></comment><comment data-id="245"></comment></div><comment data-id="246"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1407,23 +1429,48 @@ resolves the conflict at some later time (perhaps by prompting the user).</li>
 	body.dark .__c-436 { color: #FFFFFF !important; }
 	.__c-436:visited { color: #333333 !important; }
 	body.dark  .__c-436:visited { color: #FFFFFF !important; }
-	.__w-437 { width: 100%; }
+	.__rl-437 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-437 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
 	.__w-438 { width: 100%; }
-	.__pos-439 { position: fixed; }
-	.__p-440 { padding: 10px; }
-	.__bw-441 { border-width: 1px; }
-	.__br-442 { border-radius: 4px; }
-	.__bc-443 { border-color: #D2D2D2; }
-	body.dark .__bc-443 { border-color: #434547; }
-	.__b-444 { bottom: 25px; }
-	.__r-445 { right: 25px; }
-	.__z-446 { z-index: 99999999999999; }
-	.__bgc-447 { background-color: #FFFFFF; }
-	body.dark .__bgc-447 { background-color: #130224; }
-	.__cur-448 { cursor: pointer; }
-	.__as-449 { align-self: center; }
-	.__w-450 { width: 19px; }
-	.__h-451 { height: 19px; }
+	.__c-439 { color: #7C7C7C !important; }
+	body.dark .__c-439 { color: #B8B8B8 !important; }
+	.__c-439:visited { color: #7C7C7C !important; }
+	body.dark  .__c-439:visited { color: #B8B8B8 !important; }
+	.__w-440 { width: 100%; }
+	.__w-441 { width: 100%; }
+	.__rl-442 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-442 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-443 { width: 100%; }
+	.__pt-444 { padding-top: 0.17em; }
+	.__mb-445 { margin-bottom: 0.5rem; }
+	.__c-446 { color: #333333 !important; }
+	body.dark .__c-446 { color: #FFFFFF !important; }
+	.__c-446:visited { color: #333333 !important; }
+	body.dark  .__c-446:visited { color: #FFFFFF !important; }
+	.__rl-447 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-447 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-448 { width: 100%; }
+	.__c-449 { color: #7C7C7C !important; }
+	body.dark .__c-449 { color: #B8B8B8 !important; }
+	.__c-449:visited { color: #7C7C7C !important; }
+	body.dark  .__c-449:visited { color: #B8B8B8 !important; }
+	.__w-450 { width: 100%; }
+	.__w-451 { width: 100%; }
+	.__pos-452 { position: fixed; }
+	.__p-453 { padding: 10px; }
+	.__bw-454 { border-width: 1px; }
+	.__br-455 { border-radius: 4px; }
+	.__bc-456 { border-color: #D2D2D2; }
+	body.dark .__bc-456 { border-color: #434547; }
+	.__b-457 { bottom: 25px; }
+	.__r-458 { right: 25px; }
+	.__z-459 { z-index: 99999999999999; }
+	.__bgc-460 { background-color: #FFFFFF; }
+	body.dark .__bgc-460 { background-color: #130224; }
+	.__cur-461 { cursor: pointer; }
+	.__as-462 { align-self: center; }
+	.__w-463 { width: 19px; }
+	.__h-464 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3603,7 +3650,14 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       },
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
-          title: "Custom conflict resolution logic"
+          title: "Custom conflict resolution logic",
+          body: "Most multi-leader replication tools allow to write conflict resolution logic using application code. That code may be\nexecuted on write or on read:\n\n- *On write:* Conflict handler is triggered as soon as the database system detects a conflict in the log of replicated\n  changes. Example: Bucardo enables writing a Perl snippet for conflict resolution. Typically runs in a background\n  process and must execute quickly, without user interaction.\n- *On read:* Conflicting writes are stored when a conflict is detected. Upon reading the data next, multiple versions of\n  the data are returned to the application. The application can then prompt the user or automatically resolve the\n  conflict, updating the database accordingly. Example: CouchDB employs this approach.\n\nConflict resolution operates at the level of individual rows or documents, not entire transactions. Thus, each write\nwithin a transaction is considered separately for conflict resolution."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Automatic Conflict Resolution",
+          body: "Conflict resolution rules can become complex, and custom code may introduce errors. For instance, Amazon's conflict\nresolution handler led to unexpected outcomes like items reappearing in shopping carts after removal.\n\nResearch on automatic conflict resolution includes:\n\n- *Conflict-free replicated datatypes (CRDTs):* Data structures (for sets, maps, ordered lists, counters, etc. ) for\n  concurrent editing, automatically resolving conflicts. Uses two way merge.\n- *Mergeable persistent data structures:* Track history like Git and use three-way merge functions.\n- *Operational transformation:* Algorithm behind collaborative editing apps like Etherpad and Google Docs, designed for\n  concurrent editing of ordered lists.\n\nWhile database implementations of these algorithms are emerging, they offer potential for simplifying multi-leader data\nsynchronization in applications."
         });
       }
       ]),

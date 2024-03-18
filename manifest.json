@@ -77,8 +77,8 @@
     },
     "ddd/data-intensive-application/5-replication.ftd": {
       "name": "ddd/data-intensive-application/5-replication.ftd",
-      "checksum": "5E7A869162D9401D34CD822DEBD3C25E1D14549BE35001D4E8426F5A123ECAD7",
-      "size": 29468
+      "checksum": "190075A57487C04444CCE6EB278EFC9CE45ECA9E2DDB791F784FF77009D5524E",
+      "size": 31352
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -376,6 +376,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/94fc19dec00a7f355ab8b41fcf41bcaf9b78a992.zip",
-  "checksum": "23069C79F8B93328A2BADBAC47BEEE169E4666A9A9AC00D5D6E19BC68D8C3E72"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/5d194bca4527795766b3aca8b2810c0090724190.zip",
+  "checksum": "1E2F6B9F2DD3FD8645E0A4F11010E02FB25356F49ABF50A89B514787744B3EFC"
 }
