@@ -77,8 +77,8 @@
     },
     "ddd/data-intensive-application/5-replication.ftd": {
       "name": "ddd/data-intensive-application/5-replication.ftd",
-      "checksum": "190075A57487C04444CCE6EB278EFC9CE45ECA9E2DDB791F784FF77009D5524E",
-      "size": 31352
+      "checksum": "5E5030587CD8760BEAA55EE12603816B1B78F833F737E199D9B96BEBADA82F86",
+      "size": 39646
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -180,6 +180,36 @@
       "checksum": "1EAC68D33783B5586BE99C28E5D9E19586E8B5A742216EC86EC2B2AAE91B472B",
       "size": 104894
     },
+    "ddd/data-intensive-application/images/5-10-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-10-dark.png",
+      "checksum": "39EB8EA8517582DB4790A16B7C4CC6406618BC794B4B9BBDFECCA35C9ACD397F",
+      "size": 157014
+    },
+    "ddd/data-intensive-application/images/5-10.png": {
+      "name": "ddd/data-intensive-application/images/5-10.png",
+      "checksum": "C1699D914B4650839FE8C3200BDCA57E0A6B5AA221D93C51D9873E4A899D8D75",
+      "size": 117559
+    },
+    "ddd/data-intensive-application/images/5-11-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-11-dark.png",
+      "checksum": "149315DFCFD525659440C8150C5F145234A0E744F25AFA0888ACCEC00B7F06A3",
+      "size": 129210
+    },
+    "ddd/data-intensive-application/images/5-11.png": {
+      "name": "ddd/data-intensive-application/images/5-11.png",
+      "checksum": "7061718E8C33094866C029BB07E7E5B7EEE3EC238E1B97BE5F7FC37525B0FB32",
+      "size": 101307
+    },
+    "ddd/data-intensive-application/images/5-12-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-12-dark.png",
+      "checksum": "929422A99D64CD53495FD86E7E5F078D679CFFCB15AF6FF9C0BD5C0DC1B730D9",
+      "size": 102540
+    },
+    "ddd/data-intensive-application/images/5-12.png": {
+      "name": "ddd/data-intensive-application/images/5-12.png",
+      "checksum": "F0B8C5355B369D345A9642D5391C34BBDE3D5BA1E011F7E1BA496B0945D7552D",
+      "size": 75302
+    },
     "ddd/data-intensive-application/images/5-2-dark.png": {
       "name": "ddd/data-intensive-application/images/5-2-dark.png",
       "checksum": "F36A0625269D76850B1E402239AA12ACE034B5A593F19711F794A9184937DA60",
@@ -239,6 +269,26 @@
       "name": "ddd/data-intensive-application/images/5-7.png",
       "checksum": "B2185F396391203113FEC0EBE892A5526BE5ABC48165623721C8CAABC9868A28",
       "size": 104194
+    },
+    "ddd/data-intensive-application/images/5-8-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-8-dark.png",
+      "checksum": "2334CBBB9F77E41473D4037E994B7600A21062D6E222B0C55785DF3968789DFF",
+      "size": 70579
+    },
+    "ddd/data-intensive-application/images/5-8.png": {
+      "name": "ddd/data-intensive-application/images/5-8.png",
+      "checksum": "173D5C56D2B30271DD030982D5A823DD7DD4D1559E9422DED86AFCF78140F0E7",
+      "size": 53482
+    },
+    "ddd/data-intensive-application/images/5-9-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-9-dark.png",
+      "checksum": "767DADEF78DEA95CA40367B05B5DAEFCD6DC4F7749D8EC9182D8A0241F4576E1",
+      "size": 125550
+    },
+    "ddd/data-intensive-application/images/5-9.png": {
+      "name": "ddd/data-intensive-application/images/5-9.png",
+      "checksum": "AC7797A5500053546DF4A8840D7DC4CD39E23ECB2A4447BA86ABD77EB13FF6BA",
+      "size": 93885
     },
     "ddd/data-intensive-application/index.ftd": {
       "name": "ddd/data-intensive-application/index.ftd",
@@ -376,6 +426,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/5d194bca4527795766b3aca8b2810c0090724190.zip",
-  "checksum": "1E2F6B9F2DD3FD8645E0A4F11010E02FB25356F49ABF50A89B514787744B3EFC"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/75cc7cf2bfae74e473a5edce0280aed8bb68598c.zip",
+  "checksum": "AB5B59096F8E22EDF43DCC311792131C955ED689781BD8AF5FFCC2B6F380606D"
 }

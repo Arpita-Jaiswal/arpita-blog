@@ -728,7 +728,77 @@ concurrent editing, automatically resolving conflicts. Uses two way merge.</li>
 concurrent editing of ordered lists.</li>
 </ul>
 While database implementations of these algorithms are emerging, they offer potential for simplifying multi-leader data
-synchronization in applications.</div><div data-id="235" class="ft_column __w-450"></div></div></div></div></div><comment data-id="236"></comment><comment data-id="237"></comment></div><div data-id="238" class="ft_column __w-451"></div><comment data-id="239"></comment></div><div data-id="240" class="ft_row __pos-452 __p-453 __bw-454 __br-455 __bc-456 __b-457 __r-458 __z-459 __bgc-460"><comment data-id="241"></comment><div data-id="242" class="ft_row __cur-461"><img data-id="243" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-462 __w-463 __h-464"></img></div><comment data-id="244"></comment><comment data-id="245"></comment></div><comment data-id="246"></comment></div></div></div></body><style id="styles">
+synchronization in applications.</div><div data-id="235" class="ft_column __w-450"></div></div><div data-id="236" class="ft_column __w-451"><h2 data-id="237" id="multi-leader-replication-topologies" class="__rl-452 __w-453 __pt-454 __mb-455 __c-456">Multi-Leader Replication Topologies</h2><comment data-id="238"></comment><div data-id="239" class="__rl-457 __w-458 __c-459">With more than two leaders, various different topologies are possible. The most general topology is all-to-all, in which
+every leader sends its writes to every other leader.</div><div data-id="240" class="ft_column __w-460"></div></div><div data-id="241" class="ft_column __w-461 __h-462 __jc-463 __ali-464"><img data-id="242" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-8.png" class="__w-465 __h-466 __mxw-467"></img><comment data-id="243"></comment><div data-id="244" class="__rl-468 __pl-469 __pr-470 __pt-471 __pb-472 __bblr-473 __bbrr-474 __c-475 __bgc-476 __ta-477">Three example topologies in which multi-leader replication can be set up.</div><comment data-id="245"></comment></div><div data-id="246" class="__rl-478 __w-479 __c-480"><p>The fault tolerance of a more densely connected topology (such as all-to-all) is better because it allows messages to
+travel along different paths, avoiding a single point of failure.</p>
+On the other hand, all-to-all topologies can have issues too. In particular, some network links may be faster than
+others (e.g., due to network congestion), with the result that some replication messages may “overtake” others.</div><div data-id="247" class="ft_column __w-481 __h-482 __jc-483 __ali-484"><img data-id="248" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-9.png" class="__w-485 __h-486 __mxw-487"></img><comment data-id="249"></comment><div data-id="250" class="__rl-488 __pl-489 __pr-490 __pt-491 __pb-492 __bblr-493 __bbrr-494 __c-495 __bgc-496 __ta-497">With multi-leader replication, writes may arrive in the wrong order at some replicas.</div><comment data-id="251"></comment></div><div data-id="252" class="ft_column __w-498"><h1 data-id="253" id="leaderless-replication" class="__rl-499 __w-500 __pt-501 __mb-502 __bbw-503 __bc-504 __c-505">Leaderless Replication</h1><comment data-id="254"></comment><div data-id="255" class="__rl-506 __w-507 __c-508"><p>It became a fashionable architecture for databases after Amazon used it for its in-house Dynamo system. Riak, Cassandra,
+and Voldemort are open source datastores with leaderless replication models inspired by Dynamo, so this kind of database
+is also known as Dynamo-style.</p>
+In some leaderless implementations, the client directly sends its writes to several replicas, while in others, a
+coordinator node does this on behalf of the client. However, unlike a leader database, that coordinator does not enforce
+a particular ordering of writes.</div><div data-id="256" class="ft_column __w-509"></div></div><div data-id="257" class="ft_column __w-510"><h2 data-id="258" id="writing-to-the-database-when-a-node-is-down" class="__rl-511 __w-512 __pt-513 __mb-514 __c-515">Writing to the Database When a Node Is Down</h2><comment data-id="259"></comment><div data-id="260" class="__rl-516 __w-517 __c-518"><p>Imagins a database with three replicas, if one is unavailable, such as during a system update reboot, a failover may be
+needed in a leader-based configuration to continue processing writes.</p>
+However, in a leaderless setup, failover doesn&#39;t apply. The client sends the write to all replicas in parallel, with the
+two available replicas accepting it while the unavailable one misses it. As long as two out of three replicas acknowledge
+the write, it&#39;s considered successful. The client disregards the fact that one replica missed the write.</div><div data-id="261" class="ft_column __w-519"></div></div><div data-id="262" class="ft_column __w-520 __h-521 __jc-522 __ali-523"><img data-id="263" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-10.png" class="__w-524 __h-525 __mxw-526"></img><comment data-id="264"></comment><div data-id="265" class="__rl-527 __pl-528 __pr-529 __pt-530 __pb-531 __bblr-532 __bbrr-533 __c-534 __bgc-535 __ta-536">A quorum write, quorum read, and read repair after a node outage.</div><comment data-id="266"></comment></div><div data-id="267" class="__rl-537 __w-538 __c-539">When the previously unavailable node comes back online, clients start reading from it, potentially receiving stale
+values because any writes during the node&#39;s downtime are missing. To address this, clients send read requests to multiple
+nodes in parallel. Responses from different nodes may vary, with one providing the up-to-date value and another offering
+a stale one. Version numbers help determine which value is newer.</div><div data-id="268" class="ft_column __w-540"><h3 data-id="269" id="read-repair-and-anti-entropy" class="__rl-541 __w-542 __pt-543 __mb-544 __c-545">Read repair and anti-entropy</h3><comment data-id="270"></comment><div data-id="271" class="__rl-546 __w-547 __c-548"><p>Two mechanisms are often used in Dynamo-style datastores:</p>
+<ul>
+<li><p><strong>Read repair:</strong>
+When a client reads from multiple nodes in parallel, it detects stale responses. For example, in above image, if a
+client receives different versions of data from different replicas, it writes the newer value back to replicas with
+stale data. Effective for frequently read values.</p>
+</li>
+<li><strong>Anti-entropy Process:</strong>
+Background process in some datastores that constantly checks for data differences between replicas. Copies missing data
+from one replica to another to maintain consistency. Unlike leader-based replication, data is not copied in a specific
+order, and there may be a significant delay before data is synchronized.
+</li>
+</ul></div><div data-id="272" class="ft_column __w-549"></div></div><div data-id="273" class="ft_column __w-550"><h3 data-id="274" id="quorums-for-reading-and-writing" class="__rl-551 __w-552 __pt-553 __mb-554 __c-555">Quorums for reading and writing</h3><comment data-id="275"></comment><div data-id="276" class="__rl-556 __w-557 __c-558"><p>In a system with n replicas, every write requires confirmation from w nodes to be deemed successful, and at least r nodes
+must be queried for each read. For instance, in the example provided, n = 3, w = 2, and r = 2. When w + r &gt; n, quorum
+reads and writes are performed, ensuring an up-to-date value during reading as at least one of the r nodes queried is
+expected to be current.</p>
+In Dynamo-style databases, the parameters n, w, and r are typically configurable. A common choice is to make n an odd
+number (typically 3 or 5) and to set w = r = (n + 1) / 2 (rounded up). However, you can vary the numbers as you see fit.
+For example, a workload with few writes and many reads may benefit from setting w = n and r = 1. This makes reads faster,
+but has the disadvantage that just one failed node causes all database writes to fail.</div><div data-id="277" class="ft_column __w-559"></div></div><div data-id="278" class="ft_column __w-560 __h-561 __jc-562 __ali-563"><img data-id="279" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-11.png" class="__w-564 __h-565 __mxw-566"></img><comment data-id="280"></comment><div data-id="281" class="__rl-567 __pl-568 __pr-569 __pt-570 __pb-571 __bblr-572 __bbrr-573 __c-574 __bgc-575 __ta-576">If w + r &gt; n, at least one of the r replicas you read from must have seen the most recent successful write.</div><comment data-id="282"></comment></div><div data-id="283" class="ft_column __w-577"><h2 data-id="284" id="limitations-of-quorum-consistency" class="__rl-578 __w-579 __pt-580 __mb-581 __c-582">Limitations of Quorum Consistency</h2><comment data-id="285"></comment><div data-id="286" class="__rl-583 __w-584 __c-585"><p>You may also set w and r to smaller numbers, so that w + r ≤ n. With a smaller w and r you are more likely to read stale
+values. On the upside, this configuration allows lower latency and higher availability.</p>
+However, even with w + r &gt; n, there are likely to be edge cases where stale values are returned. These depend on the
+implementation, but possible scenarios include:
+<ul>
+<li>If a sloppy quorum is used, the w writes may end up on different nodes than the r reads, so there is no longer a
+guaranteed overlap.</li>
+<li>If two writes occur concurrently, it is not clear which one happened first. In this case, the only safe solution is to
+merge the concurrent writes.</li>
+<li>If a write happens concurrently with a read, the write may be reflected on only some of the replicas. In this case,
+it’s undetermined whether the read returns the old or the new value.</li>
+<li>If a write succeeded on some replicas but failed on others, and overall succeeded on fewer than w replicas, it is not
+rolled back on the replicas where it succeeded.</li>
+<li>If a node carrying a new value fails, and its data is restored from a replica carrying an old value, the number of
+replicas storing the new value may fall below w.</li>
+</ul></div><div data-id="287" class="ft_column __w-586"></div></div><div data-id="288" class="ft_column __w-587"><h2 data-id="289" id="sloppy-quorums-and-hinted-handoff" class="__rl-588 __w-589 __pt-590 __mb-591 __c-592">Sloppy Quorums and Hinted Handoff</h2><comment data-id="290"></comment><div data-id="291" class="__rl-593 __w-594 __c-595"><p>In a large cluster it’s likely that the client can connect to some database nodes during the network interruption, just
+not to the nodes that it needs to assemble a quorum for a particular value.</p>
+<p>Writes and reads still require w and r successful responses, but those may include nodes that are not among the
+designated n “home” nodes for a value. This is known as a sloppy quorum.</p>
+<p>Once the network interruption is fixed, any writes that one node temporarily accepted on behalf of another node are sent
+to the appropriate “home” nodes. This is called hinted handoff.</p>
+Sloppy quorums are optional in all common Dynamo implementations. In Riak they are enabled by default, and in Cassandra
+and Voldemort they are disabled by default.</div><div data-id="292" class="ft_column __w-596"></div></div><div data-id="293" class="ft_column __w-597"><h3 data-id="294" id="multi-datacenter-operation" class="__rl-598 __w-599 __pt-600 __mb-601 __c-602">Multi-datacenter operation</h3><comment data-id="295"></comment><div data-id="296" class="__rl-603 __w-604 __c-605">Cassandra and Voldemort implement their multi-datacenter support within the normal leaderless model: the number of
+replicas n includes nodes in all datacenters, and in the configuration you can specify how many of the n replicas you
+want to have in each datacenter. Each write from a client is sent to all replicas, regardless of datacenter, but the
+client usually only waits for acknowledgment from a quorum of nodes within its local datacenter so that it is unaffected
+by delays and interruptions on the cross-datacenter link. The higher-latency writes to other datacenters are often
+configured to happen asynchronously, although there is some flexibility in the configuration.</div><div data-id="297" class="ft_column __w-606"></div></div><div data-id="298" class="ft_column __w-607"><h2 data-id="299" id="detecting-concurrent-writes" class="__rl-608 __w-609 __pt-610 __mb-611 __c-612">Detecting Concurrent Writes</h2><comment data-id="300"></comment><div data-id="301" class="__rl-613 __w-614 __c-615">Two clients, A and B, simultaneously writing to a key X in a three-node datastore:
+<ul>
+<li>Node 1 receives the write from A, but never receives the write from B due to a transient outage.</li>
+<li>Node 2 first receives the write from A, then the write from B.</li>
+<li>Node 3 first receives the write from B, then the write from A.</li>
+</ul></div><div data-id="302" class="ft_column __w-616"></div></div><div data-id="303" class="ft_column __w-617 __h-618 __jc-619 __ali-620"><img data-id="304" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-12.png" class="__w-621 __h-622 __mxw-623"></img><comment data-id="305"></comment><div data-id="306" class="__rl-624 __pl-625 __pr-626 __pt-627 __pb-628 __bblr-629 __bbrr-630 __c-631 __bgc-632 __ta-633">Concurrent writes in a Dynamo-style datastore: there is no well-defined ordering.</div><comment data-id="307"></comment></div><div data-id="308" class="ft_column __w-634"><h3 data-id="309" id="last-write-wins-discarding-concurrent-writes" class="__rl-635 __w-636 __pt-637 __mb-638 __c-639">Last write wins (discarding concurrent writes)</h3><comment data-id="310"></comment><div data-id="311" class="__rl-640 __w-641 __c-642">Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach
+a timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier
+timestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution
+method in Cassandra, and an optional feature in Riak.</div><div data-id="312" class="ft_column __w-643"></div></div></div></div></div><comment data-id="313"></comment><comment data-id="314"></comment></div><div data-id="315" class="ft_column __w-644"></div><comment data-id="316"></comment></div><div data-id="317" class="ft_row __pos-645 __p-646 __bw-647 __br-648 __bc-649 __b-650 __r-651 __z-652 __bgc-653"><comment data-id="318"></comment><div data-id="319" class="ft_row __cur-654"><img data-id="320" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-655 __w-656 __h-657"></img></div><comment data-id="321"></comment><comment data-id="322"></comment></div><comment data-id="323"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1456,21 +1526,328 @@ synchronization in applications.</div><div data-id="235" class="ft_column __w-45
 	body.dark  .__c-449:visited { color: #B8B8B8 !important; }
 	.__w-450 { width: 100%; }
 	.__w-451 { width: 100%; }
-	.__pos-452 { position: fixed; }
-	.__p-453 { padding: 10px; }
-	.__bw-454 { border-width: 1px; }
-	.__br-455 { border-radius: 4px; }
-	.__bc-456 { border-color: #D2D2D2; }
-	body.dark .__bc-456 { border-color: #434547; }
-	.__b-457 { bottom: 25px; }
-	.__r-458 { right: 25px; }
-	.__z-459 { z-index: 99999999999999; }
-	.__bgc-460 { background-color: #FFFFFF; }
-	body.dark .__bgc-460 { background-color: #130224; }
-	.__cur-461 { cursor: pointer; }
-	.__as-462 { align-self: center; }
-	.__w-463 { width: 19px; }
-	.__h-464 { height: 19px; }
+	.__rl-452 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-452 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-453 { width: 100%; }
+	.__pt-454 { padding-top: 0.3em; }
+	.__mb-455 { margin-bottom: 0.5rem; }
+	.__c-456 { color: #333333 !important; }
+	body.dark .__c-456 { color: #FFFFFF !important; }
+	.__c-456:visited { color: #333333 !important; }
+	body.dark  .__c-456:visited { color: #FFFFFF !important; }
+	.__rl-457 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-457 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-458 { width: 100%; }
+	.__c-459 { color: #7C7C7C !important; }
+	body.dark .__c-459 { color: #B8B8B8 !important; }
+	.__c-459:visited { color: #7C7C7C !important; }
+	body.dark  .__c-459:visited { color: #B8B8B8 !important; }
+	.__w-460 { width: 100%; }
+	.__w-461 { width: 100%; }
+	.__h-462 { height: null; }
+	.__jc-463 { justify-content: center; }
+	.__ali-464 { align-items: center; }
+	.__w-465 { width: auto; }
+	.__h-466 { height: auto; }
+	.__mxw-467 { max-width: 100%; }
+	.__rl-468 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-468 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-469 { padding-left: 20px; }
+	.__pr-470 { padding-right: 20px; }
+	.__pt-471 { padding-top: 8px; }
+	.__pb-472 { padding-bottom: 8px; }
+	.__bblr-473 { border-bottom-left-radius: 5px; }
+	.__bbrr-474 { border-bottom-right-radius: 5px; }
+	.__c-475 { color: #7C7C7C !important; }
+	body.dark .__c-475 { color: #B8B8B8 !important; }
+	.__c-475:visited { color: #7C7C7C !important; }
+	body.dark  .__c-475:visited { color: #B8B8B8 !important; }
+	.__bgc-476 { background-color: #F8F8F8; }
+	body.dark .__bgc-476 { background-color: #260B40; }
+	.__ta-477 { text-align: center; }
+	.__rl-478 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-478 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-479 { width: 100%; }
+	.__c-480 { color: #7C7C7C !important; }
+	body.dark .__c-480 { color: #B8B8B8 !important; }
+	.__c-480:visited { color: #7C7C7C !important; }
+	body.dark  .__c-480:visited { color: #B8B8B8 !important; }
+	.__w-481 { width: 100%; }
+	.__h-482 { height: null; }
+	.__jc-483 { justify-content: center; }
+	.__ali-484 { align-items: center; }
+	.__w-485 { width: auto; }
+	.__h-486 { height: auto; }
+	.__mxw-487 { max-width: 100%; }
+	.__rl-488 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-488 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-489 { padding-left: 20px; }
+	.__pr-490 { padding-right: 20px; }
+	.__pt-491 { padding-top: 8px; }
+	.__pb-492 { padding-bottom: 8px; }
+	.__bblr-493 { border-bottom-left-radius: 5px; }
+	.__bbrr-494 { border-bottom-right-radius: 5px; }
+	.__c-495 { color: #7C7C7C !important; }
+	body.dark .__c-495 { color: #B8B8B8 !important; }
+	.__c-495:visited { color: #7C7C7C !important; }
+	body.dark  .__c-495:visited { color: #B8B8B8 !important; }
+	.__bgc-496 { background-color: #F8F8F8; }
+	body.dark .__bgc-496 { background-color: #260B40; }
+	.__ta-497 { text-align: center; }
+	.__w-498 { width: 100%; }
+	.__rl-499 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 40px; font-weight: 700; line-height: 60px; }
+	body.mobile .__rl-499 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 36px; font-weight: 700; line-height: 54px; }
+	.__w-500 { width: 100%; }
+	.__pt-501 { padding-top: 0.5em; }
+	.__mb-502 { margin-bottom: 0.5rem; }
+	.__bbw-503 { border-bottom-width: 1px; }
+	.__bc-504 { border-color: #D2D2D2; }
+	body.dark .__bc-504 { border-color: #434547; }
+	.__c-505 { color: #333333 !important; }
+	body.dark .__c-505 { color: #FFFFFF !important; }
+	.__c-505:visited { color: #333333 !important; }
+	body.dark  .__c-505:visited { color: #FFFFFF !important; }
+	.__rl-506 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-506 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-507 { width: 100%; }
+	.__c-508 { color: #7C7C7C !important; }
+	body.dark .__c-508 { color: #B8B8B8 !important; }
+	.__c-508:visited { color: #7C7C7C !important; }
+	body.dark  .__c-508:visited { color: #B8B8B8 !important; }
+	.__w-509 { width: 100%; }
+	.__w-510 { width: 100%; }
+	.__rl-511 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-511 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-512 { width: 100%; }
+	.__pt-513 { padding-top: 0.3em; }
+	.__mb-514 { margin-bottom: 0.5rem; }
+	.__c-515 { color: #333333 !important; }
+	body.dark .__c-515 { color: #FFFFFF !important; }
+	.__c-515:visited { color: #333333 !important; }
+	body.dark  .__c-515:visited { color: #FFFFFF !important; }
+	.__rl-516 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-516 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-517 { width: 100%; }
+	.__c-518 { color: #7C7C7C !important; }
+	body.dark .__c-518 { color: #B8B8B8 !important; }
+	.__c-518:visited { color: #7C7C7C !important; }
+	body.dark  .__c-518:visited { color: #B8B8B8 !important; }
+	.__w-519 { width: 100%; }
+	.__w-520 { width: 100%; }
+	.__h-521 { height: null; }
+	.__jc-522 { justify-content: center; }
+	.__ali-523 { align-items: center; }
+	.__w-524 { width: auto; }
+	.__h-525 { height: auto; }
+	.__mxw-526 { max-width: 100%; }
+	.__rl-527 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-527 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-528 { padding-left: 20px; }
+	.__pr-529 { padding-right: 20px; }
+	.__pt-530 { padding-top: 8px; }
+	.__pb-531 { padding-bottom: 8px; }
+	.__bblr-532 { border-bottom-left-radius: 5px; }
+	.__bbrr-533 { border-bottom-right-radius: 5px; }
+	.__c-534 { color: #7C7C7C !important; }
+	body.dark .__c-534 { color: #B8B8B8 !important; }
+	.__c-534:visited { color: #7C7C7C !important; }
+	body.dark  .__c-534:visited { color: #B8B8B8 !important; }
+	.__bgc-535 { background-color: #F8F8F8; }
+	body.dark .__bgc-535 { background-color: #260B40; }
+	.__ta-536 { text-align: center; }
+	.__rl-537 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-537 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-538 { width: 100%; }
+	.__c-539 { color: #7C7C7C !important; }
+	body.dark .__c-539 { color: #B8B8B8 !important; }
+	.__c-539:visited { color: #7C7C7C !important; }
+	body.dark  .__c-539:visited { color: #B8B8B8 !important; }
+	.__w-540 { width: 100%; }
+	.__rl-541 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-541 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-542 { width: 100%; }
+	.__pt-543 { padding-top: 0.17em; }
+	.__mb-544 { margin-bottom: 0.5rem; }
+	.__c-545 { color: #333333 !important; }
+	body.dark .__c-545 { color: #FFFFFF !important; }
+	.__c-545:visited { color: #333333 !important; }
+	body.dark  .__c-545:visited { color: #FFFFFF !important; }
+	.__rl-546 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-546 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-547 { width: 100%; }
+	.__c-548 { color: #7C7C7C !important; }
+	body.dark .__c-548 { color: #B8B8B8 !important; }
+	.__c-548:visited { color: #7C7C7C !important; }
+	body.dark  .__c-548:visited { color: #B8B8B8 !important; }
+	.__w-549 { width: 100%; }
+	.__w-550 { width: 100%; }
+	.__rl-551 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-551 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-552 { width: 100%; }
+	.__pt-553 { padding-top: 0.17em; }
+	.__mb-554 { margin-bottom: 0.5rem; }
+	.__c-555 { color: #333333 !important; }
+	body.dark .__c-555 { color: #FFFFFF !important; }
+	.__c-555:visited { color: #333333 !important; }
+	body.dark  .__c-555:visited { color: #FFFFFF !important; }
+	.__rl-556 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-556 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-557 { width: 100%; }
+	.__c-558 { color: #7C7C7C !important; }
+	body.dark .__c-558 { color: #B8B8B8 !important; }
+	.__c-558:visited { color: #7C7C7C !important; }
+	body.dark  .__c-558:visited { color: #B8B8B8 !important; }
+	.__w-559 { width: 100%; }
+	.__w-560 { width: 100%; }
+	.__h-561 { height: null; }
+	.__jc-562 { justify-content: center; }
+	.__ali-563 { align-items: center; }
+	.__w-564 { width: auto; }
+	.__h-565 { height: auto; }
+	.__mxw-566 { max-width: 100%; }
+	.__rl-567 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-567 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-568 { padding-left: 20px; }
+	.__pr-569 { padding-right: 20px; }
+	.__pt-570 { padding-top: 8px; }
+	.__pb-571 { padding-bottom: 8px; }
+	.__bblr-572 { border-bottom-left-radius: 5px; }
+	.__bbrr-573 { border-bottom-right-radius: 5px; }
+	.__c-574 { color: #7C7C7C !important; }
+	body.dark .__c-574 { color: #B8B8B8 !important; }
+	.__c-574:visited { color: #7C7C7C !important; }
+	body.dark  .__c-574:visited { color: #B8B8B8 !important; }
+	.__bgc-575 { background-color: #F8F8F8; }
+	body.dark .__bgc-575 { background-color: #260B40; }
+	.__ta-576 { text-align: center; }
+	.__w-577 { width: 100%; }
+	.__rl-578 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-578 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-579 { width: 100%; }
+	.__pt-580 { padding-top: 0.3em; }
+	.__mb-581 { margin-bottom: 0.5rem; }
+	.__c-582 { color: #333333 !important; }
+	body.dark .__c-582 { color: #FFFFFF !important; }
+	.__c-582:visited { color: #333333 !important; }
+	body.dark  .__c-582:visited { color: #FFFFFF !important; }
+	.__rl-583 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-583 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-584 { width: 100%; }
+	.__c-585 { color: #7C7C7C !important; }
+	body.dark .__c-585 { color: #B8B8B8 !important; }
+	.__c-585:visited { color: #7C7C7C !important; }
+	body.dark  .__c-585:visited { color: #B8B8B8 !important; }
+	.__w-586 { width: 100%; }
+	.__w-587 { width: 100%; }
+	.__rl-588 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-588 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-589 { width: 100%; }
+	.__pt-590 { padding-top: 0.3em; }
+	.__mb-591 { margin-bottom: 0.5rem; }
+	.__c-592 { color: #333333 !important; }
+	body.dark .__c-592 { color: #FFFFFF !important; }
+	.__c-592:visited { color: #333333 !important; }
+	body.dark  .__c-592:visited { color: #FFFFFF !important; }
+	.__rl-593 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-593 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-594 { width: 100%; }
+	.__c-595 { color: #7C7C7C !important; }
+	body.dark .__c-595 { color: #B8B8B8 !important; }
+	.__c-595:visited { color: #7C7C7C !important; }
+	body.dark  .__c-595:visited { color: #B8B8B8 !important; }
+	.__w-596 { width: 100%; }
+	.__w-597 { width: 100%; }
+	.__rl-598 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-598 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-599 { width: 100%; }
+	.__pt-600 { padding-top: 0.17em; }
+	.__mb-601 { margin-bottom: 0.5rem; }
+	.__c-602 { color: #333333 !important; }
+	body.dark .__c-602 { color: #FFFFFF !important; }
+	.__c-602:visited { color: #333333 !important; }
+	body.dark  .__c-602:visited { color: #FFFFFF !important; }
+	.__rl-603 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-603 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-604 { width: 100%; }
+	.__c-605 { color: #7C7C7C !important; }
+	body.dark .__c-605 { color: #B8B8B8 !important; }
+	.__c-605:visited { color: #7C7C7C !important; }
+	body.dark  .__c-605:visited { color: #B8B8B8 !important; }
+	.__w-606 { width: 100%; }
+	.__w-607 { width: 100%; }
+	.__rl-608 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 32px; font-weight: 700; line-height: 48px; }
+	body.mobile .__rl-608 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 26px; font-weight: 700; line-height: 40px; }
+	.__w-609 { width: 100%; }
+	.__pt-610 { padding-top: 0.3em; }
+	.__mb-611 { margin-bottom: 0.5rem; }
+	.__c-612 { color: #333333 !important; }
+	body.dark .__c-612 { color: #FFFFFF !important; }
+	.__c-612:visited { color: #333333 !important; }
+	body.dark  .__c-612:visited { color: #FFFFFF !important; }
+	.__rl-613 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-613 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-614 { width: 100%; }
+	.__c-615 { color: #7C7C7C !important; }
+	body.dark .__c-615 { color: #B8B8B8 !important; }
+	.__c-615:visited { color: #7C7C7C !important; }
+	body.dark  .__c-615:visited { color: #B8B8B8 !important; }
+	.__w-616 { width: 100%; }
+	.__w-617 { width: 100%; }
+	.__h-618 { height: null; }
+	.__jc-619 { justify-content: center; }
+	.__ali-620 { align-items: center; }
+	.__w-621 { width: auto; }
+	.__h-622 { height: auto; }
+	.__mxw-623 { max-width: 100%; }
+	.__rl-624 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-624 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-625 { padding-left: 20px; }
+	.__pr-626 { padding-right: 20px; }
+	.__pt-627 { padding-top: 8px; }
+	.__pb-628 { padding-bottom: 8px; }
+	.__bblr-629 { border-bottom-left-radius: 5px; }
+	.__bbrr-630 { border-bottom-right-radius: 5px; }
+	.__c-631 { color: #7C7C7C !important; }
+	body.dark .__c-631 { color: #B8B8B8 !important; }
+	.__c-631:visited { color: #7C7C7C !important; }
+	body.dark  .__c-631:visited { color: #B8B8B8 !important; }
+	.__bgc-632 { background-color: #F8F8F8; }
+	body.dark .__bgc-632 { background-color: #260B40; }
+	.__ta-633 { text-align: center; }
+	.__w-634 { width: 100%; }
+	.__rl-635 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-635 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-636 { width: 100%; }
+	.__pt-637 { padding-top: 0.17em; }
+	.__mb-638 { margin-bottom: 0.5rem; }
+	.__c-639 { color: #333333 !important; }
+	body.dark .__c-639 { color: #FFFFFF !important; }
+	.__c-639:visited { color: #333333 !important; }
+	body.dark  .__c-639:visited { color: #FFFFFF !important; }
+	.__rl-640 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-640 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-641 { width: 100%; }
+	.__c-642 { color: #7C7C7C !important; }
+	body.dark .__c-642 { color: #B8B8B8 !important; }
+	.__c-642:visited { color: #7C7C7C !important; }
+	body.dark  .__c-642:visited { color: #B8B8B8 !important; }
+	.__w-643 { width: 100%; }
+	.__w-644 { width: 100%; }
+	.__pos-645 { position: fixed; }
+	.__p-646 { padding: 10px; }
+	.__bw-647 { border-width: 1px; }
+	.__br-648 { border-radius: 4px; }
+	.__bc-649 { border-color: #D2D2D2; }
+	body.dark .__bc-649 { border-color: #434547; }
+	.__b-650 { bottom: 25px; }
+	.__r-651 { right: 25px; }
+	.__z-652 { z-index: 99999999999999; }
+	.__bgc-653 { background-color: #FFFFFF; }
+	body.dark .__bgc-653 { background-color: #130224; }
+	.__cur-654 { cursor: pointer; }
+	.__as-655 { align-self: center; }
+	.__w-656 { width: 19px; }
+	.__h-657 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -3658,6 +4035,106 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
           title: "Automatic Conflict Resolution",
           body: "Conflict resolution rules can become complex, and custom code may introduce errors. For instance, Amazon's conflict\nresolution handler led to unexpected outcomes like items reappearing in shopping carts after removal.\n\nResearch on automatic conflict resolution includes:\n\n- *Conflict-free replicated datatypes (CRDTs):* Data structures (for sets, maps, ordered lists, counters, etc. ) for\n  concurrent editing, automatically resolving conflicts. Uses two way merge.\n- *Mergeable persistent data structures:* Track history like Git and use three-way merge functions.\n- *Operational transformation:* Algorithm behind collaborative editing apps like Etherpad and Google Docs, designed for\n  concurrent editing of ordered lists.\n\nWhile database implementations of these algorithms are emerging, they offer potential for simplifying multi-leader data\nsynchronization in applications."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Multi-Leader Replication Topologies",
+          body: "With more than two leaders, various different topologies are possible. The most general topology is all-to-all, in which\nevery leader sends its writes to every other leader."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "Three example topologies in which multi-leader replication can be set up.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_8_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "The fault tolerance of a more densely connected topology (such as all-to-all) is better because it allows messages to\ntravel along different paths, avoiding a single point of failure.\n\nOn the other hand, all-to-all topologies can have issues too. In particular, some network links may be faster than\nothers (e.g., due to network congestion), with the result that some replication messages may “overtake” others."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "With multi-leader replication, writes may arrive in the wrong order at some replicas.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_9_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h1(root, inherited, {
+          title: "Leaderless Replication",
+          body: "It became a fashionable architecture for databases after Amazon used it for its in-house Dynamo system. Riak, Cassandra,\nand Voldemort are open source datastores with leaderless replication models inspired by Dynamo, so this kind of database\nis also known as Dynamo-style.\n\nIn some leaderless implementations, the client directly sends its writes to several replicas, while in others, a\ncoordinator node does this on behalf of the client. However, unlike a leader database, that coordinator does not enforce\na particular ordering of writes."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Writing to the Database When a Node Is Down",
+          body: "Imagins a database with three replicas, if one is unavailable, such as during a system update reboot, a failover may be\nneeded in a leader-based configuration to continue processing writes.\n\nHowever, in a leaderless setup, failover doesn't apply. The client sends the write to all replicas in parallel, with the\ntwo available replicas accepting it while the unavailable one misses it. As long as two out of three replicas acknowledge\nthe write, it's considered successful. The client disregards the fact that one replica missed the write."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "A quorum write, quorum read, and read repair after a node outage.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_10_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "When the previously unavailable node comes back online, clients start reading from it, potentially receiving stale\nvalues because any writes during the node's downtime are missing. To address this, clients send read requests to multiple\nnodes in parallel. Responses from different nodes may vary, with one providing the up-to-date value and another offering\na stale one. Version numbers help determine which value is newer."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Read repair and anti-entropy",
+          body: "Two mechanisms are often used in Dynamo-style datastores:\n\n- **Read repair:**\n  When a client reads from multiple nodes in parallel, it detects stale responses. For example, in above image, if a\n  client receives different versions of data from different replicas, it writes the newer value back to replicas with\n  stale data. Effective for frequently read values.\n\n- **Anti-entropy Process:**\n  Background process in some datastores that constantly checks for data differences between replicas. Copies missing data\n  from one replica to another to maintain consistency. Unlike leader-based replication, data is not copied in a specific\n  order, and there may be a significant delay before data is synchronized."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Quorums for reading and writing",
+          body: "In a system with n replicas, every write requires confirmation from w nodes to be deemed successful, and at least r nodes\nmust be queried for each read. For instance, in the example provided, n = 3, w = 2, and r = 2. When w + r > n, quorum\nreads and writes are performed, ensuring an up-to-date value during reading as at least one of the r nodes queried is\nexpected to be current.\n\nIn Dynamo-style databases, the parameters n, w, and r are typically configurable. A common choice is to make n an odd\nnumber (typically 3 or 5) and to set w = r = (n + 1) / 2 (rounded up). However, you can vary the numbers as you see fit.\nFor example, a workload with few writes and many reads may benefit from setting w = n and r = 1. This makes reads faster,\nbut has the disadvantage that just one failed node causes all database writes to fail."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "If w + r > n, at least one of the r replicas you read from must have seen the most recent successful write.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_11_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Limitations of Quorum Consistency",
+          body: "You may also set w and r to smaller numbers, so that w + r ≤ n. With a smaller w and r you are more likely to read stale\nvalues. On the upside, this configuration allows lower latency and higher availability.\n\nHowever, even with w + r > n, there are likely to be edge cases where stale values are returned. These depend on the\nimplementation, but possible scenarios include:\n\n- If a sloppy quorum is used, the w writes may end up on different nodes than the r reads, so there is no longer a\n  guaranteed overlap.\n- If two writes occur concurrently, it is not clear which one happened first. In this case, the only safe solution is to\n  merge the concurrent writes.\n- If a write happens concurrently with a read, the write may be reflected on only some of the replicas. In this case,\n  it’s undetermined whether the read returns the old or the new value.\n- If a write succeeded on some replicas but failed on others, and overall succeeded on fewer than w replicas, it is not\n  rolled back on the replicas where it succeeded.\n- If a node carrying a new value fails, and its data is restored from a replica carrying an old value, the number of\n  replicas storing the new value may fall below w."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Sloppy Quorums and Hinted Handoff",
+          body: "In a large cluster it’s likely that the client can connect to some database nodes during the network interruption, just\nnot to the nodes that it needs to assemble a quorum for a particular value.\n\nWrites and reads still require w and r successful responses, but those may include nodes that are not among the\ndesignated n “home” nodes for a value. This is known as a sloppy quorum.\n\nOnce the network interruption is fixed, any writes that one node temporarily accepted on behalf of another node are sent\nto the appropriate “home” nodes. This is called hinted handoff.\n\nSloppy quorums are optional in all common Dynamo implementations. In Riak they are enabled by default, and in Cassandra\nand Voldemort they are disabled by default."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Multi-datacenter operation",
+          body: "Cassandra and Voldemort implement their multi-datacenter support within the normal leaderless model: the number of\nreplicas n includes nodes in all datacenters, and in the configuration you can specify how many of the n replicas you\nwant to have in each datacenter. Each write from a client is sent to all replicas, regardless of datacenter, but the\nclient usually only waits for acknowledgment from a quorum of nodes within its local datacenter so that it is unaffected\nby delays and interruptions on the cross-datacenter link. The higher-latency writes to other datacenters are often\nconfigured to happen asynchronously, although there is some flexibility in the configuration."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h2(root, inherited, {
+          title: "Detecting Concurrent Writes",
+          body: "Two clients, A and B, simultaneously writing to a key X in a three-node datastore:\n\n- Node 1 receives the write from A, but never receives the write from B due to a transient outage.\n- Node 2 first receives the write from A, then the write from B.\n- Node 3 first receives the write from B, then the write from A."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "Concurrent writes in a Dynamo-style datastore: there is no well-defined ordering.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_12_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Last write wins (discarding concurrent writes)",
+          body: "Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach\na timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier\ntimestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution\nmethod in Cassandra, and an optional feature in Riak."
         });
       }
       ]),
@@ -10909,6 +11386,41 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_12_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-12.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-12-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_11_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-11.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-11-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_10_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-10.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-10-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_9_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-9.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-9-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_8_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-8.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-8-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_7_png", function () {
   let record = fastn.recordInstance({
   });
