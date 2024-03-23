@@ -797,10 +797,43 @@ configured to happen asynchronously, although there is some flexibility in the c
 <li>Node 1 receives the write from A, but never receives the write from B due to a transient outage.</li>
 <li>Node 2 first receives the write from A, then the write from B.</li>
 <li>Node 3 first receives the write from B, then the write from A.</li>
-</ul></div><div data-id="330" class="ft_column __w-667"></div></div><div data-id="331" class="ft_column __w-668 __h-669 __jc-670 __ali-671"><img data-id="332" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-12.png" class="__w-672 __h-673 __mxw-674"></img><comment data-id="333"></comment><div data-id="334" class="__rl-675 __pl-676 __pr-677 __pt-678 __pb-679 __bblr-680 __bbrr-681 __c-682 __bgc-683 __ta-684">Concurrent writes in a Dynamo-style datastore: there is no well-defined ordering.</div><comment data-id="335"></comment></div><div data-id="336" class="ft_column __w-685"><h3 data-id="337" id="last-write-wins-discarding-concurrent-writes" class="__rl-686 __w-687 __pt-688 __mb-689 __c-690">Last write wins (discarding concurrent writes)</h3><comment data-id="338"></comment><div data-id="339" class="__rl-691 __w-692 __c-693">Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach
+</ul></div><div data-id="330" class="ft_column __w-667"></div></div><div data-id="331" class="ft_column __w-668 __h-669 __jc-670 __ali-671"><img data-id="332" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-12.png" class="__w-672 __h-673 __mxw-674"></img><comment data-id="333"></comment><div data-id="334" class="__rl-675 __pl-676 __pr-677 __pt-678 __pb-679 __bblr-680 __bbrr-681 __c-682 __bgc-683 __ta-684">Concurrent writes in a Dynamo-style datastore: there is no well-defined ordering.</div><comment data-id="335"></comment></div><div data-id="336" class="ft_column __w-685"><h3 data-id="337" id="last-write-wins-discarding-concurrent-writes" class="__rl-686 __w-687 __pt-688 __mb-689 __c-690">Last write wins (discarding concurrent writes)</h3><comment data-id="338"></comment><div data-id="339" class="__rl-691 __w-692 __c-693"><p>Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach
 a timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier
 timestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution
-method in Cassandra, and an optional feature in Riak.</div><div data-id="340" class="ft_column __w-694"></div></div></div></div></div><comment data-id="341"></comment><comment data-id="342"></comment></div><div data-id="343" class="ft_column __w-695"></div><comment data-id="344"></comment></div><div data-id="345" class="ft_row __pos-696 __p-697 __bw-698 __br-699 __bc-700 __b-701 __r-702 __z-703 __bgc-704"><comment data-id="346"></comment><div data-id="347" class="ft_row __cur-705"><img data-id="348" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-706 __w-707 __h-708"></img></div><comment data-id="349"></comment><comment data-id="350"></comment></div><comment data-id="351"></comment></div></div></div></body><style id="styles">
+method in Cassandra, and an optional feature in Riak.</p>
+The only safe way of using a database with LWW is to ensure that a key is only written once and thereafter treated as
+immutable, thus avoiding any concurrent updates to the same key. For example, a recommended way of using Cassandra is to
+use a UUID as the key, thus giving each write operation a unique key.</div><div data-id="340" class="ft_column __w-694"></div></div><div data-id="341" class="ft_column __w-695"><h3 data-id="342" id="the-happens-before-relationship-and-concurrency" class="__rl-696 __w-697 __pt-698 __mb-699 __c-700">The “happens-before” relationship and concurrency</h3><comment data-id="343"></comment><div data-id="344" class="__rl-701 __w-702 __c-703">How do we decide whether two operations are concurrent or not?
+<ul>
+<li>A’s insert happens before B’s increment, because the value incremented by B is the value inserted by A. B is causally
+dependent on A.</li>
+<li>The two writes in above figure are concurrent: when each client starts the operation, it does not know that another
+client is also performing an operation on the same key. Thus, there is no causal dependency between the operations.</li>
+</ul></div><div data-id="345" class="ft_column __w-704"></div></div><div data-id="346" class="ft_column __w-705"><h3 data-id="347" id="capturing-the-happens-before-relationship" class="__rl-706 __w-707 __pt-708 __mb-709 __c-710">Capturing the happens-before relationship</h3><comment data-id="348"></comment><div data-id="349" class="__rl-711 __w-712 __c-713">To keep things simple, let’s start with a database that has only one replica.</div><div data-id="350" class="ft_column __w-714"></div></div><div data-id="351" class="ft_column __w-715 __h-716 __jc-717 __ali-718"><img data-id="352" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-13.png" class="__w-719 __h-720 __mxw-721"></img><comment data-id="353"></comment><div data-id="354" class="__rl-722 __pl-723 __pr-724 __pt-725 __pb-726 __bblr-727 __bbrr-728 __c-729 __bgc-730 __ta-731">Capturing causal dependencies between two clients concurrently editing a shopping cart.</div><comment data-id="355"></comment></div><div data-id="356" class="ft_column __w-732 __h-733 __jc-734 __ali-735"><img data-id="357" src="-/arjaupashak.com/ddd/data-intensive-application/images/5-14.png" class="__w-736 __h-737 __mxw-738"></img><comment data-id="358"></comment><div data-id="359" class="__rl-739 __pl-740 __pr-741 __pt-742 __pb-743 __bblr-744 __bbrr-745 __c-746 __bgc-747 __ta-748">Graph of causal dependencies in above figure.</div><comment data-id="360"></comment></div><div data-id="361" class="__rl-749 __w-750 __c-751">Note that the server can determine whether two operations are concurrent by looking at the version numbers—it does not
+need to interpret the value itself (so the value could be any data structure). The algorithm works as follows:
+<ul>
+<li>The server tracks a version number for each key, incrementing it upon each write and storing it alongside the written
+value.</li>
+<li>Upon reading a key, the server returns all values not overwritten and provides the latest version number. Clients must
+read before writing.</li>
+<li>During a write, clients include the version number from the prior read and merge received values. Write responses
+resemble reads, allowing chaining of writes (e.g., in shopping carts).</li>
+<li>Upon receiving a write with a specific version number, the server can overwrite values equal to or below that version
+(merged into the new value), while retaining those with higher versions (concurrent with the incoming write).</li>
+</ul></div><div data-id="362" class="ft_column __w-752"><h3 data-id="363" id="merging-concurrently-written-values" class="__rl-753 __w-754 __pt-755 __mb-756 __c-757">Merging concurrently written values</h3><comment data-id="364"></comment><div data-id="365" class="__rl-758 __w-759 __c-760"><p>When merging concurrently written values, taking the union is often a sensible approach. For instance, in a shopping cart
+scenario, the resulting merged values may include unique items from both siblings, [milk, flour, eggs, bacon, ham],
+eliminating duplicates.</p>
+However, if you want to allow people to also remove things from their carts, and not just add things, then taking the
+union of siblings may not yield the right result: if you merge two sibling carts and an item has been removed in only
+one of them, then the removed item will reappear in the union of the siblings. To prevent this problem, an item cannot
+simply be deleted from the database when it is removed; instead, the system must leave a marker with an appropriate
+version number to indicate that the item has been removed when merging siblings. Such a deletion marker is known as a
+<em>tombstone</em>.</div><div data-id="366" class="ft_column __w-761"></div></div><div data-id="367" class="ft_column __w-762"><h3 data-id="368" id="version-vectors" class="__rl-763 __w-764 __pt-765 __mb-766 __c-767">Version vectors</h3><comment data-id="369"></comment><div data-id="370" class="__rl-768 __w-769 __c-770"><p>The example in above figure used only a single replica. How does the algorithm change when there are multiple replicas,
+but no leader?</p>
+<p>We need to use a version number per replica as well as per key. Each replica increments its own version number when
+processing a write, and also keeps track of the version numbers it has seen from each of the other replicas. This
+information indicates which values to overwrite and which values to keep as siblings.</p>
+The collection of version numbers from all the replicas is called a <em>version vector</em>.</div><div data-id="371" class="ft_column __w-771"></div></div></div></div></div><comment data-id="372"></comment><comment data-id="373"></comment></div><div data-id="374" class="ft_column __w-772"></div><comment data-id="375"></comment></div><div data-id="376" class="ft_row __pos-773 __p-774 __bw-775 __br-776 __bc-777 __b-778 __r-779 __z-780 __bgc-781"><comment data-id="377"></comment><div data-id="378" class="ft_row __cur-782"><img data-id="379" src="-/fastn-community.github.io/dark-mode-switcher/static/system-mode-active.png" class="__as-783 __w-784 __h-785"></img></div><comment data-id="380"></comment><comment data-id="381"></comment></div><comment data-id="382"></comment></div></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__w-3 { width: 100%; }
@@ -1912,21 +1945,144 @@ method in Cassandra, and an optional feature in Riak.</div><div data-id="340" cl
 	body.dark  .__c-693:visited { color: #B8B8B8 !important; }
 	.__w-694 { width: 100%; }
 	.__w-695 { width: 100%; }
-	.__pos-696 { position: fixed; }
-	.__p-697 { padding: 10px; }
-	.__bw-698 { border-width: 1px; }
-	.__br-699 { border-radius: 4px; }
-	.__bc-700 { border-color: #D2D2D2; }
-	body.dark .__bc-700 { border-color: #434547; }
-	.__b-701 { bottom: 25px; }
-	.__r-702 { right: 25px; }
-	.__z-703 { z-index: 99999999999999; }
-	.__bgc-704 { background-color: #FFFFFF; }
-	body.dark .__bgc-704 { background-color: #130224; }
-	.__cur-705 { cursor: pointer; }
-	.__as-706 { align-self: center; }
-	.__w-707 { width: 19px; }
-	.__h-708 { height: 19px; }
+	.__rl-696 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-696 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-697 { width: 100%; }
+	.__pt-698 { padding-top: 0.17em; }
+	.__mb-699 { margin-bottom: 0.5rem; }
+	.__c-700 { color: #333333 !important; }
+	body.dark .__c-700 { color: #FFFFFF !important; }
+	.__c-700:visited { color: #333333 !important; }
+	body.dark  .__c-700:visited { color: #FFFFFF !important; }
+	.__rl-701 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-701 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-702 { width: 100%; }
+	.__c-703 { color: #7C7C7C !important; }
+	body.dark .__c-703 { color: #B8B8B8 !important; }
+	.__c-703:visited { color: #7C7C7C !important; }
+	body.dark  .__c-703:visited { color: #B8B8B8 !important; }
+	.__w-704 { width: 100%; }
+	.__w-705 { width: 100%; }
+	.__rl-706 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-706 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-707 { width: 100%; }
+	.__pt-708 { padding-top: 0.17em; }
+	.__mb-709 { margin-bottom: 0.5rem; }
+	.__c-710 { color: #333333 !important; }
+	body.dark .__c-710 { color: #FFFFFF !important; }
+	.__c-710:visited { color: #333333 !important; }
+	body.dark  .__c-710:visited { color: #FFFFFF !important; }
+	.__rl-711 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-711 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-712 { width: 100%; }
+	.__c-713 { color: #7C7C7C !important; }
+	body.dark .__c-713 { color: #B8B8B8 !important; }
+	.__c-713:visited { color: #7C7C7C !important; }
+	body.dark  .__c-713:visited { color: #B8B8B8 !important; }
+	.__w-714 { width: 100%; }
+	.__w-715 { width: 100%; }
+	.__h-716 { height: null; }
+	.__jc-717 { justify-content: center; }
+	.__ali-718 { align-items: center; }
+	.__w-719 { width: auto; }
+	.__h-720 { height: auto; }
+	.__mxw-721 { max-width: 100%; }
+	.__rl-722 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-722 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-723 { padding-left: 20px; }
+	.__pr-724 { padding-right: 20px; }
+	.__pt-725 { padding-top: 8px; }
+	.__pb-726 { padding-bottom: 8px; }
+	.__bblr-727 { border-bottom-left-radius: 5px; }
+	.__bbrr-728 { border-bottom-right-radius: 5px; }
+	.__c-729 { color: #7C7C7C !important; }
+	body.dark .__c-729 { color: #B8B8B8 !important; }
+	.__c-729:visited { color: #7C7C7C !important; }
+	body.dark  .__c-729:visited { color: #B8B8B8 !important; }
+	.__bgc-730 { background-color: #F8F8F8; }
+	body.dark .__bgc-730 { background-color: #260B40; }
+	.__ta-731 { text-align: center; }
+	.__w-732 { width: 100%; }
+	.__h-733 { height: null; }
+	.__jc-734 { justify-content: center; }
+	.__ali-735 { align-items: center; }
+	.__w-736 { width: auto; }
+	.__h-737 { height: auto; }
+	.__mxw-738 { max-width: 100%; }
+	.__rl-739 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 21px; }
+	body.mobile .__rl-739 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 14px; font-weight: 400; line-height: 19px; }
+	.__pl-740 { padding-left: 20px; }
+	.__pr-741 { padding-right: 20px; }
+	.__pt-742 { padding-top: 8px; }
+	.__pb-743 { padding-bottom: 8px; }
+	.__bblr-744 { border-bottom-left-radius: 5px; }
+	.__bbrr-745 { border-bottom-right-radius: 5px; }
+	.__c-746 { color: #7C7C7C !important; }
+	body.dark .__c-746 { color: #B8B8B8 !important; }
+	.__c-746:visited { color: #7C7C7C !important; }
+	body.dark  .__c-746:visited { color: #B8B8B8 !important; }
+	.__bgc-747 { background-color: #F8F8F8; }
+	body.dark .__bgc-747 { background-color: #260B40; }
+	.__ta-748 { text-align: center; }
+	.__rl-749 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-749 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-750 { width: 100%; }
+	.__c-751 { color: #7C7C7C !important; }
+	body.dark .__c-751 { color: #B8B8B8 !important; }
+	.__c-751:visited { color: #7C7C7C !important; }
+	body.dark  .__c-751:visited { color: #B8B8B8 !important; }
+	.__w-752 { width: 100%; }
+	.__rl-753 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-753 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-754 { width: 100%; }
+	.__pt-755 { padding-top: 0.17em; }
+	.__mb-756 { margin-bottom: 0.5rem; }
+	.__c-757 { color: #333333 !important; }
+	body.dark .__c-757 { color: #FFFFFF !important; }
+	.__c-757:visited { color: #333333 !important; }
+	body.dark  .__c-757:visited { color: #FFFFFF !important; }
+	.__rl-758 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-758 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-759 { width: 100%; }
+	.__c-760 { color: #7C7C7C !important; }
+	body.dark .__c-760 { color: #B8B8B8 !important; }
+	.__c-760:visited { color: #7C7C7C !important; }
+	body.dark  .__c-760:visited { color: #B8B8B8 !important; }
+	.__w-761 { width: 100%; }
+	.__w-762 { width: 100%; }
+	.__rl-763 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 24px; font-weight: 700; line-height: 36px; }
+	body.mobile .__rl-763 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 22px; font-weight: 700; line-height: 29px; }
+	.__w-764 { width: 100%; }
+	.__pt-765 { padding-top: 0.17em; }
+	.__mb-766 { margin-bottom: 0.5rem; }
+	.__c-767 { color: #333333 !important; }
+	body.dark .__c-767 { color: #FFFFFF !important; }
+	.__c-767:visited { color: #333333 !important; }
+	body.dark  .__c-767:visited { color: #FFFFFF !important; }
+	.__rl-768 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 28px; }
+	body.mobile .__rl-768 {  font-family: fifthtry-github-io-inter-font-Inter; letter-spacing: 0px; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__w-769 { width: 100%; }
+	.__c-770 { color: #7C7C7C !important; }
+	body.dark .__c-770 { color: #B8B8B8 !important; }
+	.__c-770:visited { color: #7C7C7C !important; }
+	body.dark  .__c-770:visited { color: #B8B8B8 !important; }
+	.__w-771 { width: 100%; }
+	.__w-772 { width: 100%; }
+	.__pos-773 { position: fixed; }
+	.__p-774 { padding: 10px; }
+	.__bw-775 { border-width: 1px; }
+	.__br-776 { border-radius: 4px; }
+	.__bc-777 { border-color: #D2D2D2; }
+	body.dark .__bc-777 { border-color: #434547; }
+	.__b-778 { bottom: 25px; }
+	.__r-779 { right: 25px; }
+	.__z-780 { z-index: 99999999999999; }
+	.__bgc-781 { background-color: #FFFFFF; }
+	body.dark .__bgc-781 { background-color: #130224; }
+	.__cur-782 { cursor: pointer; }
+	.__as-783 { align-self: center; }
+	.__w-784 { width: 19px; }
+	.__h-785 { height: 19px; }
     </style><style>
 
 @font-face { unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FB;
@@ -4213,7 +4369,48 @@ font-family: fifthtry-github-io-manrope-font-Manrope }
       function (root, inherited) {
         let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
           title: "Last write wins (discarding concurrent writes)",
-          body: "Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach\na timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier\ntimestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution\nmethod in Cassandra, and an optional feature in Riak."
+          body: "Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach\na timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier\ntimestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution\nmethod in Cassandra, and an optional feature in Riak.\n\nThe only safe way of using a database with LWW is to ensure that a key is only written once and thereafter treated as\nimmutable, thus avoiding any concurrent updates to the same key. For example, a recommended way of using Cassandra is to\nuse a UUID as the key, thus giving each write operation a unique key."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "The “happens-before” relationship and concurrency",
+          body: "How do we decide whether two operations are concurrent or not?\n\n- A’s insert happens before B’s increment, because the value incremented by B is the value inserted by A. B is causally\n  dependent on A.\n- The two writes in above figure are concurrent: when each client starts the operation, it does not know that another\n  client is also performing an operation on the same key. Thus, there is no causal dependency between the operations."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Capturing the happens-before relationship",
+          body: "To keep things simple, let’s start with a database that has only one replica."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "Capturing causal dependencies between two clients concurrently editing a shopping cart.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_13_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__image(root, inherited, {
+          caption: "Graph of causal dependencies in above figure.",
+          src: global.arjaupashak_com_assets__files.get("ddd_data_intensive_application_images_5_14_png")
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__markdown(root, inherited, {
+          body: "Note that the server can determine whether two operations are concurrent by looking at the version numbers—it does not\nneed to interpret the value itself (so the value could be any data structure). The algorithm works as follows:\n\n- The server tracks a version number for each key, incrementing it upon each write and storing it alongside the written\n  value.\n- Upon reading a key, the server returns all values not overwritten and provides the latest version number. Clients must\n  read before writing.\n- During a write, clients include the version number from the prior read and merge received values. Write responses\n  resemble reads, allowing chaining of writes (e.g., in shopping carts).\n- Upon receiving a write with a specific version number, the server can overwrite values equal to or below that version\n  (merged into the new value), while retaining those with higher versions (concurrent with the incoming write)."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Merging concurrently written values",
+          body: "When merging concurrently written values, taking the union is often a sensible approach. For instance, in a shopping cart\nscenario, the resulting merged values may include unique items from both siblings, [milk, flour, eggs, bacon, ham],\neliminating duplicates.\n\nHowever, if you want to allow people to also remove things from their carts, and not just add things, then taking the\nunion of siblings may not yield the right result: if you merge two sibling carts and an item has been removed in only\none of them, then the removed item will reappear in the union of the siblings. To prevent this problem, an item cannot\nsimply be deleted from the database when it is removed; instead, the system must leave a marker with an appropriate\nversion number to indicate that the item has been removed when merging siblings. Such a deletion marker is known as a\n*tombstone*."
+        });
+      },
+      function (root, inherited) {
+        let rooti0 = arjaupashak_com_FASTN_ds__h3(root, inherited, {
+          title: "Version vectors",
+          body: "The example in above figure used only a single replica. How does the algorithm change when there are multiple replicas,\nbut no leader?\n\nWe need to use a version number per replica as well as per key. Each replica increments its own version number when\nprocessing a write, and also keeps track of the version numbers it has seen from each of the other replicas. This\ninformation indicates which values to overwrite and which values to keep as siblings.\n\nThe collection of version numbers from all the replicas is called a *version vector*."
         });
       }
       ]),
@@ -12171,6 +12368,20 @@ let arjaupashak_com_FASTN_ds__page = function (parent, inherited, args)
   }
 }
 global["arjaupashak_com_FASTN_ds__page"] = arjaupashak_com_FASTN_ds__page;
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_14_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-14.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-14-dark.png");
+  return record;
+}());
+fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_13_png", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("light", "-/arjaupashak.com/ddd/data-intensive-application/images/5-13.png");
+  record.set("dark", "-/arjaupashak.com/ddd/data-intensive-application/images/5-13-dark.png");
+  return record;
+}());
 fastn_utils.createNestedObject(global, "arjaupashak_com_assets__files.ddd_data_intensive_application_images_5_12_png", function () {
   let record = fastn.recordInstance({
   });

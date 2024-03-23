@@ -77,8 +77,8 @@
     },
     "ddd/data-intensive-application/5-replication.ftd": {
       "name": "ddd/data-intensive-application/5-replication.ftd",
-      "checksum": "5E5030587CD8760BEAA55EE12603816B1B78F833F737E199D9B96BEBADA82F86",
-      "size": 39646
+      "checksum": "490574EE0E85A8E7DA6632F8D5F4CB31A258F90929AC081F47D7F084A9F10D62",
+      "size": 43319
     },
     "ddd/data-intensive-application/images/3-1-dark.png": {
       "name": "ddd/data-intensive-application/images/3-1-dark.png",
@@ -209,6 +209,26 @@
       "name": "ddd/data-intensive-application/images/5-12.png",
       "checksum": "F0B8C5355B369D345A9642D5391C34BBDE3D5BA1E011F7E1BA496B0945D7552D",
       "size": 75302
+    },
+    "ddd/data-intensive-application/images/5-13-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-13-dark.png",
+      "checksum": "AEE561BED43A2278DD73ACC6198535527127304578A307D05BD4A11DF4603794",
+      "size": 172132
+    },
+    "ddd/data-intensive-application/images/5-13.png": {
+      "name": "ddd/data-intensive-application/images/5-13.png",
+      "checksum": "7542F22F9CE8D62D57AA3D8770F5153ECC8A9D00A0A223047E2C442467B46A3B",
+      "size": 127451
+    },
+    "ddd/data-intensive-application/images/5-14-dark.png": {
+      "name": "ddd/data-intensive-application/images/5-14-dark.png",
+      "checksum": "2D7E0922C936F1427D81717A8325486E002C4759F31ACA056E56773A8415739B",
+      "size": 54296
+    },
+    "ddd/data-intensive-application/images/5-14.png": {
+      "name": "ddd/data-intensive-application/images/5-14.png",
+      "checksum": "C32F72D462FB7238FDBA9248823EA680C9F181EC6CBC206D6DFADFD0AC51D708",
+      "size": 41183
     },
     "ddd/data-intensive-application/images/5-2-dark.png": {
       "name": "ddd/data-intensive-application/images/5-2-dark.png",
@@ -426,6 +446,6 @@
       "size": 11352
     }
   },
-  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/75cc7cf2bfae74e473a5edce0280aed8bb68598c.zip",
-  "checksum": "AB5B59096F8E22EDF43DCC311792131C955ED689781BD8AF5FFCC2B6F380606D"
+  "zip_url": "https://github.com/Arpita-Jaiswal/blog/archive/7027f04c4c269e454cf08fadab76e3fca2352b0e.zip",
+  "checksum": "16085FC875A6BA68150293DFF57A5833C14362C0CD68D9F09AFF7808984FC5E4"
 }
