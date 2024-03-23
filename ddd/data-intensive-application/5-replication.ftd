@@ -705,4 +705,67 @@ a timestamp to each write, pick the biggest timestamp as the most “recent,” 
 timestamp. This conflict resolution algorithm, called last write wins (LWW), is the only supported conflict resolution
 method in Cassandra, and an optional feature in Riak.
 
+The only safe way of using a database with LWW is to ensure that a key is only written once and thereafter treated as
+immutable, thus avoiding any concurrent updates to the same key. For example, a recommended way of using Cassandra is to
+use a UUID as the key, thus giving each write operation a unique key.
+
+-- ds.h3: The “happens-before” relationship and concurrency
+
+How do we decide whether two operations are concurrent or not?
+
+- A’s insert happens before B’s increment, because the value incremented by B is the value inserted by A. B is causally
+  dependent on A.
+- The two writes in above figure are concurrent: when each client starts the operation, it does not know that another
+  client is also performing an operation on the same key. Thus, there is no causal dependency between the operations.
+
+-- ds.h3: Capturing the happens-before relationship
+
+To keep things simple, let’s start with a database that has only one replica.
+
+-- ds.image: Capturing causal dependencies between two clients concurrently editing a shopping cart.
+src: $assets.files.ddd.data-intensive-application.images.5-13.png
+
+-- ds.image: Graph of causal dependencies in above figure.
+src: $assets.files.ddd.data-intensive-application.images.5-14.png
+
+-- ds.markdown:
+
+Note that the server can determine whether two operations are concurrent by looking at the version numbers—it does not
+need to interpret the value itself (so the value could be any data structure). The algorithm works as follows:
+
+- The server tracks a version number for each key, incrementing it upon each write and storing it alongside the written
+  value.
+- Upon reading a key, the server returns all values not overwritten and provides the latest version number. Clients must
+  read before writing.
+- During a write, clients include the version number from the prior read and merge received values. Write responses
+  resemble reads, allowing chaining of writes (e.g., in shopping carts).
+- Upon receiving a write with a specific version number, the server can overwrite values equal to or below that version
+  (merged into the new value), while retaining those with higher versions (concurrent with the incoming write).
+
+
+-- ds.h3: Merging concurrently written values
+
+When merging concurrently written values, taking the union is often a sensible approach. For instance, in a shopping cart
+scenario, the resulting merged values may include unique items from both siblings, [milk, flour, eggs, bacon, ham],
+eliminating duplicates.
+
+However, if you want to allow people to also remove things from their carts, and not just add things, then taking the
+union of siblings may not yield the right result: if you merge two sibling carts and an item has been removed in only
+one of them, then the removed item will reappear in the union of the siblings. To prevent this problem, an item cannot
+simply be deleted from the database when it is removed; instead, the system must leave a marker with an appropriate
+version number to indicate that the item has been removed when merging siblings. Such a deletion marker is known as a
+*tombstone*.
+
+-- ds.h3: Version vectors
+
+The example in above figure used only a single replica. How does the algorithm change when there are multiple replicas,
+but no leader?
+
+We need to use a version number per replica as well as per key. Each replica increments its own version number when
+processing a write, and also keeps track of the version numbers it has seen from each of the other replicas. This
+information indicates which values to overwrite and which values to keep as siblings.
+
+The collection of version numbers from all the replicas is called a *version vector*.
+
+
 -- end: ds.page
